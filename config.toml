@@ -1,6 +1,6 @@
 title = "A Walnut's Thoughts"
 base_url = "https://Walnut356.github.io"
-description = "A Zola-theme based on Bear Blog."
+description = ""
 
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = false

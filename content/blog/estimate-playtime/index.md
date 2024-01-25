@@ -1,6 +1,6 @@
 +++
 title = "Can you estimate playtime from replay folder size?"
-date = "2023-12-24"
+date = "2024-01-25"
 description = "Sample article showcasing basic Markdown syntax and formatting for HTML elements."
 [taxonomies]
 tags=["programming", "rust", "ssbm", "games"]

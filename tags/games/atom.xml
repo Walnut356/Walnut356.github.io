@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
     <title>A Walnut&#x27;s Thoughts - games</title>
-    <subtitle>A Zola-theme based on Bear Blog.</subtitle>
     <link href="https://Walnut356.github.io/tags/games/atom.xml" rel="self" type="application/atom+xml"/>
     <link href="https://Walnut356.github.io"/>
     <generator uri="https://www.getzola.org/">Zola</generator>
-    <updated>2023-12-24T00:00:00+00:00</updated>
+    <updated>2024-01-25T00:00:00+00:00</updated>
     <id>https://Walnut356.github.io/tags/games/atom.xml</id>
     <entry xml:lang="en">
         <title>Can you estimate playtime from replay folder size?</title>
-        <published>2023-12-24T00:00:00+00:00</published>
-        <updated>2023-12-24T00:00:00+00:00</updated>
+        <published>2024-01-25T00:00:00+00:00</published>
+        <updated>2024-01-25T00:00:00+00:00</updated>
         <author>
           <name>Unknown</name>
         </author>
