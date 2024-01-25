@@ -1,0 +1,31 @@
+title = "A Walnut's Thoughts"
+base_url = "https://Walnut356.github.io"
+description = "A Zola-theme based on Bear Blog."
+
+# Whether to automatically compile all Sass files in the sass directory
+compile_sass = false
+
+# Whether to build a search index to be used later on by a JavaScript library
+build_search_index = false
+
+theme = "zola-bearblog"
+
+taxonomies = [
+  {name = "categories", feed = true},
+  {name = "tags", feed = true},
+]
+
+[markdown]
+# Whether to do syntax highlighting
+# Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
+highlight_code = true
+highlight_theme = "two-dark"
+
+[extra]
+date_format="%d %b, %Y"
+webserver_sends_csp_headers=true
+
+
+[[extra.main_menu]]
+name = "Blog"
+url = "@/blog/_index.md"

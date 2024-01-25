@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>A Walnut&#x27;s Thoughts - rust</title>
+    <subtitle>A Zola-theme based on Bear Blog.</subtitle>
+    <link href="https://Walnut356.github.io/tags/rust/atom.xml" rel="self" type="application/atom+xml"/>
+    <link href="https://Walnut356.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2023-12-24T00:00:00+00:00</updated>
+    <id>https://Walnut356.github.io/tags/rust/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Can you estimate playtime from replay folder size?</title>
+        <published>2023-12-24T00:00:00+00:00</published>
+        <updated>2023-12-24T00:00:00+00:00</updated>
+        <author>
+          <name>Unknown</name>
+        </author>
+        <link rel="alternate" href="https://Walnut356.github.io/blog/estimate-playtime/" type="text/html"/>
+        <id>https://Walnut356.github.io/blog/estimate-playtime/</id>
+        
+        <content type="html">&lt;p&gt;I&#x27;ve seen this question come up a few times on r&#x2F;ssbm and while I&#x27;ve given hand-wavey answers before, I find myself in a good place to answer more rigerously now. We can break this question down to more basic ones: &amp;quot;how many bytes of replay data correspond to a single frame of gameplay?&amp;quot; and &amp;quot;how many bytes in the replay are unrelated to frames?&amp;quot;. From there, we can estimate a duration by simply translating the 16.667ms per frame to minutes and seconds.&lt;&#x2F;p&gt;
+&lt;p&gt;For the analysis, we&#x27;ll be using the replay parser I wrote in Rust. Replays &lt;em&gt;do&lt;&#x2F;em&gt; store their duration - both in their total frame count, and directly - so we&#x27;ll easily be able to check our work. We&#x27;ll be using my current netplay replays folder which contains my most recent ~1000 replays, several of which were filtered out for unimportant reasons.&lt;&#x2F;p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Code
+&lt;&#x2F;summary&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; The DB here is still a WIP, so this is
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; the only SQL that will be in this post
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; conn = Connection::open_in_memory()?;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; stubs = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;parse_stubs&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;r&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;E:\Slippi Replays\Netplay\&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(stubs.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;len&lt;&#x2F;span&gt;&lt;span&gt;());
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; total = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;u128&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;for&lt;&#x2F;span&gt;&lt;span&gt; stub in stubs {
+&lt;&#x2F;span&gt;&lt;span&gt;    total += stub.path.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;file_size&lt;&#x2F;span&gt;&lt;span&gt;() as &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;u128&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(total);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;create_stubs&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;conn, &amp;amp;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;parse_stubs&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;r&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;E:\Slippi Replays\Netplay\&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span&gt;))?;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;export&lt;&#x2F;span&gt;&lt;span&gt;(&amp;amp;conn, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;test_db&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;)?;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; stmt = conn.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;prepare&lt;&#x2F;span&gt;&lt;span&gt;(
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;SELECT sum(duration) FROM stub;&amp;quot;
+&lt;&#x2F;span&gt;&lt;span&gt;)?;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; val = stmt.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;query&lt;&#x2F;span&gt;&lt;span&gt;([])?;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;println!(
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;{:?}&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    val
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;next&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;        .get::&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;usize&lt;&#x2F;span&gt;&lt;span&gt;, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;usize&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;)
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;() &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; just give me the number already &amp;gt;=(
+&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Output
+&lt;&#x2F;summary&gt;
+&lt;pre data-lang=&quot;cmd&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-cmd &quot;&gt;&lt;code class=&quot;language-cmd&quot; data-lang=&quot;cmd&quot;&gt;&lt;span&gt;    [slp_db\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;13&lt;&#x2F;span&gt;&lt;span&gt;] stubs.len() = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;1048&lt;&#x2F;span&gt;&lt;span&gt; &#x2F;&#x2F; # of games
+&lt;&#x2F;span&gt;&lt;span&gt;    [slp_db\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;20&lt;&#x2F;span&gt;&lt;span&gt;] total = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;3682219473&lt;&#x2F;span&gt;&lt;span&gt; &#x2F;&#x2F; byte count
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;155336180&lt;&#x2F;span&gt;&lt;span&gt; &#x2F;&#x2F; total playtime in ms
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;details&gt;
+&lt;p&gt;After loading these into the database, a quick query gives us the total duration of all of the games: 155,336,180ms. Or, in a less disgusting unit, ~43 hours and 9 minutes. Accounting for the filtered replays, the total file size is 3,682,219,473 bytes or ~3.43GiB.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;what-exactly-is-in-a-replay-file&quot;&gt;What exactly is in a replay file?&lt;&#x2F;h2&gt;
+&lt;p&gt;This is both an easy and a difficult question to answer. While we could directly inspect the assembly code that exports the replay data or the .slp file itself in a hex editor, there&#x27;s a much easier way: a &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;project-slippi&#x2F;slippi-wiki&#x2F;blob&#x2F;master&#x2F;SPEC.md&quot;&gt;file specification&lt;&#x2F;a&gt; maintained by the slippi and slippi-adjacent devs. The spec helpfully lists the hexadecimal byte offsets of each field in each subsection. The values are not encoded or padded in any way, so simply adding the byte-length of the last field to the offset of the last field gives us the total size:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Event:&lt;&#x2F;th&gt;&lt;th&gt;Size:&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;Payloads&lt;&#x2F;td&gt;&lt;td&gt;30&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Game Start&lt;&#x2F;td&gt;&lt;td&gt;761&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Pre-Frame&lt;&#x2F;td&gt;&lt;td&gt;65&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Post-Frame&lt;&#x2F;td&gt;&lt;td&gt;85&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Game End&lt;&#x2F;td&gt;&lt;td&gt;7&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Frame Start&lt;&#x2F;td&gt;&lt;td&gt;13&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Item Update&lt;&#x2F;td&gt;&lt;td&gt;45&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Frame Bookend&lt;&#x2F;td&gt;&lt;td&gt;9&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Gecko List&lt;&#x2F;td&gt;&lt;td&gt;uhh...&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;The metadata event at the end doesn&#x27;t have a guaranteed size, but it&#x27;s roughly 250 bytes.&lt;&#x2F;p&gt;
+&lt;p&gt;It&#x27;s also worth noting that these sizes are specifically for replays of version 3.16.0. As new versions come out and add new fields, events can be larger. It follows that events in older replays have smaller events. We can&#x27;t extract the replay version without parsing the replay, but the file creation date and&#x2F;or default file name (which contains the replay&#x27;s creation date) can be used as a proxy to that information. I manually compiled the release dates of the replay file versions by walking the git history of the replay recording asm file, a list is available &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Walnut356&#x2F;SlpProcess&#x2F;blob&#x2F;37c25c8488178157c0f97e1184385a62af82a6e1&#x2F;slp_parse&#x2F;src&#x2F;events&#x2F;game_start.rs#L508&quot;&gt;here&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;So now we know what&#x27;s in a replay file, but that doesn&#x27;t tell us what&#x27;s &lt;em&gt;in&lt;&#x2F;em&gt; a replay file. For that, we need to bust out the hex editor:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;Walnut356.github.io&#x2F;blog&#x2F;estimate-playtime&#x2F;.&#x2F;header_bytes.png&quot; alt=&quot;hex editor&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;...&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;Walnut356.github.io&#x2F;blog&#x2F;estimate-playtime&#x2F;.&#x2F;gamestart_bytes.png&quot; alt=&quot;gamestart bytes&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;At the top we see the header, a 15 byte sequence that marks the beginning of a .slp file, which we can add on to our non-frame data total. Next we can see the command byte for the Event Payloads (&lt;code&gt;0x35&lt;&#x2F;code&gt;), followed by the command byte for the Game Start event (&lt;code&gt;0x36&lt;&#x2F;code&gt;). The next thing we see though isn&#x27;t the start of the first frame of data as might be expected, it&#x27;s event code &lt;code&gt;0x10&lt;&#x2F;code&gt; which corresponds to the Message Splitter. The layout and implementation are a bit confusing, so I&#x27;ll gloss over the specifics. Long story short this contains all of the gecko codes used when the replay was recorded. As I understand it, this exists to prevent playback desyncs, especially in spectator mode. Unfortunately for us it means we&#x27;re going to have to formalize the fact that our playtime estimate will be an &lt;em&gt;estimate&lt;&#x2F;em&gt;, not an exact match.&lt;&#x2F;p&gt;
+&lt;p&gt;See, when you play a match against someone online, each of your dolphin instances generates a replay file. As many of you probably know, there are a handful of &amp;quot;netplay safe&amp;quot; gecko codes out there - codes that can be added by an individual, but won&#x27;t desync if their opponent doesn&#x27;t have it. These can change from game to game as the player toggles them on or off. Also, there is no &amp;quot;sharing&amp;quot; of gecko codes, and no &amp;quot;canonical&amp;quot; list of gecko codes for that game, thus each dolphin instance records the gecko codes that it had enabled at the time. That means 2 (or more via broadcasting) replay files of the same game are &lt;em&gt;not&lt;&#x2F;em&gt; guaranteed to be identical. Keep that in mind, as it will come up again later.&lt;&#x2F;p&gt;
+&lt;p&gt;This means that, at best, we can only guess at how large people&#x27;s gecko codes will be. There are some limits to how small and large the gecko codes section can be, but for now, we&#x27;ll just assume everyone uses the same ones I do: the required and recommended set, as well as Flash Red on Failed L-Cancel.&lt;&#x2F;p&gt;
+&lt;p&gt;My parser stores offsets of each event as an intermediate step, so we can pull the offset of the first pre-frame event, subtract out the non-gecko event sizes, and we get a gecko code size of 56,124 bytes. The game-end and metadata events also occur once per game (assuming no bugs). That means that, for this replay, ~56,374 bytes do not contribute to the duration.&lt;&#x2F;p&gt;
+&lt;p&gt;We can multiply this by the total number of replays and subtract it out from the total byte count of the files, leaving us with ~3,623,139,521 bytes of pure frame data&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;frame-data&quot;&gt;Frame data&lt;&#x2F;h2&gt;
+&lt;p&gt;The naive solution is to just divide the remaining bytes by the size of frame start + pre frame + post frame + frame end (172 bytes). That gets us 21,064,764 frames, which we can multiply by 16.667 to get 351,086,432ms, or ~97.5 hours, which slightly more than double the actual time.&lt;&#x2F;p&gt;
+&lt;p&gt;One issue stands out immediately: frame start and frame end events only happen once per frame, whereas pre- and post-frame events happen once &lt;em&gt;per character&lt;&#x2F;em&gt; per frame. Note how there are 2 pre-frames (&lt;code&gt;0x37&lt;&#x2F;code&gt;) and 2 post-frames (&lt;code&gt;0x38&lt;&#x2F;code&gt;) in this single span from one frame start (&lt;code&gt;0x3A&lt;&#x2F;code&gt;) to another:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;Walnut356.github.io&#x2F;blog&#x2F;estimate-playtime&#x2F;one_frame.png&quot; alt=&quot;frame span&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Because these are generated per character, there will sometimes be more than 2 pre&#x2F;post frame events per frame start&#x2F;end. Nana generates her own frame events when she&#x27;s alive, and doubles games will generate events for everyone who is alive. In my case, I don&#x27;t have any doubles replays and I don&#x27;t think there&#x27;s a statistically significant enough number of ice climbers games in my replay set for it to matter. That means each 16.667ms, it should be exactly (13 + 9 + (65 * 2) + (85 * 2)) = 322 bytes. That would mean we have ~11,251,986 frames, which is 187,536,852ms, or ~52 hours. It&#x27;s fairly close to our goal of 43 hours, but still about 20% too high.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;item-frames&quot;&gt;Item Frames&lt;&#x2F;h2&gt;
+&lt;p&gt;Items are a bit of a can of worms. &amp;quot;Item&amp;quot; in this context is more a game engine term than a colloquial one. We&#x27;d normally think of items as being projectiles - falco&#x27;s laser, turnips, pills. In engine terms though, an item is basically any non-player, non-stage, non-ui entity. Using the items tab of &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Walnut356&#x2F;stats-dash&quot;&gt;stats dash&lt;&#x2F;a&gt;, we can see what (and how many) items falco spawned in a single game:&lt;&#x2F;p&gt;
+&lt;p&gt;&lt;img src=&quot;https:&#x2F;&#x2F;Walnut356.github.io&#x2F;blog&#x2F;estimate-playtime&#x2F;falco_items.png&quot; alt=&quot;falco items&quot; &#x2F;&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;Huh. Not just are lasers items, but also falco&#x27;s gun itself as well as the trail left behind by his side B. Some characters have lots of items - most of GnW&#x27;s attacks involve an item - some characters have basically none. There&#x27;s also some extra weirdness with things like samus&#x27;s charge shot, which count as items during the charging animation, even though they&#x27;re not &amp;quot;active&amp;quot; and able to deal damage. Things like marth&#x27;s sword that are permanently attached to his player model don&#x27;t count, but then shine doesn&#x27;t count when it seems like maybe it should. I&#x27;ve been surprised more than a few times by what does and doesn&#x27;t count as an item.&lt;&#x2F;p&gt;
+&lt;p&gt;Either way, that means that there isn&#x27;t a perfect &amp;quot;generalized&amp;quot; method to predict how many item frames are present in a game. Knowing what characters are in it &lt;em&gt;helps&lt;&#x2F;em&gt;, but we&#x27;ve restricted ourselves to file size as our only source of info so at best we could only guess by an additional proxy guess of the average character distribution (which also assumes that you have roughly the same set length vs, say, game and watch that you do vs fox which likely isn&#x27;t true). It&#x27;s still probably worth checking if item frames occupy a significant fraction of my game time though which is pretty simple:&lt;&#x2F;p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Code
+&lt;&#x2F;summary&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; replay = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;r&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;E:\Slippi Replays\Netplay\&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; games = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;parse&lt;&#x2F;span&gt;&lt;span&gt;(replay, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(
+&lt;&#x2F;span&gt;&lt;span&gt;    games
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;iter&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;g&lt;&#x2F;span&gt;&lt;span&gt;|
+&lt;&#x2F;span&gt;&lt;span&gt;            g.item_frames.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;as_ref&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;len&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;        )
+&lt;&#x2F;span&gt;&lt;span&gt;        .sum::&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;usize&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Output
+&lt;&#x2F;summary&gt;
+&lt;pre data-lang=&quot;cmd&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-cmd &quot;&gt;&lt;code class=&quot;language-cmd&quot; data-lang=&quot;cmd&quot;&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;91&lt;&#x2F;span&gt;&lt;span&gt;] games.iter().map(|g| g.item_frames.as_ref().unwrap().len()).sum::&amp;lt;usize&amp;gt;() = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;5229553
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;details&gt;
+&lt;p&gt;5,229,553 * 45 = 235,329,885 bytes. Removing that from our total gives us 3,387,809,636 bytes, which is 10,521,148 frames, 175,355,973ms, or ~48.71 hours. At least for someone who plays falco 90% of the time. Our estimate is still about 13% too high though.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;too-many-frames&quot;&gt;Too many frames&lt;&#x2F;h2&gt;
+&lt;p&gt;13% too high is kind of a lot. The remaining data is purely frame data, and it&#x27;s not being thrown off by items or characters generating extra frames. So why do we have so much extra data?&lt;&#x2F;p&gt;
+&lt;p&gt;When I built the parser, I compared the output to the &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;hohav&#x2F;py-slippi&quot;&gt;py-slippi parser&lt;&#x2F;a&gt; which I had previously verified as accurate, and I found that the outputs didn&#x27;t match. The data from the first bit of the replay seemed fine, but later in the replay some things appeared to be happening &amp;quot;too early&amp;quot;. The data looked &amp;quot;valid&amp;quot;, it was just in the wrong location in the parsed data. I agonized a bit over how I was handling offsets, but the end-game data was correct as well. After some time stepping through my parser with a debugger and comparing the output to dolphin playing back the replay, I wrote a quick test that should have occurred to me from the start - do these parsers end up with the same total number of frames?&lt;&#x2F;p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Code
+&lt;&#x2F;summary&gt;
+&lt;pre data-lang=&quot;python&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-python &quot;&gt;&lt;code class=&quot;language-python&quot; data-lang=&quot;python&quot;&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;slippi &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;# py-slippi
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;import &lt;&#x2F;span&gt;&lt;span&gt;slp_parse &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;# rust parser via python wrapper
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;replay = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;r&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;test_replays&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;\n&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;etplay_sample&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;slp&amp;quot;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;# frame count from py-slippi
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;print&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;len&lt;&#x2F;span&gt;&lt;span&gt;(slippi.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;Game&lt;&#x2F;span&gt;&lt;span&gt;(replay).frames))
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;# frame count from my parser
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;print&lt;&#x2F;span&gt;&lt;span&gt;(slp_parse.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;parse&lt;&#x2F;span&gt;&lt;span&gt;(replay, true)[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;].players[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;].frames.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;len&lt;&#x2F;span&gt;&lt;span&gt;())
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Output
+&lt;&#x2F;summary&gt;
+&lt;pre data-lang=&quot;cmd&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-cmd &quot;&gt;&lt;code class=&quot;language-cmd&quot; data-lang=&quot;cmd&quot;&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;9808&lt;&#x2F;span&gt;&lt;span&gt; &#x2F;&#x2F; py-slippi
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;9822&lt;&#x2F;span&gt;&lt;span&gt; &#x2F;&#x2F; slp_parse
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;details&gt;
+&lt;p&gt;Ah. Shit.&lt;&#x2F;p&gt;
+&lt;p&gt;As many of you probably know, rollback netplay works by guessing your opponent&#x27;s inputs when they arrive too late, then re-simulating the previous few frames once the accurate inputs finally arrive. What you may not know is that the code that generates the replay is written in assembly and is called directly by the engine&#x27;s main loop. That means when the game re-simulates, it calls the recording code again and records those re-simulated frames. This is a good thing, it means that the &amp;quot;canonical&amp;quot; game exists within the replay file. The bad news is that there&#x27;s no handling for &amp;quot;cleaning up&amp;quot; those rollback&#x27;d frames (and it&#x27;s generally good that they&#x27;re left in for debugging purposes) and my parser was treating them just like any other frame. Py-slippi has special handling for &amp;quot;finalized&amp;quot; frames - and the slippi file spec even mentions it in the frame end event.  For compatibility reasons, I don&#x27;t rely on the frame end event, and I didn&#x27;t have any special handling. As a result, my parser&#x27;s frames were drifting apart from &amp;quot;reality&amp;quot; because rollback&#x27;d frames were sneaking in. Solving that was fairly easy, but what does this mean for estimating playtime?&lt;&#x2F;p&gt;
+&lt;p&gt;All replay files will have extra &amp;quot;garbage&amp;quot; data that doesn&#x27;t count towards playtime. How much &amp;quot;garbage&amp;quot; data? Depends on how bad your connection was as well as how often the engine mis-predicted inputs. It&#x27;s worth noting that because the engine is re-simulating full frames, all the above issues (nana, items, doubles) apply to each rollbacked frame. Remember when I said that 2 replay files of the same aren&#x27;t guaranteed to be identical? That&#x27;s true for this too. The rollback&#x27;d frames in each replay will very likely be different between the two replays because your opponent&#x27;s client has to re-simulate via your inputs and you have to re-simulate via theirs; one client may guess wrong at the same time that the other guesses right.&lt;&#x2F;p&gt;
+&lt;p&gt;All hope isn&#x27;t lost though. Matchmaking typically makes sure pings aren&#x27;t too ridiculous between players. Even when it can&#x27;t, most players won&#x27;t play those games out. That means, in general, the number of rollback frames should be pretty low. Finding out how many is pretty simple, just compare the total number of frames in the replay to the amount of &amp;quot;valid&amp;quot; frames:&lt;&#x2F;p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Code
+&lt;&#x2F;summary&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; replay = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;r&lt;&#x2F;span&gt;&lt;span style=&quot;color:#98c379;&quot;&gt;&amp;quot;E:\Slippi Replays\Netplay\&amp;quot;&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; games = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;parse&lt;&#x2F;span&gt;&lt;span&gt;(replay, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; a replay *probably* can&amp;#39;t be 100% rollback frames
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; but may as well be safe
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; counts = [&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;11&lt;&#x2F;span&gt;&lt;span&gt;];
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; max: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;f32 &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0.0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; min: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;f32 &lt;&#x2F;span&gt;&lt;span&gt;= &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;100.0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; total_frames = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; total_rbs = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;for&lt;&#x2F;span&gt;&lt;span&gt; game in games {
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; tf = game.total_frames;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; rbs = game.frames_rollbacked;
+&lt;&#x2F;span&gt;&lt;span&gt;    total_frames += tf;
+&lt;&#x2F;span&gt;&lt;span&gt;    total_rbs = rbs;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;if&lt;&#x2F;span&gt;&lt;span&gt; rbs == &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0 &lt;&#x2F;span&gt;&lt;span&gt;{
+&lt;&#x2F;span&gt;&lt;span&gt;        counts[&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;] += &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;        &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;continue&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    }
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; p = rbs as &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;f32 &lt;&#x2F;span&gt;&lt;span&gt;&#x2F; (rbs + tf) as &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;f32&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; group by 10%, shifted 1 idx forward
+&lt;&#x2F;span&gt;&lt;span&gt;    counts[(p * &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;10.0 &lt;&#x2F;span&gt;&lt;span&gt;+ &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;1.0&lt;&#x2F;span&gt;&lt;span&gt;) as &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;usize&lt;&#x2F;span&gt;&lt;span&gt;] += &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;1&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;    max = max.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;max&lt;&#x2F;span&gt;&lt;span&gt;(p);
+&lt;&#x2F;span&gt;&lt;span&gt;    min = min.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;min&lt;&#x2F;span&gt;&lt;span&gt;(p);
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; maximum rollback percentage
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(max);
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; minimum non-0 rollback percentage
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(min);
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; number of games with X% rollbacks
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; where idx 0 = 0%, idx 1 = 0..10% non-inclusive...
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(counts);
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(total_rbs);
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(total_frames);
+&lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; percentage of rollback frames over all games
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(total_rbs as &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;f32&lt;&#x2F;span&gt;&lt;span&gt;&#x2F; (total_rbs as &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;f32 &lt;&#x2F;span&gt;&lt;span&gt;+ total_frames as &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;f32&lt;&#x2F;span&gt;&lt;span&gt;));
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Output
+&lt;&#x2F;summary&gt;
+&lt;pre data-lang=&quot;cmd&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-cmd &quot;&gt;&lt;code class=&quot;language-cmd&quot; data-lang=&quot;cmd&quot;&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;113&lt;&#x2F;span&gt;&lt;span&gt;] max = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;51921797
+&lt;&#x2F;span&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;114&lt;&#x2F;span&gt;&lt;span&gt;] min = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;6&lt;&#x2F;span&gt;&lt;span&gt;.818957e-&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;5
+&lt;&#x2F;span&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;115&lt;&#x2F;span&gt;&lt;span&gt;] counts = [
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;148&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;575&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;120&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;89&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;102&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;12&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;2&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;    &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;,
+&lt;&#x2F;span&gt;&lt;span&gt;]
+&lt;&#x2F;span&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;116&lt;&#x2F;span&gt;&lt;span&gt;] total_rbs = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;1073691
+&lt;&#x2F;span&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;117&lt;&#x2F;span&gt;&lt;span&gt;] total_frames = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;9450144
+&lt;&#x2F;span&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;118&lt;&#x2F;span&gt;&lt;span&gt;] total_rbs as f32 &#x2F; (total_rbs as f32 + total_frames as f32) = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;10202469
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;details&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Percent&lt;&#x2F;th&gt;&lt;th&gt;Count&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;0&lt;&#x2F;td&gt;&lt;td&gt;148&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;0.01-9.99&lt;&#x2F;td&gt;&lt;td&gt;575&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;10.00-19.99&lt;&#x2F;td&gt;&lt;td&gt;120&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;20.00-29.99&lt;&#x2F;td&gt;&lt;td&gt;89&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;30.00-39.99&lt;&#x2F;td&gt;&lt;td&gt;102&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;40.00-49.99&lt;&#x2F;td&gt;&lt;td&gt;12&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;&amp;gt;50&lt;&#x2F;td&gt;&lt;td&gt;2&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;The vast majority of replays were less than 10% rollbacked data, and the total number of rollbacked frames is ~10.2%. If we remove this data from our total we are left with 3,042,081,134 bytes. Converting this to time as above leaves us with 9,447,457 frames and a playtime of 157,460,765ms or ~43.74 hours. That&#x27;s a difference of only 35 minutes compared to our expected time! We got there by cheating a little, but we&#x27;ve established some important invariants and some decent guesses for things that aren&#x27;t guaranteed. In this instance, items + rollbacks accounted for ~20% of replay data, and the rest can be accounted for via file spec guarantees. 20% isn&#x27;t a bad number to start guessing with&lt;&#x2F;p&gt;
+&lt;p&gt;There are a few other things that could affect the replay size, but involve incredibly rare bugs that cause events to be duplicated or missing.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-test&quot;&gt;The test&lt;&#x2F;h2&gt;
+&lt;p&gt;I have ~63GiB of replays dating back to 2020, so for this test I&#x27;ll combine everything we&#x27;ve learned above into a simple formula and apply it to my replay data from 2022. One thing worth mentioning is the slippi versions at that time. 2022 had 4 major versions, but 3 of them were released in January&#x2F;February. Most of the year was played on 3.12.0, with a solid few months on both 3.13.0 and 3.14.0. Thankfully, the size of the pre-, post-, and item-frame events are all the same on all of those versions. There&#x27;s a few minor differences in some of the &amp;quot;once per file&amp;quot; fields, but since metadata and gecko codes are already estimates, it shouldn&#x27;t matter too much. If I was building this more robustly, I&#x27;d have it dynamically alter the byte counts based on file dates, but that&#x27;s not necessary for this test.&lt;&#x2F;p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Code
+&lt;&#x2F;summary&gt;
+&lt;pre data-lang=&quot;rust&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-rust &quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let mut&lt;&#x2F;span&gt;&lt;span&gt; games = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;parse&lt;&#x2F;span&gt;&lt;span&gt;(replay, &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;true&lt;&#x2F;span&gt;&lt;span&gt;);
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; actual_dur: &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;u128 &lt;&#x2F;span&gt;&lt;span&gt;= games
+&lt;&#x2F;span&gt;&lt;span&gt;                        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;iter&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;                        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;g&lt;&#x2F;span&gt;&lt;span&gt;| g.duration.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;as_millis&lt;&#x2F;span&gt;&lt;span&gt;()).&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;sum&lt;&#x2F;span&gt;&lt;span&gt;();
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; size = games
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;iter&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;        .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;map&lt;&#x2F;span&gt;&lt;span&gt;(|&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e06c75;&quot;&gt;g&lt;&#x2F;span&gt;&lt;span&gt;|
+&lt;&#x2F;span&gt;&lt;span&gt;            File::open(g.path.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;to_str&lt;&#x2F;span&gt;&lt;span&gt;().&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;())
+&lt;&#x2F;span&gt;&lt;span&gt;                .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;                .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;metadata&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;                .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;unwrap&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;                .&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;file_size&lt;&#x2F;span&gt;&lt;span&gt;()
+&lt;&#x2F;span&gt;&lt;span&gt;        )
+&lt;&#x2F;span&gt;&lt;span&gt;        .sum::&amp;lt;&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;u64&lt;&#x2F;span&gt;&lt;span&gt;&amp;gt;();
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(size);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; guess_frames =
+&lt;&#x2F;span&gt;&lt;span&gt;    ((size - (games.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;len&lt;&#x2F;span&gt;&lt;span&gt;() as &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;u64 &lt;&#x2F;span&gt;&lt;span&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;56_300&lt;&#x2F;span&gt;&lt;span&gt;)) as &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;f32 &lt;&#x2F;span&gt;&lt;span&gt;* &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0.8&lt;&#x2F;span&gt;&lt;span&gt;) &#x2F; &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;314.0&lt;&#x2F;span&gt;&lt;span&gt;; &lt;&#x2F;span&gt;&lt;span style=&quot;font-style:italic;color:#5c6370;&quot;&gt;&#x2F;&#x2F; post-frame is 4 bytes smaller than 3.16.0
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(guess_frames);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span&gt; guess_ms = guess_frames * &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;16.667&lt;&#x2F;span&gt;&lt;span&gt;;
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(guess_ms);
+&lt;&#x2F;span&gt;&lt;span&gt;
+&lt;&#x2F;span&gt;&lt;span&gt;dbg!(actual_dur.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#56b6c2;&quot;&gt;abs_diff&lt;&#x2F;span&gt;&lt;span&gt;(guess_ms as &lt;&#x2F;span&gt;&lt;span style=&quot;color:#c678dd;&quot;&gt;u128&lt;&#x2F;span&gt;&lt;span&gt;));
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Output
+&lt;&#x2F;summary&gt;
+&lt;pre data-lang=&quot;cmd&quot; style=&quot;background-color:#282c34;color:#abb2bf;&quot; class=&quot;language-cmd &quot;&gt;&lt;code class=&quot;language-cmd&quot; data-lang=&quot;cmd&quot;&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;97&lt;&#x2F;span&gt;&lt;span&gt;] size = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;16837148506
+&lt;&#x2F;span&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;100&lt;&#x2F;span&gt;&lt;span&gt;] guess_frames = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;42221164&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0
+&lt;&#x2F;span&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;103&lt;&#x2F;span&gt;&lt;span&gt;] guess_ms = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;703700160&lt;&#x2F;span&gt;&lt;span&gt;.&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;0
+&lt;&#x2F;span&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;104&lt;&#x2F;span&gt;&lt;span&gt;] actual_dur = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;703206555
+&lt;&#x2F;span&gt;&lt;span&gt;[slp_parse\src\main.rs:&lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;106&lt;&#x2F;span&gt;&lt;span&gt;] actual_dur.abs_diff(guess_ms as u128) = &lt;&#x2F;span&gt;&lt;span style=&quot;color:#d19a66;&quot;&gt;493605
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;&#x2F;details&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;&lt;&#x2F;th&gt;&lt;th&gt;Playtime (ms)&lt;&#x2F;th&gt;&lt;th&gt;Playtime (hours)&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;Guess&lt;&#x2F;td&gt;&lt;td&gt;703700160&lt;&#x2F;td&gt;&lt;td&gt;195.5&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Actual&lt;&#x2F;td&gt;&lt;td&gt;703206555&lt;&#x2F;td&gt;&lt;td&gt;195.3&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Diff&lt;&#x2F;td&gt;&lt;td&gt;493605&lt;&#x2F;td&gt;&lt;td&gt;.14&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Well well well, that&#x27;s a difference of only &lt;em&gt;8 minutes&lt;&#x2F;em&gt;, a difference of ~0.07%. Using only the file size, the number of files, and a little bit of investigation into a file format. I&#x27;d say that&#x27;s a success. There&#x27;s a few asterisks, but they can mainly be boiled down to the &lt;code&gt;0.8&lt;&#x2F;code&gt; scalar in the formula. If you play a different character or have better&#x2F;worse connections on average, that number might need to be fiddled with.&lt;&#x2F;p&gt;
+&lt;p&gt;Is it practical? Uh... kinda. Opening a bunch of file handles and doing a handful of math operations is also WAY faster than parsing all of the replays - especially if you aren&#x27;t using a compiled parser (which are still bottlenecked by disk read speed, even when only partially parsing files). Though, I think most slippi-adjacent apps are already parsing replays for other purposes though, so there&#x27;s not really anything gained over just pulling it straight from the parsed file.&lt;&#x2F;p&gt;
+&lt;p&gt;Still, neat.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>

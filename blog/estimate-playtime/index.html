@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Can you estimate playtime from replay folder size? | A Walnut&#x27;s Thoughts</title>
+  <meta name="title" content="Can you estimate playtime from replay folder size?">
+<meta name="description" content="A Zola-theme based on Bear Blog." />
+
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <style>body {
+font-family: EB Garamond, sans-serif;
+font-size: 16px;
+font-weight: 500;
+margin: auto;
+padding: 20px;
+max-width: 720px;
+text-align: left;
+background-color: #fff;
+word-wrap: break-word;
+overflow-wrap: break-word;
+line-height: 1.5;
+color: #444;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+b {
+color: #222;
+}
+
+a {
+color: #3273dc;
+}
+
+.title {
+text-decoration: none;
+border: 0;
+}
+
+.title span {
+font-weight: 400;
+}
+
+nav a {
+margin-right: 10px;
+}
+
+textarea {
+width: 100%;
+font-size: 1rem;
+
+}
+
+input {
+font-size: 1rem;
+}
+
+main,article {
+line-height: 1.6;
+font-size: 1rem;
+text-align: justify;
+text-justify: inter-word;
+}
+
+table {
+width: 50%;
+}
+
+table, th, td {
+border: 1px solid black;
+border-collapse: collapse;
+padding-left: 1em;
+}
+
+img {
+max-width: 100%;
+}
+
+code {
+padding: 2px 5px;
+<!-- color: #ddd; -->
+background-color: #181818;
+}
+
+pre code {
+color: #ddd;
+display: block;
+padding: 20px;
+<!-- white-space: pre-wrap; -->
+<!-- overflow-wrap: break-word; -->
+font-size: 0.875rem;
+overflow-x: auto;
+}
+
+div.highlight pre {
+background-color: initial;
+color: initial;
+}
+
+div.highlight code {
+background-color: unset;
+color: unset;
+}
+
+blockquote {
+border-left: 1px solid #999;
+color: #222;
+padding-left: 20px;
+font-style: italic;
+}
+
+footer {
+padding: 25px;
+text-align: center;
+}
+
+.helptext {
+color: #777;
+font-size: small;
+}
+
+.errorlist {
+color: #eba613;
+font-size: small;
+}
+
+/* blog posts */
+ul.blog-posts {
+list-style-type: none;
+padding: unset;
+}
+
+ul.blog-posts li {
+display: flex;
+}
+
+ul.blog-posts li span {
+flex: 0 0 130px;
+}
+
+ul.blog-posts li a:visited {
+color: #8b6fcb;
+}
+
+@media (prefers-color-scheme: dark) {
+body {
+background-color: #333;
+color: #ddd;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+strong,
+b {
+color: #eee;
+}
+
+a {
+color: #8cc2dd;
+}
+
+code {
+background-color: #282c34;
+}
+
+pre code {
+color: #ddd;
+background-color: initial;
+<!-- overflow-x: auto; -->
+}
+
+blockquote {
+color: #ccc;
+}
+
+textarea,
+input {
+background-color: #252525;
+color: #ddd;
+}
+
+.helptext {
+color: #aaa;
+}
+}</style>
+  </head>
+<body>
+  <header>
+  <a href="https:&#x2F;&#x2F;Walnut356.github.io" class="title">
+    <h2>A Walnut&#x27;s Thoughts</h2>
+  </a>
+  <nav>
+    <a href="https:&#x2F;&#x2F;Walnut356.github.io">Home</a>
+      <a href="https://Walnut356.github.io/blog/">Blog</a>
+  </nav>
+</header>
+
+    <h1>Can you estimate playtime from replay folder size?</h1>
+      <p>
+        <i>
+          <time datetime='2023-12-24T00:00:00+00:00' pubdate>24 Dec, 2023</time>
+        </i>
+      </p>
+  <main>
+    <p>I've seen this question come up a few times on r/ssbm and while I've given hand-wavey answers before, I find myself in a good place to answer more rigerously now. We can break this question down to more basic ones: &quot;how many bytes of replay data correspond to a single frame of gameplay?&quot; and &quot;how many bytes in the replay are unrelated to frames?&quot;. From there, we can estimate a duration by simply translating the 16.667ms per frame to minutes and seconds.</p>
+<p>For the analysis, we'll be using the replay parser I wrote in Rust. Replays <em>do</em> store their duration - both in their total frame count, and directly - so we'll easily be able to check our work. We'll be using my current netplay replays folder which contains my most recent ~1000 replays, several of which were filtered out for unimportant reasons.</p>
+<details>
+<summary>
+Code
+</summary>
+<pre data-lang="rust" style="background-color:#282c34;color:#abb2bf;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="font-style:italic;color:#5c6370;">// The DB here is still a WIP, so this is
+</span><span style="font-style:italic;color:#5c6370;">// the only SQL that will be in this post
+</span><span style="color:#c678dd;">let</span><span> conn = Connection::open_in_memory()?;
+</span><span>
+</span><span style="color:#c678dd;">let</span><span> stubs = </span><span style="color:#56b6c2;">parse_stubs</span><span>(</span><span style="color:#c678dd;">r</span><span style="color:#98c379;">&quot;E:\Slippi Replays\Netplay\&quot;</span><span>, </span><span style="color:#d19a66;">true</span><span>);
+</span><span>dbg!(stubs.</span><span style="color:#56b6c2;">len</span><span>());
+</span><span>
+</span><span style="color:#c678dd;">let mut</span><span> total = </span><span style="color:#d19a66;">0</span><span style="color:#c678dd;">u128</span><span>;
+</span><span style="color:#c678dd;">for</span><span> stub in stubs {
+</span><span>    total += stub.path.</span><span style="color:#56b6c2;">metadata</span><span>().</span><span style="color:#56b6c2;">unwrap</span><span>().</span><span style="color:#56b6c2;">file_size</span><span>() as </span><span style="color:#c678dd;">u128</span><span>;
+</span><span>}
+</span><span>
+</span><span>dbg!(total);
+</span><span>
+</span><span style="color:#56b6c2;">create_stubs</span><span>(&amp;conn, &amp;</span><span style="color:#56b6c2;">parse_stubs</span><span>(</span><span style="color:#c678dd;">r</span><span style="color:#98c379;">&quot;E:\Slippi Replays\Netplay\&quot;</span><span>, </span><span style="color:#d19a66;">true</span><span>))?;
+</span><span style="color:#56b6c2;">export</span><span>(&amp;conn, </span><span style="color:#98c379;">&quot;test_db&quot;</span><span>)?;
+</span><span style="color:#c678dd;">let mut</span><span> stmt = conn.</span><span style="color:#56b6c2;">prepare</span><span>(
+</span><span>    </span><span style="color:#98c379;">&quot;SELECT sum(duration) FROM stub;&quot;
+</span><span>)?;
+</span><span>
+</span><span style="color:#c678dd;">let mut</span><span> val = stmt.</span><span style="color:#56b6c2;">query</span><span>([])?;
+</span><span>
+</span><span>println!(
+</span><span>    </span><span style="color:#98c379;">&quot;</span><span style="color:#d19a66;">{:?}</span><span style="color:#98c379;">&quot;</span><span>,
+</span><span>    val
+</span><span>        .</span><span style="color:#56b6c2;">next</span><span>()
+</span><span>        .</span><span style="color:#56b6c2;">unwrap</span><span>()
+</span><span>        .</span><span style="color:#56b6c2;">unwrap</span><span>()
+</span><span>        .get::&lt;</span><span style="color:#c678dd;">usize</span><span>, </span><span style="color:#c678dd;">usize</span><span>&gt;(</span><span style="color:#d19a66;">0</span><span>)
+</span><span>        .</span><span style="color:#56b6c2;">unwrap</span><span>() </span><span style="font-style:italic;color:#5c6370;">// just give me the number already &gt;=(
+</span><span>);
+</span></code></pre>
+</details>
+<details>
+<summary>
+Output
+</summary>
+<pre data-lang="cmd" style="background-color:#282c34;color:#abb2bf;" class="language-cmd "><code class="language-cmd" data-lang="cmd"><span>    [slp_db\src\main.rs:</span><span style="color:#d19a66;">13</span><span>] stubs.len() = </span><span style="color:#d19a66;">1048</span><span> // # of games
+</span><span>    [slp_db\src\main.rs:</span><span style="color:#d19a66;">20</span><span>] total = </span><span style="color:#d19a66;">3682219473</span><span> // byte count
+</span><span>    </span><span style="color:#d19a66;">155336180</span><span> // total playtime in ms
+</span></code></pre>
+</details>
+<p>After loading these into the database, a quick query gives us the total duration of all of the games: 155,336,180ms. Or, in a less disgusting unit, ~43 hours and 9 minutes. Accounting for the filtered replays, the total file size is 3,682,219,473 bytes or ~3.43GiB.</p>
+<h2 id="what-exactly-is-in-a-replay-file">What exactly is in a replay file?</h2>
+<p>This is both an easy and a difficult question to answer. While we could directly inspect the assembly code that exports the replay data or the .slp file itself in a hex editor, there's a much easier way: a <a href="https://github.com/project-slippi/slippi-wiki/blob/master/SPEC.md">file specification</a> maintained by the slippi and slippi-adjacent devs. The spec helpfully lists the hexadecimal byte offsets of each field in each subsection. The values are not encoded or padded in any way, so simply adding the byte-length of the last field to the offset of the last field gives us the total size:</p>
+<table><thead><tr><th>Event:</th><th>Size:</th></tr></thead><tbody>
+<tr><td>Payloads</td><td>30</td></tr>
+<tr><td>Game Start</td><td>761</td></tr>
+<tr><td>Pre-Frame</td><td>65</td></tr>
+<tr><td>Post-Frame</td><td>85</td></tr>
+<tr><td>Game End</td><td>7</td></tr>
+<tr><td>Frame Start</td><td>13</td></tr>
+<tr><td>Item Update</td><td>45</td></tr>
+<tr><td>Frame Bookend</td><td>9</td></tr>
+<tr><td>Gecko List</td><td>uhh...</td></tr>
+</tbody></table>
+<p>The metadata event at the end doesn't have a guaranteed size, but it's roughly 250 bytes.</p>
+<p>It's also worth noting that these sizes are specifically for replays of version 3.16.0. As new versions come out and add new fields, events can be larger. It follows that events in older replays have smaller events. We can't extract the replay version without parsing the replay, but the file creation date and/or default file name (which contains the replay's creation date) can be used as a proxy to that information. I manually compiled the release dates of the replay file versions by walking the git history of the replay recording asm file, a list is available <a href="https://github.com/Walnut356/SlpProcess/blob/37c25c8488178157c0f97e1184385a62af82a6e1/slp_parse/src/events/game_start.rs#L508">here</a></p>
+<p>So now we know what's in a replay file, but that doesn't tell us what's <em>in</em> a replay file. For that, we need to bust out the hex editor:</p>
+<p><img src="https://Walnut356.github.io/blog/estimate-playtime/./header_bytes.png" alt="hex editor" /></p>
+<p>...</p>
+<p><img src="https://Walnut356.github.io/blog/estimate-playtime/./gamestart_bytes.png" alt="gamestart bytes" /></p>
+<p>At the top we see the header, a 15 byte sequence that marks the beginning of a .slp file, which we can add on to our non-frame data total. Next we can see the command byte for the Event Payloads (<code>0x35</code>), followed by the command byte for the Game Start event (<code>0x36</code>). The next thing we see though isn't the start of the first frame of data as might be expected, it's event code <code>0x10</code> which corresponds to the Message Splitter. The layout and implementation are a bit confusing, so I'll gloss over the specifics. Long story short this contains all of the gecko codes used when the replay was recorded. As I understand it, this exists to prevent playback desyncs, especially in spectator mode. Unfortunately for us it means we're going to have to formalize the fact that our playtime estimate will be an <em>estimate</em>, not an exact match.</p>
+<p>See, when you play a match against someone online, each of your dolphin instances generates a replay file. As many of you probably know, there are a handful of &quot;netplay safe&quot; gecko codes out there - codes that can be added by an individual, but won't desync if their opponent doesn't have it. These can change from game to game as the player toggles them on or off. Also, there is no &quot;sharing&quot; of gecko codes, and no &quot;canonical&quot; list of gecko codes for that game, thus each dolphin instance records the gecko codes that it had enabled at the time. That means 2 (or more via broadcasting) replay files of the same game are <em>not</em> guaranteed to be identical. Keep that in mind, as it will come up again later.</p>
+<p>This means that, at best, we can only guess at how large people's gecko codes will be. There are some limits to how small and large the gecko codes section can be, but for now, we'll just assume everyone uses the same ones I do: the required and recommended set, as well as Flash Red on Failed L-Cancel.</p>
+<p>My parser stores offsets of each event as an intermediate step, so we can pull the offset of the first pre-frame event, subtract out the non-gecko event sizes, and we get a gecko code size of 56,124 bytes. The game-end and metadata events also occur once per game (assuming no bugs). That means that, for this replay, ~56,374 bytes do not contribute to the duration.</p>
+<p>We can multiply this by the total number of replays and subtract it out from the total byte count of the files, leaving us with ~3,623,139,521 bytes of pure frame data</p>
+<h2 id="frame-data">Frame data</h2>
+<p>The naive solution is to just divide the remaining bytes by the size of frame start + pre frame + post frame + frame end (172 bytes). That gets us 21,064,764 frames, which we can multiply by 16.667 to get 351,086,432ms, or ~97.5 hours, which slightly more than double the actual time.</p>
+<p>One issue stands out immediately: frame start and frame end events only happen once per frame, whereas pre- and post-frame events happen once <em>per character</em> per frame. Note how there are 2 pre-frames (<code>0x37</code>) and 2 post-frames (<code>0x38</code>) in this single span from one frame start (<code>0x3A</code>) to another:</p>
+<p><img src="https://Walnut356.github.io/blog/estimate-playtime/one_frame.png" alt="frame span" /></p>
+<p>Because these are generated per character, there will sometimes be more than 2 pre/post frame events per frame start/end. Nana generates her own frame events when she's alive, and doubles games will generate events for everyone who is alive. In my case, I don't have any doubles replays and I don't think there's a statistically significant enough number of ice climbers games in my replay set for it to matter. That means each 16.667ms, it should be exactly (13 + 9 + (65 * 2) + (85 * 2)) = 322 bytes. That would mean we have ~11,251,986 frames, which is 187,536,852ms, or ~52 hours. It's fairly close to our goal of 43 hours, but still about 20% too high.</p>
+<h2 id="item-frames">Item Frames</h2>
+<p>Items are a bit of a can of worms. &quot;Item&quot; in this context is more a game engine term than a colloquial one. We'd normally think of items as being projectiles - falco's laser, turnips, pills. In engine terms though, an item is basically any non-player, non-stage, non-ui entity. Using the items tab of <a href="https://github.com/Walnut356/stats-dash">stats dash</a>, we can see what (and how many) items falco spawned in a single game:</p>
+<p><img src="https://Walnut356.github.io/blog/estimate-playtime/falco_items.png" alt="falco items" /></p>
+<p>Huh. Not just are lasers items, but also falco's gun itself as well as the trail left behind by his side B. Some characters have lots of items - most of GnW's attacks involve an item - some characters have basically none. There's also some extra weirdness with things like samus's charge shot, which count as items during the charging animation, even though they're not &quot;active&quot; and able to deal damage. Things like marth's sword that are permanently attached to his player model don't count, but then shine doesn't count when it seems like maybe it should. I've been surprised more than a few times by what does and doesn't count as an item.</p>
+<p>Either way, that means that there isn't a perfect &quot;generalized&quot; method to predict how many item frames are present in a game. Knowing what characters are in it <em>helps</em>, but we've restricted ourselves to file size as our only source of info so at best we could only guess by an additional proxy guess of the average character distribution (which also assumes that you have roughly the same set length vs, say, game and watch that you do vs fox which likely isn't true). It's still probably worth checking if item frames occupy a significant fraction of my game time though which is pretty simple:</p>
+<details>
+<summary>
+Code
+</summary>
+<pre data-lang="rust" style="background-color:#282c34;color:#abb2bf;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#c678dd;">let</span><span> replay = </span><span style="color:#c678dd;">r</span><span style="color:#98c379;">&quot;E:\Slippi Replays\Netplay\&quot;</span><span>;
+</span><span style="color:#c678dd;">let mut</span><span> games = </span><span style="color:#56b6c2;">parse</span><span>(replay, </span><span style="color:#d19a66;">true</span><span>);
+</span><span>dbg!(
+</span><span>    games
+</span><span>        .</span><span style="color:#56b6c2;">iter</span><span>()
+</span><span>        .</span><span style="color:#56b6c2;">map</span><span>(|</span><span style="color:#e06c75;">g</span><span>|
+</span><span>            g.item_frames.</span><span style="color:#56b6c2;">as_ref</span><span>().</span><span style="color:#56b6c2;">unwrap</span><span>().</span><span style="color:#56b6c2;">len</span><span>()
+</span><span>        )
+</span><span>        .sum::&lt;</span><span style="color:#c678dd;">usize</span><span>&gt;()
+</span><span>);
+</span></code></pre>
+</details>
+<details>
+<summary>
+Output
+</summary>
+<pre data-lang="cmd" style="background-color:#282c34;color:#abb2bf;" class="language-cmd "><code class="language-cmd" data-lang="cmd"><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">91</span><span>] games.iter().map(|g| g.item_frames.as_ref().unwrap().len()).sum::&lt;usize&gt;() = </span><span style="color:#d19a66;">5229553
+</span></code></pre>
+</details>
+<p>5,229,553 * 45 = 235,329,885 bytes. Removing that from our total gives us 3,387,809,636 bytes, which is 10,521,148 frames, 175,355,973ms, or ~48.71 hours. At least for someone who plays falco 90% of the time. Our estimate is still about 13% too high though.</p>
+<h2 id="too-many-frames">Too many frames</h2>
+<p>13% too high is kind of a lot. The remaining data is purely frame data, and it's not being thrown off by items or characters generating extra frames. So why do we have so much extra data?</p>
+<p>When I built the parser, I compared the output to the <a href="https://github.com/hohav/py-slippi">py-slippi parser</a> which I had previously verified as accurate, and I found that the outputs didn't match. The data from the first bit of the replay seemed fine, but later in the replay some things appeared to be happening &quot;too early&quot;. The data looked &quot;valid&quot;, it was just in the wrong location in the parsed data. I agonized a bit over how I was handling offsets, but the end-game data was correct as well. After some time stepping through my parser with a debugger and comparing the output to dolphin playing back the replay, I wrote a quick test that should have occurred to me from the start - do these parsers end up with the same total number of frames?</p>
+<details>
+<summary>
+Code
+</summary>
+<pre data-lang="python" style="background-color:#282c34;color:#abb2bf;" class="language-python "><code class="language-python" data-lang="python"><span style="color:#c678dd;">import </span><span>slippi </span><span style="font-style:italic;color:#5c6370;"># py-slippi
+</span><span style="color:#c678dd;">import </span><span>slp_parse </span><span style="font-style:italic;color:#5c6370;"># rust parser via python wrapper
+</span><span>
+</span><span>replay = </span><span style="color:#c678dd;">r</span><span style="color:#98c379;">&quot;test_replays</span><span style="color:#56b6c2;">\n</span><span style="color:#98c379;">etplay_sample</span><span style="color:#d19a66;">.</span><span style="color:#98c379;">slp&quot;
+</span><span style="font-style:italic;color:#5c6370;"># frame count from py-slippi
+</span><span style="color:#56b6c2;">print</span><span>(</span><span style="color:#56b6c2;">len</span><span>(slippi.</span><span style="color:#e06c75;">Game</span><span>(replay).frames))
+</span><span style="font-style:italic;color:#5c6370;"># frame count from my parser
+</span><span style="color:#56b6c2;">print</span><span>(slp_parse.</span><span style="color:#e06c75;">parse</span><span>(replay, true)[</span><span style="color:#d19a66;">0</span><span>].players[</span><span style="color:#d19a66;">0</span><span>].frames.</span><span style="color:#e06c75;">len</span><span>())
+</span></code></pre>
+</details>
+<details>
+<summary>
+Output
+</summary>
+<pre data-lang="cmd" style="background-color:#282c34;color:#abb2bf;" class="language-cmd "><code class="language-cmd" data-lang="cmd"><span style="color:#d19a66;">9808</span><span> // py-slippi
+</span><span style="color:#d19a66;">9822</span><span> // slp_parse
+</span></code></pre>
+</details>
+<p>Ah. Shit.</p>
+<p>As many of you probably know, rollback netplay works by guessing your opponent's inputs when they arrive too late, then re-simulating the previous few frames once the accurate inputs finally arrive. What you may not know is that the code that generates the replay is written in assembly and is called directly by the engine's main loop. That means when the game re-simulates, it calls the recording code again and records those re-simulated frames. This is a good thing, it means that the &quot;canonical&quot; game exists within the replay file. The bad news is that there's no handling for &quot;cleaning up&quot; those rollback'd frames (and it's generally good that they're left in for debugging purposes) and my parser was treating them just like any other frame. Py-slippi has special handling for &quot;finalized&quot; frames - and the slippi file spec even mentions it in the frame end event.  For compatibility reasons, I don't rely on the frame end event, and I didn't have any special handling. As a result, my parser's frames were drifting apart from &quot;reality&quot; because rollback'd frames were sneaking in. Solving that was fairly easy, but what does this mean for estimating playtime?</p>
+<p>All replay files will have extra &quot;garbage&quot; data that doesn't count towards playtime. How much &quot;garbage&quot; data? Depends on how bad your connection was as well as how often the engine mis-predicted inputs. It's worth noting that because the engine is re-simulating full frames, all the above issues (nana, items, doubles) apply to each rollbacked frame. Remember when I said that 2 replay files of the same aren't guaranteed to be identical? That's true for this too. The rollback'd frames in each replay will very likely be different between the two replays because your opponent's client has to re-simulate via your inputs and you have to re-simulate via theirs; one client may guess wrong at the same time that the other guesses right.</p>
+<p>All hope isn't lost though. Matchmaking typically makes sure pings aren't too ridiculous between players. Even when it can't, most players won't play those games out. That means, in general, the number of rollback frames should be pretty low. Finding out how many is pretty simple, just compare the total number of frames in the replay to the amount of &quot;valid&quot; frames:</p>
+<details>
+<summary>
+Code
+</summary>
+<pre data-lang="rust" style="background-color:#282c34;color:#abb2bf;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#c678dd;">let</span><span> replay = </span><span style="color:#c678dd;">r</span><span style="color:#98c379;">&quot;E:\Slippi Replays\Netplay\&quot;</span><span>;
+</span><span style="color:#c678dd;">let mut</span><span> games = </span><span style="color:#56b6c2;">parse</span><span>(replay, </span><span style="color:#d19a66;">true</span><span>);
+</span><span>
+</span><span style="font-style:italic;color:#5c6370;">// a replay *probably* can&#39;t be 100% rollback frames
+</span><span style="font-style:italic;color:#5c6370;">// but may as well be safe
+</span><span style="color:#c678dd;">let mut</span><span> counts = [</span><span style="color:#d19a66;">0</span><span>; </span><span style="color:#d19a66;">11</span><span>];
+</span><span style="color:#c678dd;">let mut</span><span> max: </span><span style="color:#c678dd;">f32 </span><span>= </span><span style="color:#d19a66;">0.0</span><span>;
+</span><span style="color:#c678dd;">let mut</span><span> min: </span><span style="color:#c678dd;">f32 </span><span>= </span><span style="color:#d19a66;">100.0</span><span>;
+</span><span style="color:#c678dd;">let mut</span><span> total_frames = </span><span style="color:#d19a66;">0</span><span>;
+</span><span style="color:#c678dd;">let mut</span><span> total_rbs = </span><span style="color:#d19a66;">0</span><span>;
+</span><span>
+</span><span style="color:#c678dd;">for</span><span> game in games {
+</span><span>    </span><span style="color:#c678dd;">let</span><span> tf = game.total_frames;
+</span><span>    </span><span style="color:#c678dd;">let</span><span> rbs = game.frames_rollbacked;
+</span><span>    total_frames += tf;
+</span><span>    total_rbs = rbs;
+</span><span>    </span><span style="color:#c678dd;">if</span><span> rbs == </span><span style="color:#d19a66;">0 </span><span>{
+</span><span>        counts[</span><span style="color:#d19a66;">0</span><span>] += </span><span style="color:#d19a66;">1</span><span>;
+</span><span>        </span><span style="color:#c678dd;">continue</span><span>;
+</span><span>    }
+</span><span>    </span><span style="color:#c678dd;">let</span><span> p = rbs as </span><span style="color:#c678dd;">f32 </span><span>/ (rbs + tf) as </span><span style="color:#c678dd;">f32</span><span>;
+</span><span>    </span><span style="font-style:italic;color:#5c6370;">// group by 10%, shifted 1 idx forward
+</span><span>    counts[(p * </span><span style="color:#d19a66;">10.0 </span><span>+ </span><span style="color:#d19a66;">1.0</span><span>) as </span><span style="color:#c678dd;">usize</span><span>] += </span><span style="color:#d19a66;">1</span><span>;
+</span><span>
+</span><span>    max = max.</span><span style="color:#56b6c2;">max</span><span>(p);
+</span><span>    min = min.</span><span style="color:#56b6c2;">min</span><span>(p);
+</span><span>}
+</span><span>
+</span><span style="font-style:italic;color:#5c6370;">// maximum rollback percentage
+</span><span>dbg!(max);
+</span><span style="font-style:italic;color:#5c6370;">// minimum non-0 rollback percentage
+</span><span>dbg!(min);
+</span><span style="font-style:italic;color:#5c6370;">// number of games with X% rollbacks
+</span><span style="font-style:italic;color:#5c6370;">// where idx 0 = 0%, idx 1 = 0..10% non-inclusive...
+</span><span>dbg!(counts);
+</span><span>dbg!(total_rbs);
+</span><span>dbg!(total_frames);
+</span><span style="font-style:italic;color:#5c6370;">// percentage of rollback frames over all games
+</span><span>dbg!(total_rbs as </span><span style="color:#c678dd;">f32</span><span>/ (total_rbs as </span><span style="color:#c678dd;">f32 </span><span>+ total_frames as </span><span style="color:#c678dd;">f32</span><span>));
+</span><span>
+</span></code></pre>
+</details>
+<details>
+<summary>
+Output
+</summary>
+<pre data-lang="cmd" style="background-color:#282c34;color:#abb2bf;" class="language-cmd "><code class="language-cmd" data-lang="cmd"><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">113</span><span>] max = </span><span style="color:#d19a66;">0</span><span>.</span><span style="color:#d19a66;">51921797
+</span><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">114</span><span>] min = </span><span style="color:#d19a66;">6</span><span>.818957e-</span><span style="color:#d19a66;">5
+</span><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">115</span><span>] counts = [
+</span><span>    </span><span style="color:#d19a66;">148</span><span>,
+</span><span>    </span><span style="color:#d19a66;">575</span><span>,
+</span><span>    </span><span style="color:#d19a66;">120</span><span>,
+</span><span>    </span><span style="color:#d19a66;">89</span><span>,
+</span><span>    </span><span style="color:#d19a66;">102</span><span>,
+</span><span>    </span><span style="color:#d19a66;">12</span><span>,
+</span><span>    </span><span style="color:#d19a66;">2</span><span>,
+</span><span>    </span><span style="color:#d19a66;">0</span><span>,
+</span><span>    </span><span style="color:#d19a66;">0</span><span>,
+</span><span>    </span><span style="color:#d19a66;">0</span><span>,
+</span><span>    </span><span style="color:#d19a66;">0</span><span>,
+</span><span>]
+</span><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">116</span><span>] total_rbs = </span><span style="color:#d19a66;">1073691
+</span><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">117</span><span>] total_frames = </span><span style="color:#d19a66;">9450144
+</span><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">118</span><span>] total_rbs as f32 / (total_rbs as f32 + total_frames as f32) = </span><span style="color:#d19a66;">0</span><span>.</span><span style="color:#d19a66;">10202469
+</span></code></pre>
+</details>
+<table><thead><tr><th>Percent</th><th>Count</th></tr></thead><tbody>
+<tr><td>0</td><td>148</td></tr>
+<tr><td>0.01-9.99</td><td>575</td></tr>
+<tr><td>10.00-19.99</td><td>120</td></tr>
+<tr><td>20.00-29.99</td><td>89</td></tr>
+<tr><td>30.00-39.99</td><td>102</td></tr>
+<tr><td>40.00-49.99</td><td>12</td></tr>
+<tr><td>&gt;50</td><td>2</td></tr>
+</tbody></table>
+<p>The vast majority of replays were less than 10% rollbacked data, and the total number of rollbacked frames is ~10.2%. If we remove this data from our total we are left with 3,042,081,134 bytes. Converting this to time as above leaves us with 9,447,457 frames and a playtime of 157,460,765ms or ~43.74 hours. That's a difference of only 35 minutes compared to our expected time! We got there by cheating a little, but we've established some important invariants and some decent guesses for things that aren't guaranteed. In this instance, items + rollbacks accounted for ~20% of replay data, and the rest can be accounted for via file spec guarantees. 20% isn't a bad number to start guessing with</p>
+<p>There are a few other things that could affect the replay size, but involve incredibly rare bugs that cause events to be duplicated or missing.</p>
+<h2 id="the-test">The test</h2>
+<p>I have ~63GiB of replays dating back to 2020, so for this test I'll combine everything we've learned above into a simple formula and apply it to my replay data from 2022. One thing worth mentioning is the slippi versions at that time. 2022 had 4 major versions, but 3 of them were released in January/February. Most of the year was played on 3.12.0, with a solid few months on both 3.13.0 and 3.14.0. Thankfully, the size of the pre-, post-, and item-frame events are all the same on all of those versions. There's a few minor differences in some of the &quot;once per file&quot; fields, but since metadata and gecko codes are already estimates, it shouldn't matter too much. If I was building this more robustly, I'd have it dynamically alter the byte counts based on file dates, but that's not necessary for this test.</p>
+<details>
+<summary>
+Code
+</summary>
+<pre data-lang="rust" style="background-color:#282c34;color:#abb2bf;" class="language-rust "><code class="language-rust" data-lang="rust"><span style="color:#c678dd;">let mut</span><span> games = </span><span style="color:#56b6c2;">parse</span><span>(replay, </span><span style="color:#d19a66;">true</span><span>);
+</span><span style="color:#c678dd;">let</span><span> actual_dur: </span><span style="color:#c678dd;">u128 </span><span>= games
+</span><span>                        .</span><span style="color:#56b6c2;">iter</span><span>()
+</span><span>                        .</span><span style="color:#56b6c2;">map</span><span>(|</span><span style="color:#e06c75;">g</span><span>| g.duration.</span><span style="color:#56b6c2;">as_millis</span><span>()).</span><span style="color:#56b6c2;">sum</span><span>();
+</span><span style="color:#c678dd;">let</span><span> size = games
+</span><span>        .</span><span style="color:#56b6c2;">iter</span><span>()
+</span><span>        .</span><span style="color:#56b6c2;">map</span><span>(|</span><span style="color:#e06c75;">g</span><span>|
+</span><span>            File::open(g.path.</span><span style="color:#56b6c2;">to_str</span><span>().</span><span style="color:#56b6c2;">unwrap</span><span>())
+</span><span>                .</span><span style="color:#56b6c2;">unwrap</span><span>()
+</span><span>                .</span><span style="color:#56b6c2;">metadata</span><span>()
+</span><span>                .</span><span style="color:#56b6c2;">unwrap</span><span>()
+</span><span>                .</span><span style="color:#56b6c2;">file_size</span><span>()
+</span><span>        )
+</span><span>        .sum::&lt;</span><span style="color:#c678dd;">u64</span><span>&gt;();
+</span><span>dbg!(size);
+</span><span>
+</span><span style="color:#c678dd;">let</span><span> guess_frames =
+</span><span>    ((size - (games.</span><span style="color:#56b6c2;">len</span><span>() as </span><span style="color:#c678dd;">u64 </span><span>* </span><span style="color:#d19a66;">56_300</span><span>)) as </span><span style="color:#c678dd;">f32 </span><span>* </span><span style="color:#d19a66;">0.8</span><span>) / </span><span style="color:#d19a66;">314.0</span><span>; </span><span style="font-style:italic;color:#5c6370;">// post-frame is 4 bytes smaller than 3.16.0
+</span><span>
+</span><span>dbg!(guess_frames);
+</span><span>
+</span><span style="color:#c678dd;">let</span><span> guess_ms = guess_frames * </span><span style="color:#d19a66;">16.667</span><span>;
+</span><span>dbg!(guess_ms);
+</span><span>
+</span><span>dbg!(actual_dur.</span><span style="color:#56b6c2;">abs_diff</span><span>(guess_ms as </span><span style="color:#c678dd;">u128</span><span>));
+</span></code></pre>
+</details>
+<details>
+<summary>
+Output
+</summary>
+<pre data-lang="cmd" style="background-color:#282c34;color:#abb2bf;" class="language-cmd "><code class="language-cmd" data-lang="cmd"><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">97</span><span>] size = </span><span style="color:#d19a66;">16837148506
+</span><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">100</span><span>] guess_frames = </span><span style="color:#d19a66;">42221164</span><span>.</span><span style="color:#d19a66;">0
+</span><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">103</span><span>] guess_ms = </span><span style="color:#d19a66;">703700160</span><span>.</span><span style="color:#d19a66;">0
+</span><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">104</span><span>] actual_dur = </span><span style="color:#d19a66;">703206555
+</span><span>[slp_parse\src\main.rs:</span><span style="color:#d19a66;">106</span><span>] actual_dur.abs_diff(guess_ms as u128) = </span><span style="color:#d19a66;">493605
+</span></code></pre>
+</details>
+<table><thead><tr><th></th><th>Playtime (ms)</th><th>Playtime (hours)</th></tr></thead><tbody>
+<tr><td>Guess</td><td>703700160</td><td>195.5</td></tr>
+<tr><td>Actual</td><td>703206555</td><td>195.3</td></tr>
+<tr><td>Diff</td><td>493605</td><td>.14</td></tr>
+</tbody></table>
+<p>Well well well, that's a difference of only <em>8 minutes</em>, a difference of ~0.07%. Using only the file size, the number of files, and a little bit of investigation into a file format. I'd say that's a success. There's a few asterisks, but they can mainly be boiled down to the <code>0.8</code> scalar in the formula. If you play a different character or have better/worse connections on average, that number might need to be fiddled with.</p>
+<p>Is it practical? Uh... kinda. Opening a bunch of file handles and doing a handful of math operations is also WAY faster than parsing all of the replays - especially if you aren't using a compiled parser (which are still bottlenecked by disk read speed, even when only partially parsing files). Though, I think most slippi-adjacent apps are already parsing replays for other purposes though, so there's not really anything gained over just pulling it straight from the parsed file.</p>
+<p>Still, neat.</p>
+
+  </main>
+  <p>
+        Tags:
+          <a href="https://Walnut356.github.io/tags/programming/">#programming</a>
+          <a href="https://Walnut356.github.io/tags/rust/">#rust</a>
+          <a href="https://Walnut356.github.io/tags/ssbm/">#ssbm</a>
+          <a href="https://Walnut356.github.io/tags/games/">#games</a>
+  </p>
+<footer>
+    Made with <a href="https://codeberg.org/alanpearce/zola-bearblog">Zola ʕ•ᴥ•ʔ Bear</a>
+</footer>
+</body>
+</html>
