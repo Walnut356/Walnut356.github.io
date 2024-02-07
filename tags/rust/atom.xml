@@ -283,7 +283,7 @@ Output
 &lt;tr&gt;&lt;td&gt;Diff&lt;&#x2F;td&gt;&lt;td&gt;493605&lt;&#x2F;td&gt;&lt;td&gt;.14&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
 &lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
 &lt;p&gt;Well well well, that&#x27;s a difference of only &lt;em&gt;8 minutes&lt;&#x2F;em&gt;, a difference of ~0.07%. Using only the file size, the number of files, and a little bit of investigation into a file format. I&#x27;d say that&#x27;s a success. There&#x27;s a few asterisks, but they can mainly be boiled down to the &lt;code&gt;0.8&lt;&#x2F;code&gt; scalar in the formula. If you play a different character or have better&#x2F;worse connections on average, that number might need to be fiddled with.&lt;&#x2F;p&gt;
-&lt;p&gt;Is it practical? Uh... kinda. Opening a bunch of file handles and doing a handful of math operations is also WAY faster than parsing all of the replays - especially if you aren&#x27;t using a compiled parser (which are still bottlenecked by disk read speed, even when only partially parsing files). Though, I think most slippi-adjacent apps are already parsing replays for other purposes though, so there&#x27;s not really anything gained over just pulling it straight from the parsed file.&lt;&#x2F;p&gt;
+&lt;p&gt;Is it practical? Uh... kinda. Opening a bunch of file handles and doing a handful of math operations is WAY faster than parsing all of the replays - especially if you aren&#x27;t using a compiled parser (which are still bottlenecked by disk read speed, even when only partially parsing files). I think most slippi-adjacent apps are already parsing replays for other purposes though, so there&#x27;s not really anything gained over just pulling it straight from the parsed file.&lt;&#x2F;p&gt;
 &lt;p&gt;Still, neat.&lt;&#x2F;p&gt;
 </content>
         

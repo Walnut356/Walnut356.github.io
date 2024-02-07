@@ -1,7 +1,7 @@
 +++
 title = "Can you estimate playtime from replay folder size?"
 date = "2024-01-25"
-description = "Sample article showcasing basic Markdown syntax and formatting for HTML elements."
+description = ""
 [taxonomies]
 tags=["programming", "rust", "ssbm", "games"]
 +++
@@ -354,6 +354,6 @@ Output
 
 Well well well, that's a difference of only *8 minutes*, a difference of ~0.07%. Using only the file size, the number of files, and a little bit of investigation into a file format. I'd say that's a success. There's a few asterisks, but they can mainly be boiled down to the `0.8` scalar in the formula. If you play a different character or have better/worse connections on average, that number might need to be fiddled with.
 
-Is it practical? Uh... kinda. Opening a bunch of file handles and doing a handful of math operations is also WAY faster than parsing all of the replays - especially if you aren't using a compiled parser (which are still bottlenecked by disk read speed, even when only partially parsing files). Though, I think most slippi-adjacent apps are already parsing replays for other purposes though, so there's not really anything gained over just pulling it straight from the parsed file.
+Is it practical? Uh... kinda. Opening a bunch of file handles and doing a handful of math operations is WAY faster than parsing all of the replays - especially if you aren't using a compiled parser (which are still bottlenecked by disk read speed, even when only partially parsing files). I think most slippi-adjacent apps are already parsing replays for other purposes though, so there's not really anything gained over just pulling it straight from the parsed file.
 
 Still, neat.
