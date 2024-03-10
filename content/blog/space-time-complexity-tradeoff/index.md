@@ -1,6 +1,6 @@
 +++
 title = "The space-time-complexity tradeoff"
-date = "2024-03-01"
+date = "2024-03-09"
 description = ""
 [taxonomies]
 tags=["programming", "rust",]
