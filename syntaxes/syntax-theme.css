@@ -1,0 +1,101 @@
+:root {
+  --red: #e06c75;
+  --yellow: #e5c07b;
+  --purple: #c678dd;
+  --white: #abb2bf;
+  --orange: #d19a66;
+  --blue: #61afef;
+  --teal: #56b6c2;
+  --green: #98c379;
+  --grey: #5c6370;
+}
+
+code {
+    background-color: #282c34;
+}
+
+.z-keyword:not(.z-symbol),
+.z-modifier,
+.z-type.z-function,
+.z-trait.z-type.z-storage,
+.z-placeholder.z-constant.z-other {
+  color: var(--purple);
+}
+
+.z-path,
+.z-type,
+.z-annotation.z-parameters,
+.z-entity.z-name,
+.z-any,
+.z-identifier {
+  color: var(--yellow);
+}
+
+.z-macro,
+.z-constant {
+  color: var(--orange);
+}
+
+.z-member,
+.z-parameter,
+.z-local,
+.z-keyword.z-operator.z-underscore {
+  color: var(--red);
+}
+
+.z-annotation.z-variable,
+.z-function.z-name,
+.z-function.z-variable {
+  color: var(--blue);
+}
+
+.z-block > .z-enum > .z-type {
+  color: var(--teal);
+}
+
+.z-string, .z-string.z-begin, .z-string.z-end {
+    color: var(--green);
+}
+
+
+.z-accessor,
+.z-begin,
+.z-end,
+.z-separator,
+.z-lifetime,
+.z-assignment.z-operator,
+.z-punctuation.z-annotation,
+.z-terminator,
+.z-operator,
+.z-arithmetic.z-keyword.z-operator,
+.z-range.z-keyword.z-operator,
+.z-bitwise.z-keyword.z-operator,
+.z-operator.z-comparison {
+  color: var(--white);
+}
+
+.z-comment {
+  color: var(--grey);
+  font-style: italic;
+}
+
+
+/* assembly */
+
+.z-assembly {
+  .z-function {
+    color: #61afef;
+  }
+
+  .z-source {
+    color: #abb2bf;
+  }
+
+  .z-directive {
+    color: #56b6c2;
+  }
+}
+
+.z-text.z-plain {
+  color: #abb2bf;
+}

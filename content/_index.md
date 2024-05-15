@@ -1,3 +1,4 @@
 +++
+sort_by = "date"
+paginate_by = 5
 +++
-Self taught programmer with interests in systems programming, videogames, and epic fantasy books.

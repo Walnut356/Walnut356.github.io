@@ -1,31 +1,58 @@
-title = "A Walnut's Thoughts"
 base_url = "https://Walnut356.github.io"
 description = ""
+title = "Cracking the Shell"
+author = "Walnut356"
 
-# Whether to automatically compile all Sass files in the sass directory
-compile_sass = false
 
-# Whether to build a search index to be used later on by a JavaScript library
+compile_sass = true
+default_language = "en"
+generate_feed = true
+feed_filename = "atom.xml"
+minify_html = false
+
+
 build_search_index = false
 
-theme = "zola-bearblog"
+theme = "papermod"
 
-taxonomies = [
-  {name = "categories", feed = true},
-  {name = "tags", feed = true},
-]
+taxonomies = [{ name = "tags" }]
 
 [markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
+extra_syntaxes_and_themes = ["syntaxes"]
+external_links_target_blank = true
 highlight_code = true
-highlight_theme = "two-dark"
-
-[extra]
-date_format="%d %b, %Y"
-webserver_sends_csp_headers=true
+highlight_theme = "css"
+highlight_theme_css = [{ theme = "temp", filename = "syntax-theme.css" }]
 
 
-[[extra.main_menu]]
-name = "Blog"
-url = "@/blog/_index.md"
+[extra.papermod]
+title = "Cracking The Shell"
+default_theme = "dark"
+theme = "dark"
+language_direction = "auto"
+keywords = [""]
+show_theme_toggle = true
+show_scroll_to_top = true
+show_code_copy_buttons = true
+show_reading_time = true
+show_word_count = true
+show_post_nav_links = true
+show_post_meta = true
+default_toc_open = false
+show_post_edit_button = false
+edit_post_url = "https://github.com/Walnut356/Walnut356.github.io"
+#copyright = ""
+date_format = "%Y-%m-%d"
+navigation = [
+    { url = "$BASE_URL/archive", title = "Archive" },
+    { url = "$BASE_URL/tags", title = "Tags" },
+]
+
+home_title = "A Walnut's Thoughts"
+home_content = "Self taught developer. Interested in systems programming, video games, and epic fantasy books."
+social_icons = [
+    { url = "https://github.com/walnut356", title = "GitHub", icon = "github" },
+    { url = "$BASE_URL/atom.xml", title = "RSS", icon = "rss" },
+]
