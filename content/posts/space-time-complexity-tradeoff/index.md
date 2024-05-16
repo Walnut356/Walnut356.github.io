@@ -1,5 +1,5 @@
 +++
-title = "The space-time-complexity tradeoff"
+title = "The space time complexity tradeoff"
 date = "2024-03-09"
 description = ""
 [taxonomies]
@@ -114,7 +114,7 @@ for y in start.y..=end.y {
 
 I had just finished reading The Art of 64-bit Assembly, and the BT* instructions were fresh on my mind. For those that don't read ISAs in your free time, BTS, BTR, and BTC are *very* cool instructions. The mnemonics are short for "Bit Test and \<Set / Reset / Complement\>". You feed the instruction a memory address and a *bit* offset, and it sets it, clears it, or inverts it. It also sets the carry flag so you know what the bit was before you operated on it, and you can optionally make the instruction atomic.
 
-It took me a few minutes to come up with - and convince myself of the correctness of - the indexing formula for the bitwise version. This version is the same level of cognitive complexity as the array of booleans, but with the space saving of the bitwise operations. Relative to other assembly instructions, I especially like how human-readable it is. I've spent a decent amount of time staring at PowerPC assembly, and the somewhat equivalent [RLWIMI](https://www.ibm.com/docs/ru/aix/7.2?topic=is-rlwimi-rlimi-rotate-left-word-immediate-then-mask-insert-instruction) and RLWIMN instructions require [several paragraphs](https://mariokartwii.com/showthread.php?tid=1262) to explain, and are *still* kinda incomprehensible at a glance. RLWIMI has some cool differences, such as being able to operate on a range of bits all at once, but in most cases I see it used to modify a single bit.
+It took me a few minutes to come up with - and convince myself of the correctness of - the indexing formula for the bitwise version. This version is the same level of cognitive complexity as the array of booleans, but with the space saving of the bitwise operations. Relative to other assembly instructions, I especially like how human-readable it is. I've spent a decent amount of time staring at PowerPC assembly, and the somewhat equivalent [RLWIMI](https://www.ibm.com/docs/ru/aix/7.2?topic=is-rlwimi-rlimi-rotate-left-word-immediate-then-mask-insert-instruction) and RLWINM instructions require [several paragraphs](https://mariokartwii.com/showthread.php?tid=1262) to explain, and are *still* kinda incomprehensible at a glance. RLWIMI has some cool differences, such as being able to operate on a range of bits all at once, but in most cases I see it used to modify a single bit.
 
 All that aside, we can once again run it and see that we get the correct result, and a runtime of ... 47ms? Almost twice as slow as the bitwise version? That can't be right. Lets pull the work out of the loops into their own functions and check the disassembly to see what's actually going on. Running `cargo-show-asm` on the bitwise function reveals:
 

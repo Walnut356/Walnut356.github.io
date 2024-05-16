@@ -623,7 +623,7 @@ pre:hover .copy-code {
 .post-content code {
   margin: auto 4px;
   padding: 4px 6px;
-  font-size: 0.9em;
+  font-size: 0.85em;
   line-height: 1.5;
   background: var(--code-bg);
   border-radius: 2px;

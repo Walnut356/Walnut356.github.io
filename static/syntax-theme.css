@@ -11,6 +11,7 @@
 }
 
 code {
+    color: var(--white) !important;
     background-color: #282c34 !important;
 }
 
@@ -32,6 +33,7 @@ code {
 }
 
 .z-macro,
+.z-constant.z-entity.z-name,
 .z-constant {
   color: var(--orange);
 }
@@ -49,7 +51,7 @@ code {
   color: var(--blue);
 }
 
-.z-block > .z-enum > .z-type {
+.z-block > .z-enum > .z-type, .z-enum {
   color: var(--teal);
 }
 
@@ -70,7 +72,9 @@ code {
 .z-arithmetic.z-keyword.z-operator,
 .z-range.z-keyword.z-operator,
 .z-bitwise.z-keyword.z-operator,
-.z-operator.z-comparison {
+.z-operator.z-comparison,
+.z-keyword.z-operator.z-logical,
+.z-keyword.z-operator.z-fatarrow {
   color: var(--white);
 }
 

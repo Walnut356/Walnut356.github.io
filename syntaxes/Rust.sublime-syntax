@@ -11,6 +11,7 @@ variables:
   # consumed, to prevent catastrophic backtracking
   identifier: '(?:(?:(?:r\#)?{{non_raw_ident}})\b)'
   camel_ident: '\b_*[A-Z][a-zA-Z0-9_]*[a-z][a-zA-Z0-9_]*\b'
+  caps_ident: \b_*[A-Z][A-Z0-9_]*\b
   lifetime: '''(?:_|{{non_raw_ident}})(?!\'')\b'
   escaped_char: '\\([nrt0\"''\\]|x[0-7]\h|u\{(?:\h_*){1,6}\})'
   int_suffixes: "[iu](?:8|16|32|64|128|size)"
@@ -113,16 +114,16 @@ contexts:
     # `const` in a function header has a different scope from `const` values.
     - match: '\b(const)\s+(?=unsafe|extern|fn)'
       captures:
-        1: storage.modifier.rust
+        1: keyword.const.rust
 
     - match: '\b(const)\s+({{identifier}})'
       captures:
-        1: storage.type.rust
+        1: keyword.const.rust
         2: entity.name.constant.rust
 
     - match: '\b(static)\s+(?:(mut)\s+)?({{identifier}})'
       captures:
-        1: storage.type.rust
+        1: keyword.static.rust
         2: storage.modifier.rust
         3: entity.name.constant.rust
 
@@ -185,6 +186,18 @@ contexts:
 
     - include: support-type
 
+    - match: ({{camel_ident}})(::)({{caps_ident}})
+      captures:
+        1: storage.type.rust
+        2: punctuation.accessor.rust
+        3: entity.name.constant.rust
+
+    - match: ({{camel_ident}})(::)({{camel_ident}})
+      captures:
+        1: storage.type.rust
+        2: punctuation.accessor.rust
+        3: storage.type.enum.rust
+
     - include: basic-identifiers
     - include: numbers
 
@@ -220,6 +233,9 @@ contexts:
       captures:
         1: storage.modifier.rust
         2: variable.local.rust
+
+    - match: '\b_\b'
+      scope: keyword.operator.underscore.rust
 
     - match: "{{identifier}}"
       scope: variable.local.rust
@@ -1156,6 +1172,7 @@ contexts:
         - include: comments
         - match: '(?=\))'
           pop: true
+        - include: keywords
         - include: pattern-param
 
   fn-return:
@@ -1504,6 +1521,12 @@ contexts:
         - match: "::"
           scope: punctuation.accessor.rust
           set: no-type-names
+
+    - match: '(::)({{camel_ident}})'
+      captures:
+        1: punctuation.accessor.rust
+        2: storage.type.enum.rust
+
     - match: '(::)({{identifier}})(\()'
       scope: method.rust
       captures:
@@ -1539,7 +1562,7 @@ contexts:
     - match: "=>"
       # Making this an operator helps visually break up large
       # match blocks containing just enums
-      scope: keyword.operator.rust
+      scope: keyword.operator.fatarrow.rust
 
     - match: "<-|->"
       scope: keyword.operator.rust
@@ -1579,6 +1602,12 @@ contexts:
     # All keywords.  Note in `statements` some of these are superseded by more
     # specific rules.
     - include: bool
+
+    - match: \b(let|const|static)\b ({{camel_ident}})
+      scope:
+      captures:
+        1: storage.type.keyword.rust
+        2: storage.type.rust
 
     - match: \b(let|const|static)\b (mut) ({{identifier}})
       scope:
