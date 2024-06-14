@@ -30,3 +30,12 @@
 .post-content pre code > table td:nth-child(2) {
     width: 92%;
 }
+
+details[open] {
+    background-color: #26282a;
+    padding: 5px;
+}
+
+.paginav {
+    text-align: left;
+}

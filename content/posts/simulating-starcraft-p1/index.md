@@ -70,7 +70,7 @@ Here are some other things to think about:
 
 * I don't know if there is rounding, and if it is nearest/even/truncation
 * I'm not 100% sure how starcraft 2's pathfinding algorithm works (though I'm vaguely familiar with pathfinding and RTS unit movement in general)
-* Zerg health regen has the editor value `0.2734` AND `0.273`. The editor says these values are rounded to the nearest 1/256th (i.e. `0.273` is the correct value) but like... first of all, why? Second, why have an oddly specific value that's *not* rounded to the nearest 1/256th be the default value for health regen for all zerg units? Weird.
+* Zerg health regen has the editor value `0.2734` AND `0.273`. The editor says these values are rounded to the nearest 1/256th (i.e. `0.273` is the correct value) but like... first of all, why? Second, why have an oddly specific value that's *not* rounded to the nearest 1/256th be the default value for health regen for all zerg units? Weird. (Edit: This is actually the other way around. `0.273` is the editor default, `0.2734` is the rounded value that's actually used. Still weird that they don't just set the default to the rounded value though).
 * I don't know what RNG algorithm the engine uses. I'm just using the `rand` crate and hopefully that's good enough
 * Does random attack delay apply to "secondary" hits? The zealot's second swipe is triggered 0.28 seconds after the first swipe, but is that 0.28 guaranteed, or 0.28 ± random delay?
 * I don't know the sub-physics-step ordering of events.

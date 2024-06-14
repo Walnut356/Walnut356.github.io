@@ -1,10 +1,13 @@
 +++
 title = "Syntax Test"
-date = 2099-04-01
-draft = true
+date = 2024-01-01
 [taxonomies]
 tags=["programming", "rust",]
 +++
+
+Edge case testing for this site's syntax highlighting
+
+<!-- more -->
 
 ```rust
 mod test {

@@ -27,8 +27,11 @@ contexts:
     # however then we run into infinite recursion. It needs to be a prototype
     # since macro_rules! allows constructing new code, thus the metavariables
     # can be inserted in just about any position in the syntax.
-    - match: '\${{identifier}}'
-      scope: variable.other.rust
+    - match: '(\$)({{identifier}})'
+      scope: variable.macrometa.rust
+      captures:
+        1: keyword.operator.symbol.rust
+        2: variable.local.rust
 
   statements:
     # This isn't really just "statements", it also includes all types,
@@ -81,6 +84,8 @@ contexts:
         1: storage.type.keyword.rust
         2: entity.name.type.rust
       push:
+        - match: "(?=<)"
+          push: generic-angles
         - match: "=(?!=)"
           scope: keyword.operator.assignment.rust
           push: after-operator
@@ -137,7 +142,7 @@ contexts:
 
     - match: '\b(macro_rules!)\s+({{identifier}})\b'
       captures:
-        1: support.function.rust
+        1: keyword.macrorules.rust
         2: entity.name.macro.rust
       push: macro-block
 
@@ -250,6 +255,9 @@ contexts:
     - match: '\.'
       scope: punctuation.accessor.dot.rust
 
+    - match: '\)'
+      scope: punctuation.section.group.end.rust
+
   visibility:
     - match: '\b(pub)\s*(\()'
       captures:
@@ -352,7 +360,8 @@ contexts:
       pop: true
     - match: '\('
       scope: punctuation.section.group.begin.rust
-      push: [group-body, try-closure]
+      push: try-closure
+    - include: statements
 
   group-body:
     - meta_scope: meta.group.rust
@@ -389,8 +398,10 @@ contexts:
       scope: keyword.operator.rust
     - match: '[!]?(?=\bSync|Send\b)'
       scope: keyword.operator.rust
-    - match: \b(Copy|Send|Sized|Sync|Drop|Fn|FnMut|FnOnce|Box|ToOwned|Clone|PartialEq|PartialOrd|Eq|Ord|AsRef|AsMut|Into|From|Default|Iterator|Extend|IntoIterator|DoubleEndedIterator|ExactSizeIterator|Option|Some|None|Result|Ok|Err|SliceConcatExt|String|ToString|Vec)\b
+    - match: \b(Copy|Send|Sized|Sync|Drop|Fn|FnMut|FnOnce|Box|ToOwned|Clone|PartialEq|PartialOrd|Eq|Ord|AsRef|AsMut|Into|From|Default|Iterator|Extend|IntoIterator|DoubleEndedIterator|ExactSizeIterator|Option|Result|SliceConcatExt|String|ToString|Vec)\b
       scope: support.type.rust
+    - match: \b(Some|None|Ok|Err)
+      scope: support.type.variant.rust
 
   return-type:
     - match: '\bimpl\b'
@@ -424,6 +435,8 @@ contexts:
     - match: "@"
       scope: keyword.operator.symbol.rust
     - include: lifetime
+    - match: "$"
+      scope: keyword.operator.symbol.rust
     - match: '\b{{identifier}}\b(?!\s*(?:::|\{|\[|\())'
       scope: variable.parameter.rust
 
@@ -993,11 +1006,12 @@ contexts:
           pop: true
         - include: macro-matchers
 
-    - match: '(\$\s*{{identifier}})\s*(:)\s*(ident|path|expr|ty|pat_param|pat|stmt|block|item|meta|tt|lifetime|vis|literal)'
+    - match: '(\$)\s*({{identifier}})\s*(:)\s*(ident|path|expr|ty|pat_param|pat|stmt|block|item|meta|tt|lifetime|vis|literal)'
       captures:
-        1: variable.parameter.rust
-        2: punctuation.separator.rust
-        3: storage.type.rust
+        1: keyword.operator.symbol.rust
+        2: variable.parameter.rust
+        3: punctuation.separator.rust
+        4: storage.type.rust
 
     - match: '(\$)\s*(\()'
       # Kleene operator.
@@ -1024,7 +1038,7 @@ contexts:
   macro-rule-sep:
     - include: comments
     - match: "=>"
-      scope: keyword.operator.rust
+      scope: keyword.operator.symbol.rust
       set: macro-transcriber-block
     - match: '(?=\S)'
       # Abort on unexpected character.
@@ -1527,13 +1541,13 @@ contexts:
         1: punctuation.accessor.rust
         2: storage.type.enum.rust
 
-    - match: '(::)({{identifier}})(\()'
+    - match: '(::)({{identifier}})(?=\()'
       scope: method.rust
       captures:
         1: punctuation.accessor.rust
         2: variable.function.rust
-        3: meta.group.rust punctuation.section.group.begin.rust
-        set: group
+        3: meta.group.rust
+        push: group
     - match: "(::)(?={{identifier}})"
       scope: meta.path.rust
       captures:
@@ -1598,6 +1612,10 @@ contexts:
     - match: \b(true|false)\b
       scope: constant.language.rust
 
+  typedecl:
+    - match: \>
+      scope:
+
   keywords:
     # All keywords.  Note in `statements` some of these are superseded by more
     # specific rules.
@@ -1648,6 +1666,15 @@ contexts:
 
     - match: \b(crate|extern|use|where)\b
       scope: keyword.other.rust
+
+    - match: \b(if)\s*(let)\s*(\b_*[A-Z][a-zA-Z0-9_]*[a-z][a-zA-Z0-9_]*\b)(\()((?:(?:(?:r\#)?[[a-zA-Z]][a-zA-Z0-9_]*|[a-zA-Z0-9_]+)\b))(\))
+      captures:
+        1: keyword.control.rust
+        2: storage.type.keyword.rust
+        3: support.type.variant.rust
+        4: punctuation.section.group.begin.rust
+        5: variable.local.rust
+        6: punctuation.section.group.end.rust
 
     - match: \b(async|await|else|for|if|loop|match|try|while|yield)\b
       scope: keyword.control.rust

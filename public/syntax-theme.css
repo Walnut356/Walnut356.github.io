@@ -8,12 +8,29 @@
   --teal: #56b6c2;
   --green: #98c379;
   --grey: #5c6370;
+  --unstyled: #00ff00;
 }
 
 code {
-    color: var(--white) !important;
-    background-color: #282c34 !important;
+  color: var(--white) !important;
+  background-color: #282c34 !important;
 }
+
+/* .z-rust {
+  .z-keyword {
+    color: var(--purple);
+  }
+
+  .z-operator,
+  .z-symbol,
+  .z-punctuation {
+    color: var(--white);
+  }
+
+  .z-module.z-name, .z-path > .z-variable {
+    color: var(--yellow);
+  }
+} */
 
 .z-keyword:not(.z-symbol),
 .z-modifier,
@@ -33,6 +50,7 @@ code {
 }
 
 .z-macro,
+.z-entity.z-name.z-macro,
 .z-constant.z-entity.z-name,
 .z-constant {
   color: var(--orange);
@@ -51,7 +69,7 @@ code {
   color: var(--blue);
 }
 
-.z-block > .z-enum > .z-type, .z-enum {
+.z-block > .z-enum > .z-type, .z-enum, .z-support.z-type.z-variant {
   color: var(--teal);
 }
 
@@ -84,7 +102,6 @@ code {
 }
 
 
-/* assembly */
 
 .z-assembly {
   .z-function {
@@ -100,6 +117,19 @@ code {
   }
 }
 
+.z-xml {
+    .z-tag {
+        color: var(--red);
+    }
+
+    .z-attribute-name {
+        color: var(--orange);
+    }
+
+    .z-punctuation {
+        color: var(--white);
+    }
+}
 .z-text.z-plain {
   color: #abb2bf;
 }

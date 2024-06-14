@@ -3,13 +3,11 @@ description = ""
 title = "Cracking the Shell"
 author = "Walnut356"
 
-
 compile_sass = true
 default_language = "en"
 generate_feed = true
 feed_filename = "atom.xml"
 minify_html = false
-
 
 build_search_index = false
 

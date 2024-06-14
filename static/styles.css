@@ -8,7 +8,7 @@
   --gap: 24px;
   --content-gap: 20px;
   --nav-width: 1024px;
-  --main-width: 720px;
+  --main-width: 800px;
   --header-height: 60px;
   --footer-height: 60px;
   --radius: 8px;
@@ -33,6 +33,14 @@
   --code-bg: rgb(55, 56, 62);
   --border: rgb(51, 51, 51);
 }
+
+@font-face {
+    font-family: "Cascadia Code";
+    src: url("CascadiaCode.ttf");
+    font-weight: 400;
+    font-style: normal;
+}
+
 .list {
   background: var(--code-bg);
 }
@@ -355,7 +363,7 @@ body:not(.dark) #sun {
   width: 26px;
 }
 code {
-  font-family: Cascadia Mono, monospace;
+  font-family: Cascadia Code, monospace;
   direction: ltr;
 }
 div.highlight,
