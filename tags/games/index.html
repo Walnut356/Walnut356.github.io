@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+<head>
+    
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Cracking the Shell</title>
+
+
+<meta name="keywords" content="">
+
+
+
+<meta name="description" content="">
+
+
+
+<meta name="author" content="Walnut356">
+
+
+<link rel="canonical" href="https:&#x2F;&#x2F;Walnut356.github.io&#x2F;tags&#x2F;games&#x2F;">
+
+
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/override.css">
+<link rel="stylesheet" type="text/css" href="/syntax-theme.css" />
+  <link
+    href="https://fonts.googleapis.com/css?family=Roboto Slab"
+    rel="stylesheet"
+  />
+  <link href="/CascadiaCode.ttf" rel="font" crossorigin="anonymous" />
+
+
+
+
+
+
+<link rel="alternate" type="application/atom+xml" title="RSS" href="https://Walnut356.github.io/atom.xml">
+
+
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+    </style>
+    
+</noscript>
+
+
+
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-PKLX5VEB4H"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PKLX5VEB4H');
+</script>
+
+    
+</head>
+<body class="list  dark" id="top">
+    
+    
+<script>
+    if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    }
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https:&#x2F;&#x2F;Walnut356.github.io" accesskey="h" title="Cracking The Shell (Alt + H)">
+                Cracking The Shell
+            </a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <ul class="lang-switch">
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+        
+        <ul id="menu">
+            
+            
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;Walnut356.github.io&#x2F;archive" title="Archive">
+                    <span>Archive</span>
+                    
+                </a>
+            </li>
+            
+            
+            
+            <li>
+                <a href="https:&#x2F;&#x2F;Walnut356.github.io&#x2F;tags" title="Tags">
+                    <span>Tags</span>
+                    
+                </a>
+            </li>
+            
+        </ul>
+        
+    </nav>
+</header>
+
+    
+    <main class="main">
+        
+<header class="page-header">
+    <div class="breadcrumbs">
+        <a href="https:&#x2F;&#x2F;Walnut356.github.io">Home</a>&nbsp;»&nbsp;
+        <a href="https://Walnut356.github.io/tags/ ">Tags</a>&nbsp;»&nbsp;
+        <a href="https:&#x2F;&#x2F;Walnut356.github.io&#x2F;tags&#x2F;games&#x2F;">games</a>
+    </div>
+    <h1>games
+      <a href="https://Walnut356.github.io/tags/games/atom.xml" title="RSS" aria-label="RSS">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" height="23">
+        <path d="M4 11a9 9 0 0 1 9 9"></path>
+        <path d="M4 4a16 16 0 0 1 16 16"></path>
+        <circle cx="5" cy="19" r="1"></circle>
+      </svg>
+    </a>
+  </h1>
+</header>
+
+<article class="post-entry">
+  <header class="entry-header">
+      <h2>Simulating Starcraft Part 2 - Data Wrangling</h2>
+  </header>
+  
+  <div class="entry-content">
+      <p><p>Oh how naive I was when I thought I'd be moving on to pathfinding and abilities. I had hoped some of the game's mechanics would function better in isolation, so I could gradually add complexity on top of the tracer bullet in a modular way. Unfortunately, that doesn't seem possible without a huge refactoring burden every time I add the next layer. It'll be more worth my time to properly architect it right now, and build it from the ground up with all of the systems it'll need.</p>
+</p>
+  </div>
+  
+  <footer class="entry-footer">
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span title="2024-06-02 00:00:00 +0000">2024-06-02</span>&nbsp;·&nbsp;21 min&nbsp;·&nbsp;4025 words&nbsp;·&nbsp;Walnut356
+
+  </footer>
+  <a class="entry-link" aria-label="post link to Simulating Starcraft Part 2 - Data Wrangling" href="https:&#x2F;&#x2F;Walnut356.github.io&#x2F;posts&#x2F;simulating-starcraft-p2&#x2F;"></a>
+</article>
+
+<article class="post-entry">
+  <header class="entry-header">
+      <h2>Simulating Starcraft Part 1 - Tracer Bullet</h2>
+  </header>
+  
+  <div class="entry-content">
+      <p><p>A while back, I made a <a rel="noopener" target="_blank" href="https://github.com/Walnut356/SC2-Upgrade-Calculator">small application</a> meant to demonstrate some important principles about RTS design, namely that unit stats in a vacuum can be very misleading. As a quick example, stalkers have ~9.7 dps on paper. When fighting marines though, their effective DPS drops to ~8.4 (8.2 with combat shields) due to overkill. That's about the same DPS as a sentry. Unfortunately, there's only so much info that can be extracted from a Time To Kill calculation between two units.</p>
+</p>
+  </div>
+  
+  <footer class="entry-footer">
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span title="2024-05-15 00:00:00 +0000">2024-05-15</span>&nbsp;·&nbsp;24 min&nbsp;·&nbsp;4621 words&nbsp;·&nbsp;Walnut356
+
+  </footer>
+  <a class="entry-link" aria-label="post link to Simulating Starcraft Part 1 - Tracer Bullet" href="https:&#x2F;&#x2F;Walnut356.github.io&#x2F;posts&#x2F;simulating-starcraft-p1&#x2F;"></a>
+</article>
+
+<article class="post-entry">
+  <header class="entry-header">
+      <h2>Protoss has always had a cost efficiency problem</h2>
+  </header>
+  
+  <footer class="entry-footer">
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span title="2024-02-07 00:00:00 +0000">2024-02-07</span>&nbsp;·&nbsp;28 min&nbsp;·&nbsp;5434 words&nbsp;·&nbsp;Walnut356
+
+  </footer>
+  <a class="entry-link" aria-label="post link to Protoss has always had a cost efficiency problem" href="https:&#x2F;&#x2F;Walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;"></a>
+</article>
+
+<article class="post-entry">
+  <header class="entry-header">
+      <h2>Can you estimate playtime from replay folder size?</h2>
+  </header>
+  
+  <div class="entry-content">
+      <p><p>I've seen this question come up a few times on r/ssbm and while I've given hand-wavey answers before, I find myself in a good place to answer more rigorously now. We can break this question down to more basic ones: &quot;how many bytes of replay data correspond to a single frame of gameplay?&quot; and &quot;how many bytes in the replay are unrelated to frames?&quot;. From there, we can estimate a duration by simply translating the 16.667ms per frame to minutes and seconds.</p>
+</p>
+  </div>
+  
+  <footer class="entry-footer">
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span title="2024-01-25 00:00:00 +0000">2024-01-25</span>&nbsp;·&nbsp;16 min&nbsp;·&nbsp;3096 words&nbsp;·&nbsp;Walnut356
+
+  </footer>
+  <a class="entry-link" aria-label="post link to Can you estimate playtime from replay folder size?" href="https:&#x2F;&#x2F;Walnut356.github.io&#x2F;posts&#x2F;estimate-playtime&#x2F;"></a>
+</article>
+
+
+    </main>
+    
+    <footer class="footer">
+    
+    <span>&copy; 2024 <a href="https:&#x2F;&#x2F;Walnut356.github.io">Walnut356</a></span>
+    
+    <span>
+        Powered by
+        <a href="https://www.getzola.org/" rel="noopener noreferrer" target="_blank">Zola</a> &
+        <a href="https://github.com/cydave/zola-theme-papermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+
+
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+
+
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+
+
+
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+
+
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                var content = codeblock.textContent;
+                if(codeblock.firstChild.tagName == 'TABLE') {
+                    content = Array(...codeblock.firstChild.getElementsByTagName('span')).map((span) => { return span.textContent; }).join('');
+                }
+                navigator.clipboard.writeText(content);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            // td containing LineNos
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            // table containing LineNos and code
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            // code blocks not having highlight as parent class
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+
+
+    
+</body>
+</html>
