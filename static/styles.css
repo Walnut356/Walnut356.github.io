@@ -35,10 +35,10 @@
 }
 
 @font-face {
-    font-family: "Cascadia Code";
-    src: url("CascadiaCode.ttf");
-    font-weight: 400;
-    font-style: normal;
+  font-family: "Cascadia Code";
+  src: url("CascadiaCode.ttf");
+  font-weight: 400;
+  font-style: normal;
 }
 
 .list {
@@ -68,8 +68,8 @@ h6 {
   color: var(--primary);
 }
 body {
-  font-family: Roboto slab, -apple-system, BlinkMacSystemFont, segoe ui, Roboto, Oxygen,
-    Ubuntu, Cantarell, open sans, helvetica neue, sans-serif;
+  font-family: Roboto slab, -apple-system, BlinkMacSystemFont, segoe ui, Roboto,
+    Oxygen, Ubuntu, Cantarell, open sans, helvetica neue, sans-serif;
   font-size: 18px;
   line-height: 1.6;
   word-break: break-word;
@@ -152,6 +152,7 @@ img {
   display: block;
   max-width: 100%;
 }
+
 .not-found {
   position: absolute;
   left: 0;

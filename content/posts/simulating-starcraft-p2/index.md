@@ -360,7 +360,8 @@ Don't forget about the myriad of weird exceptions and non-standard names and une
 * The thor is split between 2 entities, one for each AA mode, but that means both contain identical copies of the anti-ground weapon.
 * There are parent classes `DU_WEAP`, `DU_WEAP_MISSILE`, and `DU_WEAP_SPLASH`. The latter 2 have `DU_WEAP` as a parent, but set the `Kind` value to `Ranged` and `Splash` respectively. Can that be used as a shorthand to determine if something is ranged/melee/splash? Haha. Nope. There are lots of exceptions, like the Viking's missiles that have a parent of `DU_WEAP_SPLASH`, but then manually set the `Kind` to `Ranged`, invalidating the only unique factor of its parent class.
 * As far as I can tell, there's no indication for hitscan vs projectile besides the absence of a `Mover` and/or `CEffectLaunchMissile` (which are both somewhat annoying to check for)
-* It's not always clear when something has been removed in a new patch.-
+* It's not always clear when something has been removed in a new patch.
+
 ## Wrangling
 
 This process was kinda messy. I'm parsing 5 "generations" of 6 files, and each of those files frequently link to other objects in other files. I spent a long time trying to "route" the parser and cleanly get all the info I needed in 1 pass with carefully ordered stream-parsing and stored links for data that's needed later. In the end, I just shoved everything into hashmaps like `serde_json`, as it allows me to correct mistakes or add/remove data from the final output much more easily.
