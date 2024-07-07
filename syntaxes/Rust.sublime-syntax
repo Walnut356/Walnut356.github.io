@@ -1640,6 +1640,10 @@ contexts:
         1: storage.type.keyword.rust
         2: variable.local.rust
 
+    - match: \b(let)\b
+      captures:
+        1: storage.type.keyword.rust
+
     - match: \bfn\b
       scope: storage.type.function.rust
 
