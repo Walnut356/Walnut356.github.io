@@ -240,11 +240,11 @@ Average in-game fight duration: 10.1086s
 ```
 
 ```txt
-Simulation time (1000 runs): 3.6282ms
+Simulation time (1000 runs): 12.772632ms
 Team 1: {Stalker: 1}
-Team 2: {Marine: 2}
-Team 1 wins: 1000 | Team 2 wins: 0 | Draws: 0
-Average in-game fight duration: 10.106s
+Team 2: {Marine: 3}
+Team 1 wins: 0 | Team 2 wins: 1000 | Draws: 0
+Average in-game fight duration: 10.8481s
 ```
 
 Perfect! Now lets try a mirrored fight to see that if there's any sort of bias - let's say 10 roaches vs 10 roaches.
