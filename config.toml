@@ -1,13 +1,13 @@
-base_url = "https://Walnut356.github.io"
+author = "Walnut356"
+base_url = "https://walnut356.github.io"
 description = ""
 title = "Cracking the Shell"
-author = "Walnut356"
 
 compile_sass = true
 default_language = "en"
-generate_feed = true
 feed_filename = "atom.xml"
-minify_html = false
+generate_feed = true
+minify_html = true
 
 build_search_index = false
 
@@ -18,29 +18,29 @@ taxonomies = [{ name = "tags" }]
 [markdown]
 # Whether to do syntax highlighting
 # Theme can be customised by setting the `highlight_theme` variable to a theme supported by Zola
-extra_syntaxes_and_themes = ["syntaxes"]
 external_links_target_blank = true
+extra_syntaxes_and_themes = ["syntaxes"]
 highlight_code = true
 highlight_theme = "css"
 highlight_theme_css = [{ theme = "temp", filename = "syntax-theme.css" }]
 
 
 [extra.papermod]
-title = "Cracking The Shell"
 default_theme = "dark"
-theme = "dark"
-language_direction = "auto"
-keywords = [""]
-show_theme_toggle = true
-show_scroll_to_top = true
-show_code_copy_buttons = true
-show_reading_time = true
-show_word_count = true
-show_post_nav_links = true
-show_post_meta = true
-default_toc_open = false
-show_post_edit_button = false
+default_toc_open = true
 edit_post_url = "https://github.com/Walnut356/Walnut356.github.io"
+keywords = [""]
+language_direction = "auto"
+show_code_copy_buttons = true
+show_post_edit_button = false
+show_post_meta = true
+show_post_nav_links = true
+show_reading_time = true
+show_scroll_to_top = true
+show_theme_toggle = true
+show_word_count = true
+theme = "dark"
+title = "Cracking The Shell"
 #copyright = ""
 date_format = "%Y-%m-%d"
 navigation = [
@@ -48,9 +48,9 @@ navigation = [
     { url = "$BASE_URL/tags", title = "Tags" },
 ]
 
-home_title = "A Walnut's Thoughts"
 home_content = "Self taught developer. Interested in systems programming, video games, and epic fantasy books."
+home_title = "A Walnut's Thoughts"
 social_icons = [
-    { url = "https://github.com/walnut356", title = "GitHub", icon = "github" },
     { url = "$BASE_URL/atom.xml", title = "RSS", icon = "rss" },
+    { url = "https://github.com/walnut356", title = "GitHub", icon = "github" },
 ]
