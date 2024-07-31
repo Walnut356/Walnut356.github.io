@@ -1,0 +1,101 @@
+%YAML 1.2
+---
+# http://www.sublimetext.com/docs/3/syntax.html
+name: LLVM
+file_extensions:
+  - ll
+scope: source.llvm
+variables:
+  non_raw_ident: "[[:alnum:]][_[:alnum:]]*|_[_[:alnum:]]+"
+  # include a word boundary at the end to ensure all possible characters are
+  # consumed, to prevent catastrophic backtracking
+  identifier: '(?:(?:(?:r\#)?{{non_raw_ident}})\b)'
+  camel_ident: '\b_*[A-Z][a-zA-Z0-9_]*[a-z][a-zA-Z0-9_]*\b'
+  caps_ident: \b_*[A-Z][A-Z0-9_]*\b
+  lifetime: '''(?:_|{{non_raw_ident}})(?!\'')\b'
+  escaped_char: '\\([nrt0\"''\\]|x[0-7]\h|u\{(?:\h_*){1,6}\})'
+  int_suffixes: "[iu](?:8|16|32|64|128|size)"
+  float_suffixes: "f(32|64)"
+  dec_literal: "[0-9](?:[0-9_])*"
+  float_exponent: "[eE][+-]?[0-9_]*[0-9][0-9_]*"
+
+contexts:
+  main:
+    - include: comments
+    - include: string
+    - include: intrinsic
+    - include: function
+    - include: tags
+    - include: punctuation
+    - include: label
+    - include: keywords
+    - include: types
+    - include: number
+    - include: ident
+
+
+  comments:
+    - match: (;)\s+(.*)\n
+      scope: comment.llvm
+
+  string:
+    - match: \"(.*)\"
+      scope: string.llvm
+
+  label:
+    - match: "\b({{identifier}}):\b"
+      scope: label.llvm
+
+  keywords:
+    - match: \b(define|label)\b
+      scope: keyword.llvm
+    - match: \b(define|internal|align|nonnull|dereferenceable|dereferenceable_or_null|noalias|noundef|unnamed_addr|readonly|tbaa|tbaa.struct|fpmath|range|absolute_symbol|callees|callback|exclude|unpredictable|zeroext|signext|inreg|byval|byref|preallocated|inalloca|sret|elementtype|nofree|nest|returned|swiftself|swiftasync|swifterror|immarg|noundef|nofpclass|alignstack|allocalign|allocptr|readnone|readonly|writeonly|writable|initializes|dead_on_unwind|nocapture|inbounds)\b
+      scope: keyword.metadata.llvm
+    - match: \b(ret|br|switch|indirectbr|invoke|callbr|resume|catchswitch|catchret|cleanupret|unreachable)\b
+      scope: keyword.instruction.terminator.llvm
+    - match: \b(fneg)\b
+      scope: keyword.instruction.unary.llvm
+    - match: \b(add|sub|fsub|mul|fmul|udiv|sdiv|fdiv|urem|srem|frem|shl|lshr|ashr|and|or|xor)\b
+      scope: keyword.instruction.binary.llvm
+    - match: \b(extractvalue|insertvalue|alloca|load|store|fence|cmpxchg|atomicrmw|getelementptr|trunc|to|zext|sext|fptrunc|fpext|fptoui|fptosi|uitofp|sitofp|ptrtoint|inttoptr|bitcast|addrspacecast)\b
+      scope: keyword.instruction.misc.llvm
+    - match: \b(icmp|fcmp|eq|ne|ugt|uge|ult|ule|sgt|sge|slt|sle|phi|select|freeze|call|va_arg|landingpad|catchpad|cleanupped)\b
+      scope: keyword.instruction.other.llvm
+
+  punctuation:
+    - match: \b(::)\b
+      scope: accessor.llvm
+    - match: "[@,.={}]"
+      scope: punctuation.llvm
+    - match: \[
+      scope: punctuation.llvm
+    - match: \]
+      scope: punctuation.llvm
+    - match: \(
+      scope: punctuation.llvm
+    - match: \)
+      scope: punctuation.llvm
+
+  ident:
+    - match: (%_*{{identifier}})
+      scope: local.llvm
+
+  number:
+    - match: \b{{dec_literal}}\b
+      scope: constant.llvm
+
+  types:
+    - match: \b(ptr|i64|i32|i16|i8|i1|void)\b
+      scope: type.llvm
+
+  tags:
+    - match: \!{{identifier}}\b
+      scope: tags.llvm
+
+  intrinsic:
+    - match: (llvm)(\.{{identifier}})*
+      scope: intrinsic.llvm
+
+  function:
+    - match: ({{identifier}})(::{{identifier}})+
+      scope: function.name.llvm

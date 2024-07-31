@@ -14,29 +14,35 @@
   --radius: 8px;
   --theme: rgb(255, 255, 255);
   --entry: rgb(255, 255, 255);
+  --entry_dark: rgb(225, 225, 225);
   --primary: rgb(30, 30, 30);
   --secondary: rgb(108, 108, 108);
   --tertiary: rgb(214, 214, 214);
   --content: rgb(31, 31, 31);
+  --off_content: rgb(50, 50, 50);
   --hljs-bg: rgb(28, 29, 33);
   --code-bg: rgb(245, 245, 245);
   --border: rgb(238, 238, 238);
+  --link: rgb(124, 78, 57);
 }
 .dark {
   --theme: rgb(29, 30, 32);
   --entry: rgb(46, 46, 51);
+  --entry_dark: rgb(20, 21, 23);
   --primary: rgb(218, 218, 219);
   --secondary: rgb(155, 156, 157);
   --tertiary: rgb(65, 66, 68);
   --content: rgb(196, 196, 197);
+  --off_content: rgb(175, 175, 175);
   --hljs-bg: rgb(46, 46, 51);
   --code-bg: rgb(55, 56, 62);
   --border: rgb(51, 51, 51);
+  --link: rgb(160, 129, 114);
 }
 
 @font-face {
   font-family: "Cascadia Code";
-  src: url("CascadiaCode.ttf");
+  src: url("CascadiaCode-Regular.woff2");
   font-weight: 400;
   font-style: normal;
 }
@@ -76,7 +82,11 @@ body {
   background: var(--theme);
   text-align: justify;
   text-justify: auto;
-  text-wrap: pretty;
+  /* text-wrap: balance; */
+}
+p {
+    text-wrap: pretty;
+    hyphens: auto;
 }
 article,
 aside,
@@ -98,6 +108,7 @@ h4,
 h5,
 h6 {
   line-height: 1.2;
+  text-align: left;
 }
 h1,
 h2,
@@ -366,6 +377,7 @@ body:not(.dark) #sun {
 code {
   font-family: Cascadia Code, monospace;
   direction: ltr;
+  /* hyphens: none; */
 }
 div.highlight,
 pre {
@@ -537,6 +549,7 @@ pre:hover .copy-code {
   box-shadow: 0 1px;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+  color: var(--link);
 }
 .post-content a code {
   margin: auto 0;
@@ -620,7 +633,7 @@ pre:hover .copy-code {
   table-layout: fixed;
 }
 .post-content .highlighttable td:first-child {
-  width: 40px;
+  width: 20px;
 }
 .post-content .highlighttable td .linenodiv {
   padding-inline-end: 0 !important;
@@ -650,7 +663,10 @@ pre:hover .copy-code {
 .post-content blockquote {
   margin: 20px 0;
   padding: 0 14px;
-  border-inline-start: 3px solid var(--primary);
+  border-inline-start: 3px solid var(--link);
+  color: var(--off_content);
+  background: var(--entry_dark);
+  font-style: italic;
 }
 .post-content hr {
   margin: 30px 0;

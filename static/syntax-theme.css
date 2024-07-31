@@ -105,16 +105,34 @@ code {
 
 .z-assembly {
   .z-function {
-    color: #61afef;
+    color: var(--blue);
   }
 
   .z-source {
-    color: #abb2bf;
+    color: var(--white);
   }
 
   .z-directive {
-    color: #56b6c2;
+    color: var(--teal);
   }
+}
+
+.z-llvm {
+    .z-label {
+        color: var(--blue);
+    }
+
+    .z-intrinsic {
+        color: var(--blue);
+    }
+
+    .z-metadata {
+        color: var(--teal);
+    }
+
+    .z-tags {
+        color: var(--orange);
+    }
 }
 
 .z-xml {
@@ -130,6 +148,7 @@ code {
         color: var(--white);
     }
 }
+
 .z-text.z-plain {
   color: #abb2bf;
 }
