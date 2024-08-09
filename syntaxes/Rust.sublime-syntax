@@ -242,6 +242,9 @@ contexts:
     - match: '\b_\b'
       scope: keyword.operator.underscore.rust
 
+    - match: \b[A-Z]\b
+      scope: storage.type.rust
+      
     - match: "{{identifier}}"
       scope: variable.local.rust
 
@@ -257,6 +260,7 @@ contexts:
 
     - match: '\)'
       scope: punctuation.section.group.end.rust
+
 
   visibility:
     - match: '\b(pub)\s*(\()'

@@ -47,15 +47,15 @@ contexts:
       scope: label.llvm
 
   keywords:
-    - match: \b(define|label)\b
+    - match: \b(define|label|metadata|poison|zeroinitializer)\b
       scope: keyword.llvm
-    - match: \b(define|internal|align|nonnull|dereferenceable|dereferenceable_or_null|noalias|noundef|unnamed_addr|readonly|tbaa|tbaa.struct|fpmath|range|absolute_symbol|callees|callback|exclude|unpredictable|zeroext|signext|inreg|byval|byref|preallocated|inalloca|sret|elementtype|nofree|nest|returned|swiftself|swiftasync|swifterror|immarg|noundef|nofpclass|alignstack|allocalign|allocptr|readnone|readonly|writeonly|writable|initializes|dead_on_unwind|nocapture|inbounds)\b
+    - match: \b(define|internal|align|nonnull|dereferenceable|nuw|nsw|nneg|dereferenceable_or_null|noalias|noundef|unnamed_addr|readonly|tbaa|tbaa.struct|fpmath|range|absolute_symbol|callees|callback|exclude|unpredictable|zeroext|signext|inreg|byval|byref|preallocated|inalloca|sret|elementtype|nofree|nest|returned|swiftself|swiftasync|swifterror|immarg|noundef|nofpclass|alignstack|allocalign|allocptr|readnone|readonly|writeonly|writable|initializes|dead_on_unwind|nocapture|inbounds|tail)\b
       scope: keyword.metadata.llvm
     - match: \b(ret|br|switch|indirectbr|invoke|callbr|resume|catchswitch|catchret|cleanupret|unreachable)\b
       scope: keyword.instruction.terminator.llvm
     - match: \b(fneg)\b
       scope: keyword.instruction.unary.llvm
-    - match: \b(add|sub|fsub|mul|fmul|udiv|sdiv|fdiv|urem|srem|frem|shl|lshr|ashr|and|or|xor)\b
+    - match: \b(add|sub|fsub|mul|fmul|udiv|sdiv|fdiv|urem|srem|frem|shl|lshr|ashr|and|or|xor|insertelement|shufflevector)\b
       scope: keyword.instruction.binary.llvm
     - match: \b(extractvalue|insertvalue|alloca|load|store|fence|cmpxchg|atomicrmw|getelementptr|trunc|to|zext|sext|fptrunc|fpext|fptoui|fptosi|uitofp|sitofp|ptrtoint|inttoptr|bitcast|addrspacecast)\b
       scope: keyword.instruction.misc.llvm
@@ -77,19 +77,21 @@ contexts:
       scope: punctuation.llvm
 
   ident:
-    - match: (%_*{{identifier}})
+    - match: (%(\.)*_*{{identifier}})(?:(\.)(\w|\d)+)*
       scope: local.llvm
 
   number:
     - match: \b{{dec_literal}}\b
       scope: constant.llvm
+    - match: true|false
+      scope: constant.llvm
 
   types:
-    - match: \b(ptr|i64|i32|i16|i8|i1|void)\b
+    - match: \b(ptr|i128|i64|i32|i16|i8|i1|void)\b
       scope: type.llvm
 
   tags:
-    - match: \!{{identifier}}\b
+    - match: \!{{identifier}}(?:(\.)(\w|\d)+)*\b
       scope: tags.llvm
 
   intrinsic:

@@ -95,6 +95,7 @@
 {% block ext_head %}
 
 
+{% if config.mode != "serve" %}
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-PKLX5VEB4H"></script>
 <script>
@@ -112,4 +113,5 @@
     {{- template "partials/templates/twitter_cards.html" . }}
     {{- template "partials/templates/schema_json.html" . }}
     {{- end -#}
+{% endif %}
 {% endblock %}
