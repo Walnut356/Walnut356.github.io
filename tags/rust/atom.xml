@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Cracking the Shell - rust</title>
+    <link rel="self" type="application/atom+xml" href="https://walnut356.github.io/tags/rust/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://walnut356.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-08-09T00:00:00+00:00</updated>
+    <id>https://walnut356.github.io/tags/rust/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Bypassing the borrow checker - do ref -&gt; ptr -&gt; ref partial borrows cause UB?</title>
+        <published>2024-08-09T00:00:00+00:00</published>
+        <updated>2024-08-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/partial-borrow-pointer-ub/"/>
+        <id>https://walnut356.github.io/posts/partial-borrow-pointer-ub/</id>
+        
+        <summary type="html">&lt;p&gt;Partial borrows across function boundaries don&#x27;t really work in Rust. Unfortunately, that&#x27;s kind of a major issue. There are workarounds, some are outlined &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;smallcultfollowing.com&#x2F;babysteps&#x2F;blog&#x2F;2018&#x2F;11&#x2F;01&#x2F;after-nll-interprocedural-conflicts&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, but all of them come with pretty major drawbacks.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Simulating Starcraft Part 2 - Data Wrangling</title>
+        <published>2024-06-02T00:00:00+00:00</published>
+        <updated>2024-06-02T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/simulating-starcraft-p2/"/>
+        <id>https://walnut356.github.io/posts/simulating-starcraft-p2/</id>
+        
+        <summary type="html">&lt;p&gt;Oh how naive I was when I thought I&#x27;d be moving on to pathfinding and abilities. I had hoped some of the game&#x27;s mechanics would function better in isolation, so I could gradually add complexity on top of the tracer bullet in a modular way. Unfortunately, that doesn&#x27;t seem possible without a huge refactoring burden every time I add the next layer. It&#x27;ll be more worth my time to properly architect it right now, and build it from the ground up with all of the systems it&#x27;ll need.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Simulating Starcraft Part 1 - Tracer Bullet</title>
+        <published>2024-05-15T00:00:00+00:00</published>
+        <updated>2024-05-15T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/simulating-starcraft-p1/"/>
+        <id>https://walnut356.github.io/posts/simulating-starcraft-p1/</id>
+        
+        <summary type="html">&lt;p&gt;A while back, I made a &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Walnut356&#x2F;SC2-Upgrade-Calculator&quot;&gt;small application&lt;&#x2F;a&gt; meant to demonstrate some important principles about RTS design, namely that unit stats in a vacuum can be very misleading. As a quick example, stalkers have ~9.7 dps on paper. When fighting marines though, their effective DPS drops to ~8.4 (8.2 with combat shields) due to overkill. That&#x27;s about the same DPS as a sentry. Unfortunately, there&#x27;s only so much info that can be extracted from a Time To Kill calculation between two units.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>The space time complexity tradeoff</title>
+        <published>2024-03-09T00:00:00+00:00</published>
+        <updated>2024-03-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/space-time-complexity-tradeoff/"/>
+        <id>https://walnut356.github.io/posts/space-time-complexity-tradeoff/</id>
+        
+        <summary type="html">&lt;p&gt;I encountered a neat example recently while solving &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;adventofcode.com&#x2F;2015&#x2F;day&#x2F;6&quot;&gt;Advent of Code 2015, day 6&lt;&#x2F;a&gt;. The problem can be boiled down to &quot;There is a 2D array of values. Given a range and instruction, apply the instruction to all values in that range. How many values are &#x27;on&#x27; at the end?&quot;. There are only 2 possible states for each value: on and off, and only 3 possible instructions: on, off, and toggle. I won&#x27;t focus too much on parsing the input or the structure of the algorithm here, I just want to investigate the hot loop which applies the instruction to each value.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Can you estimate playtime from replay folder size?</title>
+        <published>2024-01-25T00:00:00+00:00</published>
+        <updated>2024-01-25T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/estimate-playtime/"/>
+        <id>https://walnut356.github.io/posts/estimate-playtime/</id>
+        
+        <summary type="html">&lt;p&gt;I&#x27;ve seen this question come up a few times on r&#x2F;ssbm and while I&#x27;ve given hand-wavey answers before, I find myself in a good place to answer more rigorously now. We can break this question down to more basic ones: &quot;how many bytes of replay data correspond to a single frame of gameplay?&quot; and &quot;how many bytes in the replay are unrelated to frames?&quot;. From there, we can estimate a duration by simply translating the 16.667ms per frame to minutes and seconds.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Syntax Test</title>
+        <published>2024-01-01T00:00:00+00:00</published>
+        <updated>2024-01-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/syntax/"/>
+        <id>https://walnut356.github.io/posts/syntax/</id>
+        
+        <summary type="html">&lt;p&gt;Edge case testing for this site&#x27;s syntax highlighting&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+</feed>
