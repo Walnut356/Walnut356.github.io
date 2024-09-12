@@ -133,7 +133,7 @@ Python also makes no effort to explain the internal implementation or semantics 
 
 ## C#
 
-Hey look, a site that cannot handle both window sizes properly. The (pretty terrible) nav-pane, which I'll cover in a moment, disappears completely in half-width view. The burger menu in the top left opens up the site-wide nav-menu which is useless. The tiny little 3 dot menu in the top *right* corner opens up the nav-pane that people actually want, but only after an additional click on "Table of Contents" because why bother making it easy or convenient. I mean why would you possibly need to view *other* pages than the one you're currently on?
+Hey look, a site that cannot handle both window sizes properly. The (pretty terrible) nav-pane, which I'll cover in a moment, disappears completely in half-width view. The burger menu in the top left opens up the site-wide nav-menu which is useless. The tiny little 3 dot menu in the top *right* corner opens up the nav-pane that people actually want, but only after an additional click on "Table of Contents" because why bother making it easy or convenient.
 
 ![alt text](image-18.png)
 
@@ -195,7 +195,7 @@ I could go on about C# for hours, but I'll leave you with one final thing:
 
 ![alt text](image-28.png)
 
-You uh... maybe want to put that in like a table or bulleted list or grid or something? Maybe sort ignore the generic when sorting it? Last I checked I'm not a CSV parser. Also why is there a space *before* each comma?
+You uh... maybe want to put that in like a table or bulleted list or grid or something? Maybe ignore the generic when sorting it? Last I checked I'm not a CSV parser. Also why is there a space *before* each comma?
 
 ## Java
 
