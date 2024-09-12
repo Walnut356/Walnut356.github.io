@@ -42,7 +42,7 @@ Just look at this:
 
 ![rust standard library home page](image.png)
 
-Oh man, that looks pretty good. Look at the tasteful, left-aligned, width-bounded main text. Look the tactful use of vertical whitespace. Look at the distinct headers and comfortable text size. Look at the visually-distinct sidebar that never distracts from the main body text. Look at the font-colors chosen with such *intention* - high contrast near-white for plain text, low-contrast grey the less-important "stable since" version number, vivid orange for the links, with a darker background for code-links. There's even a nice highlight when linking directly to a [section of a page](https://doc.rust-lang.org/std/index.html#contributing-changes-to-the-documentation)
+Oh man, that looks pretty good. Look at the tasteful, left-aligned, width-bounded main text. Look the tactful use of vertical whitespace. Look at the distinct headers and comfortable text size. Look at the visually-distinct sidebar that never distracts from the main body text. Look at the font-colors chosen with such *intention* - high-contrast, near-white for plain text, low-contrast grey for the less-important "stable since" version number, vivid orange for the links, with a darker background for code-links. There's even a nice highlight when linking directly to a [section of a page](https://doc.rust-lang.org/std/index.html#contributing-changes-to-the-documentation)
 
 I'm not much of a front-end guy; maybe this isn't that impressive. After the horrors I've seen, it looks like art.
 
@@ -50,7 +50,7 @@ But does it also *resize properly*? In 2024? You bet your ass it does.
 
 ![half-width rust standard library home page](image-3.png)
 
-"Okay but I don't like the color-scheme?" you might say, "It's not offensive, but it's a little dark/bright for me"
+"Okay but I don't like the color-scheme" you might say, "It's not offensive, but it's a little dark/bright for me"
 
 Don't worry, there's a whole-ass *options menu* with BOTH a lighter AND darker theme than the default
 
@@ -72,7 +72,7 @@ Look at the level of *detail*. Everything in the rust docs looks like this, and 
 
 ![vec.drain source code listing](image-5.png)
 
-Is that... is that the *source code of `.drain`, directly linked from the docs and available offline*? Even if the docs aren't specific enough about how things work internally, I can just go *look* at how they work internally with a single click? Absolutely incredible. My only complaint is that this is the one section of the docs that does not resize properly.
+Is that... is that the *source code of `.drain`, directly linked from the docs and available offline*? Even if the docs aren't specific enough about how things work internally, I can just go *look* at how they work internally with a single click? Absolutely incredible. My only complaint is that this is the one section of the docs that does not handle half-width correctly.
 
 Anyway, lets talk about search. I'm sure you saw the box up there. Before we take that baby for a spin, I'd like to point out that it's not just "search", it's search *with convenience features:*
 
@@ -115,7 +115,7 @@ Python does not have individual pages for its built in types, thus looking for t
 
 ![google search for "python float"](image-10.png)
 
-Unless you scroll down, which provides a link to inherent floating point limitations, and the CPython internal representation of floats. Neither of which tell you what methods you can call on a flow.
+Unless you scroll down, which provides a link to inherent floating point limitations, and the CPython internal representation of floats. Neither of which tell you what methods you can call on a float.
 
 ![further results for google search](image-11.png)
 
@@ -185,9 +185,9 @@ These short-form descriptions are usually just restating the name of the functio
 
 ![alt text](image-27.png)
 
-Clicking on the function name even sends you to a page **that has all the overloads on it**. Were these pages made by different people who didn't communicate with each other or look at the final product at all?
+Clicking on either of those functions even sends you to the same page **that has all the overloads on it**. Were these pages made by different people who didn't communicate with each other or look at the final product at all?
 
-Oh yeah, one other thing about those function signatures. **Did you notice that they don't include the return type?** There isn't even a distinction between methods that return \<a value\> and methods that return nothing at all. I don't even understand how this happens. Did they forget? Is something broken and nobody noticed? Why do I have to click to a new webpage and view the code snippet of the function declaration to even know what the return type is?
+Oh yeah, one other thing about those function signatures. Did you notice that they **don't include the return type?** There isn't even a distinction between methods that return \<a value\> and methods that return nothing at all. I don't understand how this happens. Did they forget? Is something broken and nobody noticed? Why do I have to click to a new webpage and view the code snippet of the function declaration to even know what the return type is?
 
 Anyway, even once you get to the method pages, the documentation is wildly inconsistent. Some of it is fantastic and detailed, some of it leaves you scratching your head. The official description of their own API is titled "Remarks". While that *is* hilarious, it kinda gives away how much effort they felt like putting in.
 
@@ -195,7 +195,7 @@ I could go on about C# for hours, but I'll leave you with one final thing:
 
 ![alt text](image-28.png)
 
-You uh... maybe want to put that in like a table or bulleted list or grid or something? Maybe sort it alphabetically? Last I checked I'm not a CSV parser. Also why is there a space *before* each comma?
+You uh... maybe want to put that in like a table or bulleted list or grid or something? Maybe sort ignore the generic when sorting it? Last I checked I'm not a CSV parser. Also why is there a space *before* each comma?
 
 ## Java
 
@@ -219,7 +219,7 @@ I burst out laughing when I saw this. It's like it was intentionally designed to
 
 But anyway, I was able to locate a hub page with links to documents for Java SE/ME/EE. Except clicking the "documentation" links for SE, ME, and EE do *not* take you to the API docs. Each variant has a "landing page", each with completely different layouts from for some reason, and clicking on a link *there* will bring you to the API documentation. Jesus.
 
-Anyway, once we finally get to the current docs (Java 22 I think), it's borderline unreadable at full-width because the text is miniscule and isn't width-bounded. Great.
+Anyway, once we finally get to the current docs (Java 22 I think?), it's borderline unreadable at full-width because the text is miniscule and isn't width-bounded. Great.
 
 ![java SE 22 API docs](image-49.png)
 
@@ -270,11 +270,11 @@ At 100% scaling though, there is one small problem. Did you spot it?
 
 As if the search bar wasn't cursed enough.
 
-I wish I could move on and talk about the actual content of the pages, but we unfortunately there's one more piece of mangled text we should look at. I'd isolate it, but that would make it look better than it is, so here's the whole page.
+I wish I could move on and talk about the actual content of the pages, but unfortunately there's one more piece of mangled text we should look at. I'd isolate it, but that would make it look better than it is, so here's the whole page.
 
 ![alt text](image-43.png)
 
-Good *god*. How did this even happen? Was that text put through a crusher, flipped on its side, and put through a slightly stronger crusher? Why does it look like a jpeg instead of actual text? Seriously, go to the website and check it out yourself, it's wild. Using the browser zoom doesn't fix this issue, the text just like... has the wrong aspect ratio and resolution somehow? I don't even know.
+Good *god*. How did this even happen? Was that text put through a crusher, flipped on its side, and put through another, slightly stronger crusher? Why does it look like a jpeg instead of actual text? Seriously, go to the website and check it out yourself, it's wild. Using the browser zoom doesn't fix this issue, the text just like... has the wrong aspect ratio and resolution somehow? I don't even know.
 
 In any case, the examples are *kinda* syntax highlighted, there's a decent amount of internal linking, so that's nice. It's not the fault of the documentation, but having to follow every definition with a bulleted list of "here's how to use this without instantly breaking everything" is pretty funny. The descriptions are generally pretty good, but I found the examples to be exceedingly lacking when I was first learning C.
 
@@ -282,27 +282,25 @@ The real issue is the layout. Everything is so smooshed together. It's especiall
 
 ![alt text](image-44.png)
 
-It's especially horrible when there's lots of functions (or overloaded functions) within a page. I'm honestly not sure if this is a spacing issue, a font issue, a code-formatting issue, a highlighting issue, or some other nonsense but it takes genuine effort and willpower to stop my eyes from giving up halfway through a function signature.
+It's especially horrible when there's lots of functions (or overloaded functions) within a page. I'm honestly not sure if this is a spacing issue, a font issue, a code-formatting issue, a highlighting issue, or something else but it takes genuine effort and willpower to stop my eyes from giving up halfway through a function signature when it's buried in this nonsense.
 
 ![alt text](image-45.png)
-
-
 
 ## Go
 
 ![alt text](image-30.png)
 
-Go is, overall, a mixed bag. The layout is okay, it's got a light and dark mode, decently readable text coloring (though the light grey could be made a bit darker in the light theme). It resizes properly - though I'd prefer if the full-width view was width-bounded and had less space between the name of the sub-module and its description. It has (kinda functional) search, and everything is well organized on each page.
+Go is a mixed bag. The layout is okay, it's got a light and dark mode, decently readable text coloring (though the light grey could be made a bit darker in the light theme). It resizes properly - though I'd prefer if the full-width view was width-bounded and had less space between the name of the sub-module and its description. It has (kinda functional) search, and everything is well organized on each page.
 
 My main issue with Go comes from dogfooding their own documentation system. While I appreciate that confidence, I do think the standard library is a little bit special and deserves to be segregated from things made by \<not google\>. There's also quite a bit of metadata at the top of the page that's pointless for the language standard library.
 
 ![alt text](image-46.png)
 
-Once again we have slight search issues. The dogfooding means searches will have things from the entire Go package database which is rough. It could be partially fixed by prioritizing results from the page you're already on, but really it should just have its own separate subdomain on the Go website.
+Once again we have slight search issues. The dogfooding means searches will have things from the entire Go package database even if you only care about things in the standard library. It could be partially fixed by prioritizing results from the page you're already on, but really it should just have its own separate subdomain on the Go website.
 
 ![alt text](image-31.png)
 
-The bigger problem is that Go has pulled the Python mistake and ruined their SEO by putting all their built-in types on a single page. It took a minute to realize that `Map` is a built-in type, thus is not documented with the rest of the standard library. Rust does not have this issue since their docs are slightly unique compared to the docs everyone else gets. In particular, none of the types are considered "special" in Rust. All of the built-in's are documented identically to those in the standard library, and are accessed from the same page. Not only is it easier to find, it also ensures consistency and improves search performance (both internal and through a search engine). This might not be so bad if the standard library documentation linked to the place where `Map` is specified, but it just sorta doesn't.
+The bigger problem is that Go has pulled the Python mistake and ruined their SEO by putting all their built-in types on a single page. It took a minute to realize that `Map` is a built-in type, thus is not documented with the rest of the standard library. Rust does not have this issue since their docs are slightly unique compared to the docs everyone else gets. In particular, none of the types are considered "special" in Rust. All of the built-in's are documented identically to those in the standard library, and are accessed from the same page. Not only is it easier to find manually, it also ensures consistency and improves search performance (both internal and through a search engine). This might not be so bad if the standard library documentation linked to the place where `Map` is specified, but it just sorta doesn't.
 
 !["Map" in code example cannot be clicked, but other types can](image-34.png)
 
