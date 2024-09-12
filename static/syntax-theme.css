@@ -10,11 +10,11 @@
   --grey: #5c6370;
   --unstyled: #00ff00;
 }
-
+/* 
 code {
   color: var(--white) !important;
   background-color: #282c34 !important;
-}
+} */
 
 /* .z-rust {
   .z-keyword {
