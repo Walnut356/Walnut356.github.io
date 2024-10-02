@@ -254,7 +254,7 @@ Finally, we can look at the [definitions of the `!noalias` and `!alias.scope`](h
 
 >`!noalias` and `!alias.scope` metadata provide the ability to specify generic noalias memory-access sets. This means that some collection of memory access instructions (loads, stores, memory-accessing calls, etc.) that carry `!noalias` metadata can specifically be specified not to alias with some other collection of memory access instructions that carry `!alias.scope` metadata.
 
-What this allows is the defining of selective aliasing of non-argument/return value pointers. Adding these attributes to a pointer is creates the fine-grained control of "this pointer might alias with any other pointer in the program, but it *can* be guaranteed not to alias with *this other pointer* (or set of pointers) right here".
+What this allows is the defining of selective aliasing of non-argument/return value pointers. Adding these attributes to a pointer creates the fine-grained control of "this pointer might alias with any other pointer in the program, but it *can* be guaranteed not to alias with *this other pointer* (or set of pointers) right here".
 
 To sum all of this up:
 
@@ -637,7 +637,7 @@ let s: S = ...;
 
 `s.method(unsafe_mut(&s.b))` should *not* result in UB so long as you don't access `b` through `&mut s` inside the method. If `b` is a pointer to a vec, and the unsafe reference passed in is `unafe_mut(&mut s.b[i])`, accessing `b`, and even `b[x]` through `&mut s` within the method should be fine, but only so long as `b` never changes sizes (which may result in a reallocation) **and** `x != i`. This is at least partially supported via miri, which *only* errors out when I intentionally interleave access to a value between `&mut self` and the `unsafe_mut` reference.
 
-I don't think it's as straight forward if `b` is just a regular, non-pointer value. We're technically violating an assumption - the pointers that we're passing in *do* overlap - but accesses are what matter, not pointers, so as long as we're careful not to actually modify overlapping bits it should be fine. It all depends on what kinds of things Rust is doing in it's MIR - how it's extra invariants are expressed and how those are translated to LLVM-IR. Maybe it's 100% not UB and I'm overthinking it, who knows. I still don't feel like I entirely grasp the semantics behind `!alias.scope` and `!noalias`.
+I don't think it's as straight forward if `b` is just a regular, non-pointer value. We're technically violating an assumption - the pointers that we're passing in *do* overlap - but accesses are what matter, not pointers, so as long as we're careful not to actually modify overlapping bits it should be fine. It all depends on what kinds of things Rust is doing in it's MIR - how its extra invariants are expressed and how those are translated to LLVM-IR. Maybe it's 100% not UB and I'm overthinking it, who knows. I still don't feel like I entirely grasp the semantics behind `!alias.scope` and `!noalias`.
 
 It's probably safe to say that if you call a function `s.method(unsafe_mut(&mut s.a))`, observing the pointed-to-value of `b` and even changing the pointer of `s.b` is fine, since accessing `s.b` is a "shrinking" GEP. That said, assigning to the whole struct (`*s = s2`) is very likely UB. There might be some exceptions to that if, for example, `s2.a == s.a` but uh... "does a write count as an aliasing access even if the bits written are the same as the bits that were already there?" is some next level semantics that I'm not even gonna touch.
 
