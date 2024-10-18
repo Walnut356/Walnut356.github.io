@@ -73,7 +73,7 @@ w = Some(20.0,)
 
 In the above example, I made sure to exactly fill the current allocation size of `list`. That means the listed capacity (18 bytes) minus the size of the data is the amount of overhead for bookkeeping. 4 `u8`s and 2 `f32`s takes up 16 bytes total, so we only have a storage overhead of 2 bytes! Compared to the `Val` enum above, that's a savings of 30 bytes.
 
-The source code is available [here](https://github.com/Walnut356/twovec), and the crate listing here
+The source code is available [here](https://github.com/Walnut356/twovec), and the [crate is available on crates.io][https://crates.io/crates/twovec]
 
 ## How it works
 
