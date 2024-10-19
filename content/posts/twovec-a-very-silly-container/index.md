@@ -226,7 +226,7 @@ To clarify further, since this is sorta spaghetti, here's an example. Say you ha
 
 * When asking for an `Option<u8>`, the compiler sees that `u8` is `Gettable` for `u8, f32, true`, and the function signature requires a `TwoVec<u8, f32>`. There is no `Gettable` with `u8, f32, false`, as `false` is only cares about the `B` parameter, and `u8 != f32`. There is no other `Gettable` implementation for `u8` with valid criteria, thus the const parameter `true` can be assumed
 * `TwoVec<u8, f32>` impls cannot overlap with, say, `TwoVec<u8, i64>` because the `B` parameter of `i64` (and the `TwoVec<u8, f32>` in the function signature) would place it in an entirely different monomorphization of `Gettable`
-* There is no self-overlap with `TwoVec<u8, u8>` because `Gettable<A, B, false>` and `Gettable<A, B, true>` are mutually exclusive (even though in this case they'd be completely interchangeable). Interestingly, type inference doesn't require us to turbofish on a `TwoVec<A, A>` even though both implementations would be valid. I'm not sure whether the compiler is choosing `get::<u8, true>()` or `get::<u8, false>()` or how it even makes the decision. Weird.
+* There is no self-overlap with `TwoVec<u8, u8>` because `Gettable<A, B, false>` and `Gettable<A, B, true>` are mutually exclusive (even though in this case they'd be completely interchangeable). Interestingly, type inference doesn't require us to turbofish on a `TwoVec<A, A>` even though both implementations would be valid. I'm not sure whether the compiler is choosing `get::<u8, true>()` or `get::<u8, false>()` or how it even makes the decision. Weird. **Edit:** Whoops, it definitely does ask for the generic parameter, not sure how I concluded otherwise.
 
 
 Grimy? Yes. Cool? Arguably.
