@@ -391,9 +391,6 @@ pub fn idx_to_offset(&self, idx: usize) -> usize {
                 .unwrap()
         };
         let mut slice = [0u8; 8];
-        for i in bitfield.chunks(8) {
-
-        }
 
         let result: usize = bitfield
             .iter()
