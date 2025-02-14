@@ -12,5 +12,4 @@
 {% set meta = meta | concat(with=page.word_count ~ " words") %}
 {% endif %}
 
-{% set meta = meta | concat(with=page.author | default(value=config.author)) %}
 {{ meta | join(sep="&nbsp;·&nbsp;") | safe }}

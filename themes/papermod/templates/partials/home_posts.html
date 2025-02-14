@@ -21,6 +21,23 @@
     {% if paginator.previous %}
         <a class="previous" href="{{ paginator.previous | safe }}">« Previous</a>
     {% endif %}
+    <div class="page_nums">
+    {% for idx in range(end=paginator.number_pagers + 1, start=1) %}
+        {% if idx == paginator.current_index %}
+            {% if idx == 1 %}
+            <a class="paginator_page_selected" href="{{config.base_url}}">{{idx}}</a>
+            {% else %}
+            <a class="paginator_page_selected" href="{{paginator.base_url ~ idx}}">{{idx}}</a>
+            {% endif %}
+        {% else %}
+        {% if idx == 1 %}
+            <a class="paginator_page" href="{{config.base_url}}">{{idx}}</a>
+            {% else %}
+            <a class="paginator_page" href="{{paginator.base_url ~ idx}}">{{idx}}</a>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    </div>
     {% if paginator.next %}
         <a class="next" href="{{ paginator.next | safe }}">Next »</a>
     {% endif %}

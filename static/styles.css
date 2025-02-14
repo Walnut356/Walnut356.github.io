@@ -360,9 +360,26 @@ body:not(.dark) #sun {
   background: var(--primary);
   border-radius: calc(36px / 2);
   padding: 0 16px;
+  flex: none;
+  max-height: 36px;
 }
 .pagination .next {
   margin-inline-start: auto;
+}
+.pagination .paginator_page {
+    margin-left: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.pagination .paginator_page_selected {
+    margin-left: 10px;
+    align-items: center;
+    background: var(--secondary);
+    margin-bottom: 10px;
+}
+.page_nums {
+    display: flex;
+    flex-wrap: wrap;
 }
 .social-icons {
   padding: 12px 0;
@@ -455,11 +472,12 @@ pre:hover .copy-code {
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  /* -webkit-line-clamp: 3; */
 }
 .entry-footer {
   color: var(--secondary);
   font-size: 13px;
+  font-style: italic;
 }
 .entry-link {
   position: absolute;
@@ -546,7 +564,7 @@ pre:hover .copy-code {
 }
 .post-content a,
 .toc a:hover {
-  box-shadow: 0 1px;
+  text-decoration: underline;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
   color: var(--link);
@@ -554,7 +572,7 @@ pre:hover .copy-code {
 .post-content a code {
   margin: auto 0;
   border-radius: 0;
-  box-shadow: 0 -1px 0 var(--primary) inset;
+  text-decoration: underline;
 }
 .post-content del {
   text-decoration: line-through;
