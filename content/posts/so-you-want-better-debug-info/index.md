@@ -1,6 +1,6 @@
 +++
 title = "So you want better debug info?"
-date = 2025-02-01
+date = 2025-02-14
 
 [taxonomies]
 tags=["programming", "rust", "debugging"]
