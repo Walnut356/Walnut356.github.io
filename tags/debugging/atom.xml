@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Cracking the Shell - debugging</title>
+    <link rel="self" type="application/atom+xml" href="https://walnut356.github.io/tags/debugging/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://walnut356.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-02-14T00:00:00+00:00</updated>
+    <id>https://walnut356.github.io/tags/debugging/atom.xml</id>
+    <entry xml:lang="en">
+        <title>So you want better debug info?</title>
+        <published>2025-02-14T00:00:00+00:00</published>
+        <updated>2025-02-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/so-you-want-better-debug-info/"/>
+        <id>https://walnut356.github.io/posts/so-you-want-better-debug-info/</id>
+        
+        <summary type="html">&lt;p&gt;Let me start with an emphatic &lt;strong&gt;&quot;me too&quot;&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve put many of my side projects on hold because recent events have resulted in, what I consider to be, an unacceptable degredation of the debugging experience. It&#x27;s a bit hard to focus on whatever I&#x27;m doing when I have to fight to figure out what&#x27;s in a &lt;code&gt;Vec&lt;&#x2F;code&gt;. One of the great things about programming is that we&#x27;re the ones who make our own tools; we don&#x27;t have to just blindly accept mediocrity.&lt;&#x2F;p&gt;
+</summary>
+        
+    </entry>
+</feed>
