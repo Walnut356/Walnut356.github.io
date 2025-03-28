@@ -244,7 +244,7 @@ contexts:
 
     - match: \b[A-Z]\b
       scope: storage.type.rust
-      
+
     - match: "{{identifier}}"
       scope: variable.local.rust
 
@@ -700,8 +700,10 @@ contexts:
       scope: identifier.rust
 
   raw-pointer:
-    - match: '\*\s*(?:const|mut)\b'
+    - match: '(\*)\s*(?:const|mut)\b'
       scope: storage.modifier.rust
+      captures:
+        1: keyword.operator.symbol.rust
 
   hrtb:
     - match: \bfor\b

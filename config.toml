@@ -65,7 +65,7 @@ navigation = [
     { url = "$BASE_URL/search", title = "Search" },
 ]
 
-home_content = "Self taught developer. Interested in systems programming and game design. I love reading, especially epic fantasy. My favorites are Malazan and Wheel of Time."
+home_content = "Self taught developer. Interested in systems programming and game design. Currently looking for work. I love reading, especially epic fantasy. My favorites are Malazan and Wheel of Time."
 home_title = "A Walnut's Thoughts"
 social_icons = [
     { url = "$BASE_URL/atom.xml", title = "RSS", icon = "rss" },
