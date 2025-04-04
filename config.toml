@@ -70,4 +70,5 @@ home_title = "A Walnut's Thoughts"
 social_icons = [
     { url = "$BASE_URL/atom.xml", title = "RSS", icon = "rss" },
     { url = "https://github.com/walnut356", title = "GitHub", icon = "github" },
+    { url = "mailto:walnut356dev@gmail.com", title = "Email", icon = "email"}
 ]

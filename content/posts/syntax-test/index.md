@@ -5,7 +5,7 @@ date = 2024-01-01
 tags=["programming", "rust",]
 +++
 
-Edge case testing for this site's syntax highlighting
+I write my own sublime-syntax files for the syntax highlighting on this site, this page is meant for testing edge cases.
 
 <!-- more -->
 
