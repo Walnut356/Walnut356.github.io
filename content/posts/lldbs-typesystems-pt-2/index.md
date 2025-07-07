@@ -184,7 +184,7 @@ public:
 
 This isn't *too* dissimilar to `PdbAstBuilder`'s methods so I should be able to just wrap it later on.
 
-Past that, the way I like to handle these poorly documented exploratory projects is to have \<br that compiles and runs\> as often as possible. With things like the Starcraft Simulator where I'm more confident in how the fundamental pieces work, I'm more willing to spend time making plans and I don't mind long stretches of time without running the program.
+Past that, the way I like to handle these poorly documented exploratory projects is to have \<something that compiles and runs\> as often as possible. With things like the Starcraft Simulator where I'm more confident in how the fundamental pieces work, I'm more willing to spend time making plans and I don't mind long stretches of time without running the program.
 
 With something like this though? There's nothing worse than spending dozens of hours thinking a struct or function or piece of data works a specific way, using it all over, and then finding out it actually does something subtly different. It very quickly turns 1 refactor into 17 refactors. I want to be able to check what something does as soon as I can, make adjustments immediately (or put in a `// TODO`), and be confident in my understanding of each piece of code at every step along the way.
 
