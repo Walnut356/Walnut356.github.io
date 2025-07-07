@@ -11,7 +11,7 @@
 }
 
 code {
-    background-color: #282c34;
+  background-color: #282c34;
 }
 
 .z-keyword:not(.z-symbol),
@@ -49,12 +49,14 @@ code {
   color: var(--blue);
 }
 
-.z-block > .z-enum > .z-type {
+.z-block>.z-enum>.z-type {
   color: var(--teal);
 }
 
-.z-string, .z-string.z-begin, .z-string.z-end {
-    color: var(--green);
+.z-string,
+.z-string.z-begin,
+.z-string.z-end {
+  color: var(--green);
 }
 
 
@@ -99,3 +101,4 @@ code {
 .z-text.z-plain {
   color: #abb2bf;
 }
+

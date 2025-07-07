@@ -61,14 +61,20 @@ title = "Cracking The Shell"
 date_format = "%Y-%m-%d"
 navigation = [
     { url = "$BASE_URL/archive", title = "Archive" },
-    { url = "$BASE_URL/tags", title = "Tags" },
     { url = "$BASE_URL/search", title = "Search" },
+    { url = "$BASE_URL/tags", title = "Tags" },
 ]
 
-home_content = "Self taught developer. Interested in systems programming and game design. Currently looking for work. I love reading, especially epic fantasy. My favorites are Malazan and Wheel of Time."
+home_content = """My name is Anthony, I'm a self taught developer based in the midwest. I'm interested in systems programming, dev tools, and game design. Currently looking for work.
+<br>
+<br>
+3 miles deep in the Rust debugging rabbit hole. If you have any questions regarding that, feel free to send me an email or a message in the Rust zulip or LLVM discourse.
+<br>
+<br>
+I love epic fantasy novels, my favorites are Malazan Book of the Fallen and The Wheel of Time. Currently reading The Black Company."""
 home_title = "A Walnut's Thoughts"
 social_icons = [
     { url = "$BASE_URL/atom.xml", title = "RSS", icon = "rss" },
     { url = "https://github.com/walnut356", title = "GitHub", icon = "github" },
-    { url = "mailto:walnut356dev@gmail.com", title = "Email", icon = "email"}
+    { url = "mailto:walnut356dev@gmail.com", title = "Email", icon = "email" },
 ]

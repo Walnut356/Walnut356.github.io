@@ -10,7 +10,8 @@
   --grey: #5c6370;
   --unstyled: #00ff00;
 }
-/* 
+
+/*
 code {
   color: var(--white) !important;
   background-color: #282c34 !important;
@@ -69,12 +70,16 @@ code {
   color: var(--blue);
 }
 
-.z-block > .z-enum > .z-type, .z-enum, .z-support.z-type.z-variant {
+.z-block>.z-enum>.z-type,
+.z-enum,
+.z-support.z-type.z-variant {
   color: var(--teal);
 }
 
-.z-string, .z-string.z-begin, .z-string.z-end {
-    color: var(--green);
+.z-string,
+.z-string.z-begin,
+.z-string.z-end {
+  color: var(--green);
 }
 
 
@@ -118,35 +123,35 @@ code {
 }
 
 .z-llvm {
-    .z-label {
-        color: var(--blue);
-    }
+  &.z-label {
+    color: var(--blue);
+  }
 
-    .z-intrinsic {
-        color: var(--blue);
-    }
+  &.z-intrinsic {
+    color: var(--blue);
+  }
 
-    .z-metadata {
-        color: var(--teal);
-    }
+  &.z-metadata {
+    color: var(--teal);
+  }
 
-    .z-tags {
-        color: var(--orange);
-    }
+  &.z-tags {
+    color: var(--orange);
+  }
 }
 
 .z-xml {
-    .z-tag {
-        color: var(--red);
-    }
+  .z-tag {
+    color: var(--red);
+  }
 
-    .z-attribute-name {
-        color: var(--orange);
-    }
+  .z-attribute-name {
+    color: var(--orange);
+  }
 
-    .z-punctuation {
-        color: var(--white);
-    }
+  .z-punctuation {
+    color: var(--white);
+  }
 }
 
 .z-text.z-plain {
