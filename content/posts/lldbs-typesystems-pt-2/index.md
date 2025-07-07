@@ -122,13 +122,13 @@ npdb::PdbAstBuilder* TypeSystemClang::GetNativePDBParser() {
 
 So `PdbAstBuilder` is the equivalent of `PDBASTParser`. A little confusing, but alright.
 
-There is a pretty big snag though. From what I can tell, aside from setting an environment variable, there's no way to prefer the `native` parser over the `dia` parser. That also means there's no way to fall back to one or the other if one of them is invalid for a language. It's not trivial to implement that preference either because you are only able to check which one the `TypeSystem` implements once you've inspected the PDB data to know which language's `TypeSystem` to call. Inspecting that data requires having a `SymbolFilePDB` or `SymbolFileNativePDB`, at which point it's too late because you've already chosen an implementation.
+There is a pretty big snag though. From what I can tell, aside from setting an environment variable, there's no way to prefer the `native` parser over the `dia` parser. That also means there's no way to fall back to one or the other if one of them is invalid for a language. It's not trivial to implement that preference either because you are only able to check which one the `TypeSystem` implements once you've inspected the PDB data to know which language's `TypeSystem` to call. Inspecting that data requires having a `SymbolFilePDB` or `SymbolFileNativePDB`, at which point it's too late because you've already chosen one.
 
 That means I need to implement both.
 
-I decided to implement the native PDB parser first, since I can debug that easier and the API made more sense to me. I'll eventually circle back and implement the `dia` parser.
+I decided to tackle the native PDB parser first, since I can debug that easier and the API made more sense to me. I'll eventually circle back and implement the `dia` parser.
 
-Regardless of which one we implement, we need to disentangle PDB parsing from `TypeSystemClang` and clang's internals. Lets take a quick look for `clang`-related keywords in the `PDB` and `NativePDB` directories.
+Regardless of which one we choose, we need to disentangle PDB parsing from `TypeSystemClang` and clang's internals. Lets take a quick look for `clang`-related keywords in the `PDB` and `NativePDB` directories.
 
 ![Alt text: several hundred results](image.png)
 
