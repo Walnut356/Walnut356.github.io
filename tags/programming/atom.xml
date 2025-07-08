@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Cracking the Shell - programming</title>
+    <link rel="self" type="application/atom+xml" href="https://walnut356.github.io/tags/programming/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://walnut356.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-07-07T00:00:00+00:00</updated>
+    <id>https://walnut356.github.io/tags/programming/atom.xml</id>
+    <entry xml:lang="en">
+        <title>LLDB&#x27;s TypeSystems Part 2: PDB</title>
+        <published>2025-07-07T00:00:00+00:00</published>
+        <updated>2025-07-07T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/lldbs-typesystems-pt-2/"/>
+        <id>https://walnut356.github.io/posts/lldbs-typesystems-pt-2/</id>
+        
+        <summary type="html">&lt;p&gt;In my previous post, I described implementing PDB parsing as a can of worms. That might have been a bit of an understatement. PDB has been one &quot;oh, it&#x27;s gonna be twice as much work as I thought&quot; after another. Implementing it has revealed many of the same issues as the &lt;code&gt;TypeSystem&lt;&#x2F;code&gt; itself: lack of documentation, cryptic implementations, poor naming schemes, and unclear expectations. Despite all that, I was able to get it working.&lt;&#x2F;p&gt;
+&lt;p&gt;That means &lt;code&gt;TypeSystemRust&lt;&#x2F;code&gt; can be used for executables that target &lt;code&gt;*-gnu&lt;&#x2F;code&gt; or &lt;code&gt;*-msvc&lt;&#x2F;code&gt;. It&#x27;s not quite done yet, but this is a massive step towards the &lt;code&gt;TypeSystem&lt;&#x2F;code&gt; being fully complete. I want to talk a bit about the process, at least partially for posterity. As we&#x27;ll see later, PDB itself is &lt;em&gt;also&lt;&#x2F;em&gt; not documented very well, so any additional literature could be helpful to someone down the line.&lt;&#x2F;p&gt;
+&lt;p&gt;Fair warning, we&#x27;re getting into the weeds. This is gonna be a long one.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>LLDB&#x27;s TypeSystems: An Unfinished Interface</title>
+        <published>2025-03-28T00:00:00+00:00</published>
+        <updated>2025-03-28T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/lldbs-typesystems-an-unfinished-interface/"/>
+        <id>https://walnut356.github.io/posts/lldbs-typesystems-an-unfinished-interface/</id>
+        
+        <summary type="html">&lt;p&gt;Well, it&#x27;s &quot;done&quot;. &lt;code&gt;TypeSystemRust&lt;&#x2F;code&gt; has a &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Walnut356&#x2F;llvm-project&#x2F;tree&#x2F;lldbrust&#x2F;19.x&quot;&gt;(semi) working prototype for LLDB 19.x&lt;&#x2F;a&gt;. It doesn&#x27;t support expressions or MSVC targets (i.e. PDB debug info), and there are a whole host of catastrophic crashes, but it more or less proves what it needs to: Rust&#x27;s debugging experience &lt;em&gt;can&lt;&#x2F;em&gt; be improved, and there are worthwhile benefits to a working &lt;code&gt;TypeSystem&lt;&#x2F;code&gt; that can&#x27;t be emulated on other layers of the debugging stack.&lt;&#x2F;p&gt;
+&lt;p&gt;If you want to test it out, you&#x27;ll need to build my fork from source (sorry), but then &lt;code&gt;lldb.exe&lt;&#x2F;code&gt; can be used as-is, or you can point a debugger extension like lldb-dap or CodeLLDB to your newly built &lt;code&gt;lldb-dap.exe&lt;&#x2F;code&gt; or &lt;code&gt;liblldb.dll&lt;&#x2F;code&gt; respectively. If you&#x27;re on Windows, make sure to compile for MSVC otherwise CodeLLDB won&#x27;t be able to interface with &lt;code&gt;liblldb&lt;&#x2F;code&gt; properly.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>So you want better debug info?</title>
+        <published>2025-02-14T00:00:00+00:00</published>
+        <updated>2025-02-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/so-you-want-better-debug-info/"/>
+        <id>https://walnut356.github.io/posts/so-you-want-better-debug-info/</id>
+        
+        <summary type="html">&lt;p&gt;Let me start with an emphatic &lt;strong&gt;&quot;me too&quot;&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve put many of my side projects on hold because recent events have resulted in, what I consider to be, an unacceptable degredation of the debugging experience. It&#x27;s a bit hard to focus on whatever I&#x27;m doing when I have to fight to figure out what&#x27;s in a &lt;code&gt;Vec&lt;&#x2F;code&gt;. One of the great things about programming is that we&#x27;re the ones who make our own tools; we don&#x27;t have to just blindly accept mediocrity.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>TwoVec: A Very Silly Container</title>
+        <published>2024-10-18T00:00:00+00:00</published>
+        <updated>2024-10-18T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/twovec-a-very-silly-container/"/>
+        <id>https://walnut356.github.io/posts/twovec-a-very-silly-container/</id>
+        
+        <summary type="html">&lt;p&gt;Lets say you want to store two different types of objects in 1 container. Simple right? Just slap those puppies in a tuple and you&#x27;re good to go:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; class=&quot;language-rust z-code&quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;z-source z-rust&quot;&gt;&lt;span class=&quot;z-storage z-type z-keyword z-rust&quot;&gt;let&lt;&#x2F;span&gt; &lt;span class=&quot;z-variable z-local z-rust&quot;&gt;list&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-separator z-rust&quot;&gt;:&lt;&#x2F;span&gt; &lt;span class=&quot;z-meta z-generic z-rust&quot;&gt;&lt;span class=&quot;z-support z-type z-rust&quot;&gt;Vec&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-definition z-generic z-begin z-rust&quot;&gt;&amp;lt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-group z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-group z-begin z-rust&quot;&gt;(&lt;&#x2F;span&gt;&lt;span class=&quot;z-storage z-type z-primitive z-rust&quot;&gt;u8&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-separator z-rust&quot;&gt;,&lt;&#x2F;span&gt; &lt;span class=&quot;z-storage z-type z-primitive z-rust&quot;&gt;f32&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-section z-group z-end z-rust&quot;&gt;)&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-definition z-generic z-end z-rust&quot;&gt;&amp;gt;&lt;&#x2F;span&gt;&lt;&#x2F;span&gt; &lt;span class=&quot;z-keyword z-operator z-assignment z-rust&quot;&gt;=&lt;&#x2F;span&gt; &lt;span class=&quot;z-support z-macro z-rust&quot;&gt;vec!&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-group z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-group z-begin z-rust&quot;&gt;[&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-section z-group z-begin z-rust&quot;&gt;(&lt;&#x2F;span&gt;&lt;span class=&quot;z-constant z-numeric z-integer z-decimal z-rust&quot;&gt;255&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-separator z-rust&quot;&gt;,&lt;&#x2F;span&gt; &lt;span class=&quot;z-constant z-numeric z-float z-rust&quot;&gt;20.0&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-group z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-group z-end z-rust&quot;&gt;)&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-separator z-rust&quot;&gt;,&lt;&#x2F;span&gt; &lt;span class=&quot;z-punctuation z-section z-group z-begin z-rust&quot;&gt;(&lt;&#x2F;span&gt;&lt;span class=&quot;z-constant z-numeric z-integer z-decimal z-rust&quot;&gt;10&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-separator z-rust&quot;&gt;,&lt;&#x2F;span&gt; &lt;span class=&quot;z-constant z-numeric z-float z-rust&quot;&gt;37.0&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-group z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-group z-end z-rust&quot;&gt;)&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-section z-group z-end z-rust&quot;&gt;]&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-terminator z-rust&quot;&gt;;&lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;But what if you wanted to include elements of two different types in &lt;em&gt;arbitrary orders&lt;&#x2F;em&gt;? Thankfully, there&#x27;s sum types for that:&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;rust&quot; class=&quot;language-rust z-code&quot;&gt;&lt;code class=&quot;language-rust&quot; data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;z-source z-rust&quot;&gt;&lt;span class=&quot;z-storage z-modifier z-rust&quot;&gt;pub&lt;&#x2F;span&gt; &lt;span class=&quot;z-meta z-enum z-rust&quot;&gt;&lt;span class=&quot;z-storage z-type z-enum z-keyword z-rust&quot;&gt;enum&lt;&#x2F;span&gt; &lt;span class=&quot;z-meta z-enum z-rust&quot;&gt;&lt;span class=&quot;z-entity z-name z-enum z-rust&quot;&gt;Val&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-enum z-rust&quot;&gt; &lt;span class=&quot;z-meta z-block z-rust&quot;&gt;&lt;span class=&quot;z-meta z-enum z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-block z-begin z-rust&quot;&gt;{&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-block z-rust&quot;&gt;&lt;span class=&quot;z-meta z-enum z-rust&quot;&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-source z-rust&quot;&gt;&lt;span class=&quot;z-meta z-block z-rust&quot;&gt;&lt;span class=&quot;z-meta z-enum z-rust&quot;&gt;    &lt;span class=&quot;z-constant z-other z-rust&quot;&gt;A&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-struct z-rust&quot;&gt;&lt;span class=&quot;z-meta z-group z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-group z-begin z-rust&quot;&gt;(&lt;&#x2F;span&gt;&lt;span class=&quot;z-storage z-type z-primitive z-rust&quot;&gt;u8&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-section z-group z-end z-rust&quot;&gt;)&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-separator z-rust&quot;&gt;,&lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-source z-rust&quot;&gt;&lt;span class=&quot;z-meta z-block z-rust&quot;&gt;&lt;span class=&quot;z-meta z-enum z-rust&quot;&gt;    &lt;span class=&quot;z-constant z-other z-rust&quot;&gt;B&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-struct z-rust&quot;&gt;&lt;span class=&quot;z-meta z-group z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-group z-begin z-rust&quot;&gt;(&lt;&#x2F;span&gt;&lt;span class=&quot;z-storage z-type z-primitive z-rust&quot;&gt;f32&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-section z-group z-end z-rust&quot;&gt;)&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-separator z-rust&quot;&gt;,&lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-source z-rust&quot;&gt;&lt;span class=&quot;z-meta z-block z-rust&quot;&gt;&lt;span class=&quot;z-meta z-enum z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-block z-end z-rust&quot;&gt;}&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;&lt;span class=&quot;z-source z-rust&quot;&gt;
+&lt;&#x2F;span&gt;&lt;span class=&quot;z-source z-rust&quot;&gt;&lt;span class=&quot;z-keyword z-operator z-range z-rust&quot;&gt;...&lt;&#x2F;span&gt; &lt;span class=&quot;z-meta z-block z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-block z-begin z-rust&quot;&gt;{&lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-source z-rust&quot;&gt;&lt;span class=&quot;z-meta z-block z-rust&quot;&gt;    &lt;span class=&quot;z-storage z-type z-keyword z-rust&quot;&gt;let&lt;&#x2F;span&gt; &lt;span class=&quot;z-variable z-local z-rust&quot;&gt;list&lt;&#x2F;span&gt; &lt;span class=&quot;z-keyword z-operator z-assignment z-rust&quot;&gt;=&lt;&#x2F;span&gt; &lt;span class=&quot;z-support z-macro z-rust&quot;&gt;vec!&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-group z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-group z-begin z-rust&quot;&gt;[&lt;&#x2F;span&gt;&lt;span class=&quot;z-storage z-type z-rust&quot;&gt;Val&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-accessor z-rust&quot;&gt;::&lt;&#x2F;span&gt;&lt;span class=&quot;z-entity z-name z-constant z-rust&quot;&gt;A&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-section z-group z-begin z-rust&quot;&gt;(&lt;&#x2F;span&gt;&lt;span class=&quot;z-constant z-numeric z-integer z-decimal z-rust&quot;&gt;255&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-group z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-group z-end z-rust&quot;&gt;)&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-separator z-rust&quot;&gt;,&lt;&#x2F;span&gt; &lt;span class=&quot;z-storage z-type z-rust&quot;&gt;Val&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-accessor z-rust&quot;&gt;::&lt;&#x2F;span&gt;&lt;span class=&quot;z-entity z-name z-constant z-rust&quot;&gt;B&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-section z-group z-begin z-rust&quot;&gt;(&lt;&#x2F;span&gt;&lt;span class=&quot;z-constant z-numeric z-float z-rust&quot;&gt;20.0&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-group z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-group z-end z-rust&quot;&gt;)&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-separator z-rust&quot;&gt;,&lt;&#x2F;span&gt; &lt;span class=&quot;z-storage z-type z-rust&quot;&gt;Val&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-accessor z-rust&quot;&gt;::&lt;&#x2F;span&gt;&lt;span class=&quot;z-entity z-name z-constant z-rust&quot;&gt;B&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-section z-group z-begin z-rust&quot;&gt;(&lt;&#x2F;span&gt;&lt;span class=&quot;z-constant z-numeric z-float z-rust&quot;&gt;37.0&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-group z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-group z-end z-rust&quot;&gt;)&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-separator z-rust&quot;&gt;,&lt;&#x2F;span&gt; &lt;span class=&quot;z-storage z-type z-rust&quot;&gt;Val&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-accessor z-rust&quot;&gt;::&lt;&#x2F;span&gt;&lt;span class=&quot;z-entity z-name z-constant z-rust&quot;&gt;A&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-section z-group z-begin z-rust&quot;&gt;(&lt;&#x2F;span&gt;&lt;span class=&quot;z-constant z-numeric z-integer z-decimal z-rust&quot;&gt;10&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-group z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-group z-end z-rust&quot;&gt;)&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-section z-group z-end z-rust&quot;&gt;]&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-punctuation z-terminator z-rust&quot;&gt;;&lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-source z-rust&quot;&gt;&lt;span class=&quot;z-meta z-block z-rust&quot;&gt;&lt;&#x2F;span&gt;&lt;span class=&quot;z-meta z-block z-rust&quot;&gt;&lt;span class=&quot;z-punctuation z-section z-block z-end z-rust&quot;&gt;}&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;One small problem. That&#x27;s &lt;em&gt;wasteful&lt;&#x2F;em&gt;.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Why is language documentation still so terrible?</title>
+        <published>2024-09-12T00:00:00+00:00</published>
+        <updated>2024-09-12T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/language-documentation/"/>
+        <id>https://walnut356.github.io/posts/language-documentation/</id>
+        
+        <summary type="html">&lt;p&gt;Seriously, is there a good reason for this? I feel like I&#x27;m going crazy because almost every language doc I&#x27;ve looked at is legitimately awful in a bunch of obvious ways. It&#x27;s not uncommon to see third party libraries updated by a single person that are better structured, more thorough, with better layouts than the official documentation upheld by the language team itself.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bypassing the borrow checker - do ref -&gt; ptr -&gt; ref partial borrows cause UB?</title>
+        <published>2024-08-09T00:00:00+00:00</published>
+        <updated>2024-08-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/partial-borrow-pointer-ub/"/>
+        <id>https://walnut356.github.io/posts/partial-borrow-pointer-ub/</id>
+        
+        <summary type="html">&lt;p&gt;Partial borrows across function boundaries don&#x27;t really work in Rust. Unfortunately, that&#x27;s kind of a major issue. There are workarounds, some are outlined &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;smallcultfollowing.com&#x2F;babysteps&#x2F;blog&#x2F;2018&#x2F;11&#x2F;01&#x2F;after-nll-interprocedural-conflicts&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, but all of them come with pretty major drawbacks.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Simulating Starcraft Part 2 - Data Wrangling</title>
+        <published>2024-06-02T00:00:00+00:00</published>
+        <updated>2024-06-02T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/simulating-starcraft-p2/"/>
+        <id>https://walnut356.github.io/posts/simulating-starcraft-p2/</id>
+        
+        <summary type="html">&lt;p&gt;Oh how naive I was when I thought I&#x27;d be moving on to pathfinding and abilities. I had hoped some of the game&#x27;s mechanics would function better in isolation, so I could gradually add complexity on top of the tracer bullet in a modular way. Unfortunately, that doesn&#x27;t seem possible without a huge refactoring burden every time I add the next layer. It&#x27;ll be more worth my time to properly architect it right now, and build it from the ground up with all of the systems it&#x27;ll need.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Simulating Starcraft Part 1 - Tracer Bullet</title>
+        <published>2024-05-15T00:00:00+00:00</published>
+        <updated>2024-05-15T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/simulating-starcraft-p1/"/>
+        <id>https://walnut356.github.io/posts/simulating-starcraft-p1/</id>
+        
+        <summary type="html">&lt;p&gt;A while back, I made a &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Walnut356&#x2F;SC2-Upgrade-Calculator&quot;&gt;small application&lt;&#x2F;a&gt; meant to demonstrate some important principles about RTS design, namely that unit stats in a vacuum can be very misleading. As a quick example, stalkers have ~9.7 dps on paper. When fighting marines though, their effective DPS drops to ~8.4 (8.2 with combat shields) due to overkill. That&#x27;s about the same DPS as a sentry. Unfortunately, there&#x27;s only so much info that can be extracted from a Time To Kill calculation between two units.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>The space time complexity tradeoff</title>
+        <published>2024-03-09T00:00:00+00:00</published>
+        <updated>2024-03-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/space-time-complexity-tradeoff/"/>
+        <id>https://walnut356.github.io/posts/space-time-complexity-tradeoff/</id>
+        
+        <summary type="html">&lt;p&gt;I encountered a neat example recently while solving &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;adventofcode.com&#x2F;2015&#x2F;day&#x2F;6&quot;&gt;Advent of Code 2015, day 6&lt;&#x2F;a&gt;. The problem can be boiled down to &quot;There is a 2D array of values. Given a range and instruction, apply the instruction to all values in that range. How many values are &#x27;on&#x27; at the end?&quot;. There are only 2 possible states for each value: on and off, and only 3 possible instructions: on, off, and toggle. I won&#x27;t focus too much on parsing the input or the structure of the algorithm here, I just want to investigate the hot loop which applies the instruction to each value.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Can you estimate playtime from replay folder size?</title>
+        <published>2024-01-25T00:00:00+00:00</published>
+        <updated>2024-01-25T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/estimate-playtime/"/>
+        <id>https://walnut356.github.io/posts/estimate-playtime/</id>
+        
+        <summary type="html">&lt;p&gt;I&#x27;ve seen this question come up a few times on r&#x2F;ssbm and while I&#x27;ve given hand-wavey answers before, I find myself in a good place to answer more rigorously now. We can break this question down to more basic ones: &quot;how many bytes of replay data correspond to a single frame of gameplay?&quot; and &quot;how many bytes in the replay are unrelated to frames?&quot;. From there, we can estimate a duration by simply translating the 16.667ms per frame to minutes and seconds.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Syntax Test</title>
+        <published>2024-01-01T00:00:00+00:00</published>
+        <updated>2024-01-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/syntax-test/"/>
+        <id>https://walnut356.github.io/posts/syntax-test/</id>
+        
+        <summary type="html">&lt;p&gt;I write my own sublime-syntax files for the syntax highlighting on this site, this page is meant for testing edge cases.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+</feed>

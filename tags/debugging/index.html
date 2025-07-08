@@ -1,0 +1,96 @@
+<!doctype html><html dir=auto lang=en><head><meta charset=utf-8><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1,shrink-to-fit=no" name=viewport><meta content="index, follow" name=robots><title>Cracking the Shell</title><meta name=keywords><meta name=description><meta content=Walnut356 name=author><link href=https://walnut356.github.io/tags/debugging/ rel=canonical><link href=/styles.css rel=stylesheet><link href=/override.css rel=stylesheet><link href=/syntax-theme.css rel=stylesheet><link href=https://fonts.googleapis.com rel=preconnect><link crossorigin href=https://fonts.gstatic.com rel=preconnect><link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel=stylesheet><link crossorigin href=/CascadiaCode-Regular.woff2 rel=font><link href=/favicon.png rel=icon type=image/x-icon><link href=https://walnut356.github.io/atom.xml rel=alternate title=RSS type=application/atom+xml><noscript><style>#theme-toggle,.top-link{display:none}</style></noscript><script src="https://www.googletagmanager.com/gtag/js?id=G-PKLX5VEB4H" async></script><script>window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PKLX5VEB4H');</script><body class="list dark" id=top><script>if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    }</script><header class=header><nav class=nav><div class=logo><a title="Cracking The Shell (Alt + H)" accesskey=h href=https://walnut356.github.io> Cracking The Shell </a><div class=logo-switches><button title="(Alt + T)" accesskey=t id=theme-toggle><svg viewbox="0 0 24 24" fill=none height=18 id=moon stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> <svg viewbox="0 0 24 24" fill=none height=18 id=sun stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5></circle><line x1=12 x2=12 y1=1 y2=3></line><line x1=12 x2=12 y1=21 y2=23></line><line x1=4.22 x2=5.64 y1=4.22 y2=5.64></line><line x1=18.36 x2=19.78 y1=18.36 y2=19.78></line><line x1=1 x2=3 y1=12 y2=12></line><line x1=21 x2=23 y1=12 y2=12></line><line x1=4.22 x2=5.64 y1=19.78 y2=18.36></line><line x1=18.36 x2=19.78 y1=5.64 y2=4.22></line></svg></button><ul class=lang-switch><li></ul></div></div><ul id=menu><li><a href=https://walnut356.github.io/archive title=Archive> <span>Archive</span> </a><li><a href=https://walnut356.github.io/search title=Search> <span>Search</span> </a><li><a href=https://walnut356.github.io/tags title=Tags> <span>Tags</span> </a></ul></nav></header><main class=main><header class=page-header><div class=breadcrumbs><a href=https://walnut356.github.io>Home</a> »  <a href="https://walnut356.github.io/tags/ ">Tags</a> »  <a href=https://walnut356.github.io/tags/debugging/>debugging</a></div><h1>debugging <a aria-label=RSS href=https://walnut356.github.io/tags/debugging/atom.xml title=RSS> <svg viewbox="0 0 24 24" fill=none height=23 stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 xmlns=http://www.w3.org/2000/svg><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx=5 cy=19 r=1></circle></svg> </a></h1></header><article class=post-entry><header class=entry-header><h2>LLDB's TypeSystems Part 2: PDB</h2></header><div class=entry-content><p><p>In my previous post, I described implementing PDB parsing as a can of worms. That might have been a bit of an understatement. PDB has been one "oh, it's gonna be twice as much work as I thought" after another. Implementing it has revealed many of the same issues as the <code>TypeSystem</code> itself: lack of documentation, cryptic implementations, poor naming schemes, and unclear expectations. Despite all that, I was able to get it working.<p>That means <code>TypeSystemRust</code> can be used for executables that target <code>*-gnu</code> or <code>*-msvc</code>. It's not quite done yet, but this is a massive step towards the <code>TypeSystem</code> being fully complete. I want to talk a bit about the process, at least partially for posterity. As we'll see later, PDB itself is <em>also</em> not documented very well, so any additional literature could be helpful to someone down the line.<p>Fair warning, we're getting into the weeds. This is gonna be a long one.</div><footer class=entry-footer><span title="2025-07-07 00:00:00 +0000">2025-07-07</span> · 37 min · 7396 words</footer><a aria-label="post link to LLDB's TypeSystems Part 2: PDB" class=entry-link href=https://walnut356.github.io/posts/lldbs-typesystems-pt-2/></a></article><article class=post-entry><header class=entry-header><h2>LLDB's TypeSystems: An Unfinished Interface</h2></header><div class=entry-content><p><p>Well, it's "done". <code>TypeSystemRust</code> has a <a href=https://github.com/Walnut356/llvm-project/tree/lldbrust/19.x rel=noopener target=_blank>(semi) working prototype for LLDB 19.x</a>. It doesn't support expressions or MSVC targets (i.e. PDB debug info), and there are a whole host of catastrophic crashes, but it more or less proves what it needs to: Rust's debugging experience <em>can</em> be improved, and there are worthwhile benefits to a working <code>TypeSystem</code> that can't be emulated on other layers of the debugging stack.<p>If you want to test it out, you'll need to build my fork from source (sorry), but then <code>lldb.exe</code> can be used as-is, or you can point a debugger extension like lldb-dap or CodeLLDB to your newly built <code>lldb-dap.exe</code> or <code>liblldb.dll</code> respectively. If you're on Windows, make sure to compile for MSVC otherwise CodeLLDB won't be able to interface with <code>liblldb</code> properly.</div><footer class=entry-footer><span title="2025-03-28 00:00:00 +0000">2025-03-28</span> · 25 min · 4884 words</footer><a aria-label="post link to LLDB's TypeSystems: An Unfinished Interface" class=entry-link href=https://walnut356.github.io/posts/lldbs-typesystems-an-unfinished-interface/></a></article><article class=post-entry><header class=entry-header><h2>So you want better debug info?</h2></header><div class=entry-content><p><p>Let me start with an emphatic <strong>"me too"</strong>.<p>I've put many of my side projects on hold because recent events have resulted in, what I consider to be, an unacceptable degredation of the debugging experience. It's a bit hard to focus on whatever I'm doing when I have to fight to figure out what's in a <code>Vec</code>. One of the great things about programming is that we're the ones who make our own tools; we don't have to just blindly accept mediocrity.</div><footer class=entry-footer><span title="2025-02-14 00:00:00 +0000">2025-02-14</span> · 25 min · 4926 words</footer><a aria-label="post link to So you want better debug info?" class=entry-link href=https://walnut356.github.io/posts/so-you-want-better-debug-info/></a></article></main><footer class=footer><span>© 2025 <a href=https://walnut356.github.io>Walnut356</a></span><span> Powered by <a rel="noopener noreferrer" href=https://www.getzola.org/ target=_blank>Zola</a> & <a href=https://github.com/cydave/zola-theme-papermod rel=noopener target=_blank>PaperMod</a> </span></footer><a aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g class=top-link href=#top id=top-link> <svg viewbox="0 0 12 6" fill=currentColor xmlns=http://www.w3.org/2000/svg><path d="M12 6H0l6-6z"/></svg> </a><script>let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });</script><script>var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };</script><script>document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })</script><script>document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                var content = codeblock.textContent;
+                if(codeblock.firstChild.tagName == 'TABLE') {
+                    content = Array(...codeblock.firstChild.getElementsByTagName('span')).map((span) => { return span.textContent; }).join('');
+                }
+                navigator.clipboard.writeText(content);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            // td containing LineNos
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            // table containing LineNos and code
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            // code blocks not having highlight as parent class
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });</script>

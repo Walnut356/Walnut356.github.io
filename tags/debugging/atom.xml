@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Cracking the Shell - debugging</title>
+    <link rel="self" type="application/atom+xml" href="https://walnut356.github.io/tags/debugging/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://walnut356.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-07-07T00:00:00+00:00</updated>
+    <id>https://walnut356.github.io/tags/debugging/atom.xml</id>
+    <entry xml:lang="en">
+        <title>LLDB&#x27;s TypeSystems Part 2: PDB</title>
+        <published>2025-07-07T00:00:00+00:00</published>
+        <updated>2025-07-07T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/lldbs-typesystems-pt-2/"/>
+        <id>https://walnut356.github.io/posts/lldbs-typesystems-pt-2/</id>
+        
+        <summary type="html">&lt;p&gt;In my previous post, I described implementing PDB parsing as a can of worms. That might have been a bit of an understatement. PDB has been one &quot;oh, it&#x27;s gonna be twice as much work as I thought&quot; after another. Implementing it has revealed many of the same issues as the &lt;code&gt;TypeSystem&lt;&#x2F;code&gt; itself: lack of documentation, cryptic implementations, poor naming schemes, and unclear expectations. Despite all that, I was able to get it working.&lt;&#x2F;p&gt;
+&lt;p&gt;That means &lt;code&gt;TypeSystemRust&lt;&#x2F;code&gt; can be used for executables that target &lt;code&gt;*-gnu&lt;&#x2F;code&gt; or &lt;code&gt;*-msvc&lt;&#x2F;code&gt;. It&#x27;s not quite done yet, but this is a massive step towards the &lt;code&gt;TypeSystem&lt;&#x2F;code&gt; being fully complete. I want to talk a bit about the process, at least partially for posterity. As we&#x27;ll see later, PDB itself is &lt;em&gt;also&lt;&#x2F;em&gt; not documented very well, so any additional literature could be helpful to someone down the line.&lt;&#x2F;p&gt;
+&lt;p&gt;Fair warning, we&#x27;re getting into the weeds. This is gonna be a long one.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>LLDB&#x27;s TypeSystems: An Unfinished Interface</title>
+        <published>2025-03-28T00:00:00+00:00</published>
+        <updated>2025-03-28T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/lldbs-typesystems-an-unfinished-interface/"/>
+        <id>https://walnut356.github.io/posts/lldbs-typesystems-an-unfinished-interface/</id>
+        
+        <summary type="html">&lt;p&gt;Well, it&#x27;s &quot;done&quot;. &lt;code&gt;TypeSystemRust&lt;&#x2F;code&gt; has a &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Walnut356&#x2F;llvm-project&#x2F;tree&#x2F;lldbrust&#x2F;19.x&quot;&gt;(semi) working prototype for LLDB 19.x&lt;&#x2F;a&gt;. It doesn&#x27;t support expressions or MSVC targets (i.e. PDB debug info), and there are a whole host of catastrophic crashes, but it more or less proves what it needs to: Rust&#x27;s debugging experience &lt;em&gt;can&lt;&#x2F;em&gt; be improved, and there are worthwhile benefits to a working &lt;code&gt;TypeSystem&lt;&#x2F;code&gt; that can&#x27;t be emulated on other layers of the debugging stack.&lt;&#x2F;p&gt;
+&lt;p&gt;If you want to test it out, you&#x27;ll need to build my fork from source (sorry), but then &lt;code&gt;lldb.exe&lt;&#x2F;code&gt; can be used as-is, or you can point a debugger extension like lldb-dap or CodeLLDB to your newly built &lt;code&gt;lldb-dap.exe&lt;&#x2F;code&gt; or &lt;code&gt;liblldb.dll&lt;&#x2F;code&gt; respectively. If you&#x27;re on Windows, make sure to compile for MSVC otherwise CodeLLDB won&#x27;t be able to interface with &lt;code&gt;liblldb&lt;&#x2F;code&gt; properly.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>So you want better debug info?</title>
+        <published>2025-02-14T00:00:00+00:00</published>
+        <updated>2025-02-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/so-you-want-better-debug-info/"/>
+        <id>https://walnut356.github.io/posts/so-you-want-better-debug-info/</id>
+        
+        <summary type="html">&lt;p&gt;Let me start with an emphatic &lt;strong&gt;&quot;me too&quot;&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve put many of my side projects on hold because recent events have resulted in, what I consider to be, an unacceptable degredation of the debugging experience. It&#x27;s a bit hard to focus on whatever I&#x27;m doing when I have to fight to figure out what&#x27;s in a &lt;code&gt;Vec&lt;&#x2F;code&gt;. One of the great things about programming is that we&#x27;re the ones who make our own tools; we don&#x27;t have to just blindly accept mediocrity.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+</feed>

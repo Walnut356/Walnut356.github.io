@@ -1,0 +1,96 @@
+<!doctype html><html dir=auto lang=en><head><meta charset=utf-8><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1,shrink-to-fit=no" name=viewport><meta content="index, follow" name=robots><title>Cracking the Shell</title><meta name=keywords><meta name=description><meta content=Walnut356 name=author><link href=https://walnut356.github.io/posts/page/2/ rel=canonical><link href=/styles.css rel=stylesheet><link href=/override.css rel=stylesheet><link href=/syntax-theme.css rel=stylesheet><link href=https://fonts.googleapis.com rel=preconnect><link crossorigin href=https://fonts.gstatic.com rel=preconnect><link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel=stylesheet><link crossorigin href=/CascadiaCode-Regular.woff2 rel=font><link href=/favicon.png rel=icon type=image/x-icon><link href=https://walnut356.github.io/atom.xml rel=alternate title=RSS type=application/atom+xml><noscript><style>#theme-toggle,.top-link{display:none}</style></noscript><script src="https://www.googletagmanager.com/gtag/js?id=G-PKLX5VEB4H" async></script><script>window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PKLX5VEB4H');</script><body class="list dark" id=top><script>if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    }</script><header class=header><nav class=nav><div class=logo><a title="Cracking The Shell (Alt + H)" accesskey=h href=https://walnut356.github.io> Cracking The Shell </a><div class=logo-switches><button title="(Alt + T)" accesskey=t id=theme-toggle><svg viewbox="0 0 24 24" fill=none height=18 id=moon stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> <svg viewbox="0 0 24 24" fill=none height=18 id=sun stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5></circle><line x1=12 x2=12 y1=1 y2=3></line><line x1=12 x2=12 y1=21 y2=23></line><line x1=4.22 x2=5.64 y1=4.22 y2=5.64></line><line x1=18.36 x2=19.78 y1=18.36 y2=19.78></line><line x1=1 x2=3 y1=12 y2=12></line><line x1=21 x2=23 y1=12 y2=12></line><line x1=4.22 x2=5.64 y1=19.78 y2=18.36></line><line x1=18.36 x2=19.78 y1=5.64 y2=4.22></line></svg></button><ul class=lang-switch><li></ul></div></div><ul id=menu><li><a href=https://walnut356.github.io/archive title=Archive> <span>Archive</span> </a><li><a href=https://walnut356.github.io/search title=Search> <span>Search</span> </a><li><a href=https://walnut356.github.io/tags title=Tags> <span>Tags</span> </a></ul></nav></header><main class=main><header class=page-header><div class=breadcrumbs><a href=https://walnut356.github.io>Home</a></div><h1>Posts <a aria-label=RSS href=https://walnut356.github.io/atom.xml title=RSS> <svg viewbox="0 0 24 24" fill=none height=23 stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 xmlns=http://www.w3.org/2000/svg><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx=5 cy=19 r=1></circle></svg> </a></h1></header><article class=post-entry><header class=entry-header><h2>Bypassing the borrow checker - do ref -> ptr -> ref partial borrows cause UB?</h2></header><div class=entry-content><p><p>Partial borrows across function boundaries don't really work in Rust. Unfortunately, that's kind of a major issue. There are workarounds, some are outlined <a href=https://smallcultfollowing.com/babysteps/blog/2018/11/01/after-nll-interprocedural-conflicts/ rel=noopener target=_blank>here</a>, but all of them come with pretty major drawbacks.</div><footer class=entry-footer><span title="2024-08-09 00:00:00 +0000">2024-08-09</span> · 30 min · 5893 words</footer><a aria-label="post link to Bypassing the borrow checker - do ref -> ptr -> ref partial borrows cause UB?" class=entry-link href=https://walnut356.github.io/posts/partial-borrow-pointer-ub/></a></article><article class=post-entry><header class=entry-header><h2>Simulating Starcraft Part 2 - Data Wrangling</h2></header><div class=entry-content><p><p>Oh how naive I was when I thought I'd be moving on to pathfinding and abilities. I had hoped some of the game's mechanics would function better in isolation, so I could gradually add complexity on top of the tracer bullet in a modular way. Unfortunately, that doesn't seem possible without a huge refactoring burden every time I add the next layer. It'll be more worth my time to properly architect it right now, and build it from the ground up with all of the systems it'll need.</div><footer class=entry-footer><span title="2024-06-02 00:00:00 +0000">2024-06-02</span> · 15 min · 2889 words</footer><a aria-label="post link to Simulating Starcraft Part 2 - Data Wrangling" class=entry-link href=https://walnut356.github.io/posts/simulating-starcraft-p2/></a></article><article class=post-entry><header class=entry-header><h2>Simulating Starcraft Part 1 - Tracer Bullet</h2></header><div class=entry-content><p><p>A while back, I made a <a href=https://github.com/Walnut356/SC2-Upgrade-Calculator rel=noopener target=_blank>small application</a> meant to demonstrate some important principles about RTS design, namely that unit stats in a vacuum can be very misleading. As a quick example, stalkers have ~9.7 dps on paper. When fighting marines though, their effective DPS drops to ~8.4 (8.2 with combat shields) due to overkill. That's about the same DPS as a sentry. Unfortunately, there's only so much info that can be extracted from a Time To Kill calculation between two units.</div><footer class=entry-footer><span title="2024-05-15 00:00:00 +0000">2024-05-15</span> · 22 min · 4214 words</footer><a aria-label="post link to Simulating Starcraft Part 1 - Tracer Bullet" class=entry-link href=https://walnut356.github.io/posts/simulating-starcraft-p1/></a></article><article class=post-entry><header class=entry-header><h2>The space time complexity tradeoff</h2></header><div class=entry-content><p><p>I encountered a neat example recently while solving <a href=https://adventofcode.com/2015/day/6 rel=noopener target=_blank>Advent of Code 2015, day 6</a>. The problem can be boiled down to "There is a 2D array of values. Given a range and instruction, apply the instruction to all values in that range. How many values are 'on' at the end?". There are only 2 possible states for each value: on and off, and only 3 possible instructions: on, off, and toggle. I won't focus too much on parsing the input or the structure of the algorithm here, I just want to investigate the hot loop which applies the instruction to each value.</div><footer class=entry-footer><span title="2024-03-09 00:00:00 +0000">2024-03-09</span> · 10 min · 1998 words</footer><a aria-label="post link to The space time complexity tradeoff" class=entry-link href=https://walnut356.github.io/posts/space-time-complexity-tradeoff/></a></article><article class=post-entry><header class=entry-header><h2>Protoss has always had a cost efficiency problem</h2></header><footer class=entry-footer><span title="2024-02-07 00:00:00 +0000">2024-02-07</span> · 28 min · 5434 words</footer><a aria-label="post link to Protoss has always had a cost efficiency problem" class=entry-link href=https://walnut356.github.io/posts/protoss-cost-efficiency/></a></article><footer class=page-footer><nav class=pagination><a class=previous href=https://walnut356.github.io/posts/>« Previous</a><div class=page_nums><a class=paginator_page href=https://walnut356.github.io/posts/>1</a><a class=paginator_page_selected>2</a><a class=paginator_page href=https://walnut356.github.io/posts/page/3>3</a></div><a class=next href=https://walnut356.github.io/posts/page/3/>Next »</a></nav></footer></main><footer class=footer><span>© 2025 <a href=https://walnut356.github.io>Walnut356</a></span><span> Powered by <a rel="noopener noreferrer" href=https://www.getzola.org/ target=_blank>Zola</a> & <a href=https://github.com/cydave/zola-theme-papermod rel=noopener target=_blank>PaperMod</a> </span></footer><a aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g class=top-link href=#top id=top-link> <svg viewbox="0 0 12 6" fill=currentColor xmlns=http://www.w3.org/2000/svg><path d="M12 6H0l6-6z"/></svg> </a><script>let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });</script><script>var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };</script><script>document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })</script><script>document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                var content = codeblock.textContent;
+                if(codeblock.firstChild.tagName == 'TABLE') {
+                    content = Array(...codeblock.firstChild.getElementsByTagName('span')).map((span) => { return span.textContent; }).join('');
+                }
+                navigator.clipboard.writeText(content);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            // td containing LineNos
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            // table containing LineNos and code
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            // code blocks not having highlight as parent class
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });</script>

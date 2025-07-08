@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Cracking the Shell - games</title>
+    <link rel="self" type="application/atom+xml" href="https://walnut356.github.io/tags/games/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://walnut356.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2024-06-02T00:00:00+00:00</updated>
+    <id>https://walnut356.github.io/tags/games/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Simulating Starcraft Part 2 - Data Wrangling</title>
+        <published>2024-06-02T00:00:00+00:00</published>
+        <updated>2024-06-02T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/simulating-starcraft-p2/"/>
+        <id>https://walnut356.github.io/posts/simulating-starcraft-p2/</id>
+        
+        <summary type="html">&lt;p&gt;Oh how naive I was when I thought I&#x27;d be moving on to pathfinding and abilities. I had hoped some of the game&#x27;s mechanics would function better in isolation, so I could gradually add complexity on top of the tracer bullet in a modular way. Unfortunately, that doesn&#x27;t seem possible without a huge refactoring burden every time I add the next layer. It&#x27;ll be more worth my time to properly architect it right now, and build it from the ground up with all of the systems it&#x27;ll need.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Simulating Starcraft Part 1 - Tracer Bullet</title>
+        <published>2024-05-15T00:00:00+00:00</published>
+        <updated>2024-05-15T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/simulating-starcraft-p1/"/>
+        <id>https://walnut356.github.io/posts/simulating-starcraft-p1/</id>
+        
+        <summary type="html">&lt;p&gt;A while back, I made a &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Walnut356&#x2F;SC2-Upgrade-Calculator&quot;&gt;small application&lt;&#x2F;a&gt; meant to demonstrate some important principles about RTS design, namely that unit stats in a vacuum can be very misleading. As a quick example, stalkers have ~9.7 dps on paper. When fighting marines though, their effective DPS drops to ~8.4 (8.2 with combat shields) due to overkill. That&#x27;s about the same DPS as a sentry. Unfortunately, there&#x27;s only so much info that can be extracted from a Time To Kill calculation between two units.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Protoss has always had a cost efficiency problem</title>
+        <published>2024-02-07T00:00:00+00:00</published>
+        <updated>2024-02-07T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/protoss-cost-efficiency/"/>
+        <id>https://walnut356.github.io/posts/protoss-cost-efficiency/</id>
+        
+        <content type="html" xml:base="https://walnut356.github.io/posts/protoss-cost-efficiency/">&lt;p&gt;To keep the preamble brief, I did a bunch of digging and analysis a year or two ago and never did anything with the data. I wrote an &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Walnut356&#x2F;SC2-Upgrade-Calculator&quot;&gt;app&lt;&#x2F;a&gt;, compiled spreadsheets, drafted (and deleted) many documents. Most recently, I had planned to write something more formal - akin to a patch proposal (the actual &quot;patch notes&quot; and data at will be at the bottom, they&#x27;re vaguely interesting but they&#x27;re some context). I don&#x27;t think I have it in me to do something so ambitious on this topic anymore. Unfortunately, the conclusions I&#x27;ve drawn from that data will continue to bang around in my head until I say something. This will be an informal &quot;post-mortem&quot; of sorts, thus my focus is more on sharing my thought process and conclusions, rather than presenting a compelling argument meant to convince. You&#x27;ll have to meet me half way on that front. If you&#x27;re wondering who I am and&#x2F;or my qualifications: I&#x27;m nobody and have none.&lt;&#x2F;p&gt;
+&lt;p&gt;With that out of the way, on to the good stuff:&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;where-we-are-now&quot;&gt;Where we are now&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#where-we-are-now&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;Protoss is kinda a joke. Even the biggest of protoss detractors have been coming around to the idea that the race is in the worst state any race has been in since WoL&#x27;s release. It all boils down to 2 interlinked issues:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;Protoss is designed like garbage and isn&#x27;t really fun to play as or against&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Protoss is very weak&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;While the first issue has almost always been true, the second has been slowly creeping up on us for a long, &lt;em&gt;long&lt;&#x2F;em&gt; time. I want to explain what &quot;weak&quot; means, because I think it&#x27;ll probably be controversial to say protoss has been weak since sc2 released. To help tide you over until I get to the point, ponder this: has protoss&#x27;s core design changed much since WoL?&lt;&#x2F;p&gt;
+&lt;p&gt;My core idea should be clear from the title of the article: protoss simply isn&#x27;t cost efficient. I think right now, that&#x27;s fairly obvious based on the existance of the disruptor. It&#x27;s a unit thats sole purpose is to periodically &lt;strong&gt;delete portions of your opponent&#x27;s army&lt;&#x2F;strong&gt;. It&#x27;s a reload-able baneling that 1shots most units in the game. It is incredibly cheap for its potential and isn&#x27;t really that hard to use effectively. And yet despite having one of the most absurd unit designs I&#x27;ve ever seen in an RTS, protoss wasn&#x27;t completely busted. It follows then that everything &lt;em&gt;around&lt;&#x2F;em&gt; the disruptor must be equivalently &lt;em&gt;under&lt;&#x2F;em&gt;whelming. If disruptors are the kings of cost efficiency, then everything else protoss has must be the paupers.&lt;&#x2F;p&gt;
+&lt;p&gt;Assuming both players are competent and playing reasonable build orders, they should have roughly the same amount of resources at the same time. Assuming they spend their money in a reasonable way and play equally well, their armies should be of equal strength and any engagement should be decided by the context surrounding that engagement. To clarify, while the armies should be overall similar &quot;strength&quot;, they&#x27;ll likely be good at different things. A mech army will want a different kind of engagement than a bio army, a blink-based army will favor different terrain and engagement styles than an equivalent chargelot-archon-based army.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;m not going to bother establishing at length that this isn&#x27;t true for protoss right now - it&#x27;s obvious enough. The long and short of it really is the whole &quot;&lt;strong&gt;deleting portions of your opponent&#x27;s army&lt;&#x2F;strong&gt; just to make the game even&quot; thing. It was kept in careful balance until recently, and the series of nerfs to the disruptor (without equivalent compensatory buffs to surrounding units) have finally collapsed the house of cards. Instead, I want to spend some time proving that this has &lt;em&gt;always&lt;&#x2F;em&gt; been the case, it has just been masked by a set of increasingly contrived cries for help.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;where-we-used-to-be&quot;&gt;Where we used to be&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#where-we-used-to-be&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;Let&#x27;s assume the same situation as above, except you&#x27;re aware that your army is weaker than theirs, and there&#x27;s no possible way to rectify that. How do you win anyway? You play smarter. Exploit the types of engagements, the terrain, the timing that your opponent&#x27;s army can&#x27;t handle well. Get scrappy, get crafty, get weird. Claw for any way to unbalance their position. Everyone does this to some extent, but it becomes the &lt;em&gt;only&lt;&#x2F;em&gt; way when you can&#x27;t win a straight-up fight.&lt;&#x2F;p&gt;
+&lt;p&gt;So what about before the disruptor, back in HotS? The predominant strategy in PvZ was mostly variants of blinkstalker sentry. There were some weirdos like myself who played 9 colossus mothership vs swarmhosts on gigantic 4 player maps, but I think most people agree that blinkstalker sentry was not only the most common, but the most effective. For those that weren&#x27;t around, or those that forgot, here is my favorite game of all time: &lt;a rel=&quot;noopener&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=3jZaHbkqMDw&amp;amp;&quot;&gt;Parting vs True game 3 at Gfinity 2015&lt;&#x2F;a&gt; (skip to ~16:45 if you&#x27;re impatient). That game alone just about sums up HotS to me.&lt;&#x2F;p&gt;
+&lt;p&gt;Blink is the best ability in the game. Put it on any unit, and that unit is incredible. Forcefield is also stupidly strong in isolation. Combining these (and recall) is the pinnacle of hit and run cost efficiency - it&#x27;s hard to imagine a better set of abilities. Despite that, it &lt;em&gt;barely&lt;&#x2F;em&gt; worked. I don&#x27;t mean that it was too weak, I mean on the whole it was a very fragile strategy - balance-wise - that was reliable enough to be a mainstay, but there&#x27;s no hidden extra layer or whatever that makes it broken or can be adapted if things change. A single nerf to stalkers or sentries could, and indeed did, kill this strategy outright.&lt;&#x2F;p&gt;
+&lt;p&gt;Can&#x27;t out-greed? Make your opponent bleed off money constantly, put pressure on any auxiliary bases. Can&#x27;t take straight up engagements? Hit and run, trade shields for HP. Can&#x27;t hit and run without losing more than you kill? Use forcefields to only fight tiny sections of the army, in combination with blink to retreat when necessary. Force everything to be on your terms and &lt;em&gt;maybe&lt;&#x2F;em&gt; you can swing the pendulum in your favor and wear them down. It&#x27;s an exciting style to watch and play, and is represented by the other races in the MMM vs ling bane muta wars that have nearly always existed in the meta.&lt;&#x2F;p&gt;
+&lt;p&gt;This strategy unfortunately no longer works in LotV as ravagers ruin the delicate sentry energy math. The composition can no longer trade effectively with large numbers of low&#x2F;mid tier units. In effect though, disruptors are a streamlined version of forcefielding off a handful of roaches and killing them &quot;for free&quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;The other option is to go lategame and hope to weather the storm until such a time as core armies aren&#x27;t primarily made of up of t1&#x2F;1.5 units, and when production and tech limitations no longer exist. Some players were very successful with this strategy, but it&#x27;s still just masking the cost efficiency issue by avoiding confrontation rather than min-maxing every little aspect of it.&lt;&#x2F;p&gt;
+&lt;p&gt;Before that, in WoL, play was much the same. People were generally worse at the game, both executionally, and mentally. Play revolved around mostly turtling to avoid fighting with primarly t1&#x2F;1.5-based armies, gimmicks like archon toilet, or early all-ins like the Soul Train which, surprise surprise, relies on forcefields to eke out an advantage via the same tactics as above.&lt;&#x2F;p&gt;
+&lt;p&gt;The other major playstyle throughout sc2&#x27;s history was cheese. If you can&#x27;t win engagements on the map, why let it get there in the first place? I wonder which race was the most infamous for cheese...&lt;&#x2F;p&gt;
+&lt;p&gt;Unfortunately, because of this infamy, Protoss cheeses and all ins were targeted and patched more aggressively than those of Terran and Zerg (see: treatment of adept all ins vs nydus all ins at the beginning of LotV).&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;the-point&quot;&gt;The point&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#the-point&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;While the previous section was by no means extensive, I think those of you who have been around for a while can recognize the pattern and fill in the gaps with your own experience. There are all sorts of problems that have come up as a result of the lack of cost efficiency:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Over centralization on colossus, high templar, or carriers&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;If you have them, fights feel even. Once they die, the other 90% of your army may as well not exist&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Frail earlygame&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;See: WoL PvP earlygame and the forge fast expand for examples, and mothership core+photon overcharge&#x2F;shield batteries+battery overcharge for bandaid fixes.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Doubling down on annoying&#x2F;gimmicky unit design&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Lack of compositional and strategic variety&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Many niche units fall by the wayside and are completely unused, most compositions are just miniscule variations of the 2 cost effective units + whatever hard counter you need at the time&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;deleting portions of your opponent&#x27;s army&lt;&#x2F;strong&gt; being a necessity&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Infrastructure feels too expensive&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Lots of tech is required which leads to less production structures. Less production and less money means less units. Units which already aren&#x27;t cost efficient, leading to an even weaker position than an investment in tech normally risks. That means people play more passively or cheese, which leads to less interesting games. Going for production structures is a fool&#x27;s errand because even if you have as many units as your opponent, your army won&#x27;t trade effectively anyway since you don&#x27;t have the tech to &lt;strong&gt;delete portions your opponent&#x27;s army&lt;&#x2F;strong&gt; (or play tactically pre-LotV).&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Very difficult to come back from even a single mis-step or mistake&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;very little &quot;extra&quot; money, difficult to replace what&#x27;s lost. Usually have to skimp on base defenses which makes drops and harassment more effective.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;All of this stems from the simple fact that that the Zealot, Sentry, Adept, Archon, Phoenix, and Immortal do &lt;em&gt;substantially&lt;&#x2F;em&gt; less than their requisite costs would imply. I want to emphasize that again. &lt;em&gt;Substantially&lt;&#x2F;em&gt; less. Honorable mentions go out to the photon cannon, voidray, and observer for being somewhat weak and contributing to the above. Below are some of the compiled cost-efficiency numbers I wrote down a while back, categorized by DPS-, supply-, and health- per-cost and per-size. Per-cost is a decent metric for midgame, where money is your main limiting factor. Per-size is a decent metric for larger army sizes where cost is less important compared to terrain and damage density. Keep in mind that other factors also matter, such as production-structure efficiency (e.g. reactors make marines more efficient to build, observers take highly contested robo-facility time making their efficiency worse than it would initially seem), movement speed, utility, range, upgrade scaling, etc.&lt;&#x2F;p&gt;
+&lt;p&gt;The data is restricted to &quot;core army units&quot;, who focus on providing &quot;meat&quot; - solid HP and damage to fill out your army. These need to be supported by utility units (e.g. medivacs, lurkers, etc.) and higher tier damage dealers to thrive in the mid and late game. They should be all-arounders with quirks that lead to interesting dynamics during fights (e.g. marine stutter step, FF&#x27;s exploiting roach range, banelings punishing clumping while zerglings punish spreading, etc.)&lt;&#x2F;p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Efficiency Charts
+&lt;&#x2F;summary&gt;
+&lt;p&gt;Cost is just a simple sum of minerals + gas. Technically gas &quot;worth more&quot;, but it&#x27;s also used in smaller quantities, mined in different amounts, different builds prioritize different ratios of mining, etc. etc. etc. Suffice it to say the ratios cancel out for it to be close enough to 1:1, and even if it didn&#x27;t, builds would compensate to make them equivalent.&lt;&#x2F;p&gt;
+&lt;p&gt;Also worth noting that these calculations were done with float point arithmetic, whereas starcraft 2 uses a 32 bit Fixed Point numbers. If you don&#x27;t know what that means, essentially the numbers might be a tiny bit off compared to the game (or compared to what you might calculate, depending on your order of operations), but they&#x27;re close enough that it&#x27;ll make no difference.&lt;&#x2F;p&gt;
+&lt;h2 id=&quot;dps&quot;&gt;DPS&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#dps&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;no-upgrades&quot;&gt;No Upgrades&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#no-upgrades&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h3&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Unit&lt;&#x2F;th&gt;&lt;th&gt;DPS&#x2F;Cost&lt;&#x2F;th&gt;&lt;th&gt;DPS+bonus&#x2F;Cost&lt;&#x2F;th&gt;&lt;th&gt;DPS&#x2F;Supply&lt;&#x2F;th&gt;&lt;th&gt;DPS+bonus&#x2F;Supply&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;Zealot&lt;&#x2F;td&gt;&lt;td&gt;0.1860&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;9.3023&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Stalker&lt;&#x2F;td&gt;&lt;td&gt;0.0554&lt;&#x2F;td&gt;&lt;td&gt;0.0768&lt;&#x2F;td&gt;&lt;td&gt;4.8507&lt;&#x2F;td&gt;&lt;td&gt;6.7164&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Adept&lt;&#x2F;td&gt;&lt;td&gt;0.0497&lt;&#x2F;td&gt;&lt;td&gt;0.1093&lt;&#x2F;td&gt;&lt;td&gt;3.1056&lt;&#x2F;td&gt;&lt;td&gt;6.8323&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Marine&lt;&#x2F;td&gt;&lt;td&gt;0.1967&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;9.8361&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Marauder&lt;&#x2F;td&gt;&lt;td&gt;0.0748&lt;&#x2F;td&gt;&lt;td&gt;0.1495&lt;&#x2F;td&gt;&lt;td&gt;4.6729&lt;&#x2F;td&gt;&lt;td&gt;9.3458&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Zergling&lt;&#x2F;td&gt;&lt;td&gt;0.4024&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;20.120&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Roach&lt;&#x2F;td&gt;&lt;td&gt;0.1119&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;5.5944&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Queen&lt;&#x2F;td&gt;&lt;td&gt;0.0751&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;5.6338&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Sorted:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;BaseDPS&#x2F;Cost&lt;&#x2F;th&gt;&lt;th&gt;DPS+bonus&#x2F;Cost&lt;&#x2F;th&gt;&lt;th&gt;BaseDPS&#x2F;Supply&lt;&#x2F;th&gt;&lt;th&gt;DPS+bonus&#x2F;Supply&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-GHpqkz.png&quot; alt=&quot;qownnotes-media-GHpqkz&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-RKPMFe.png&quot; alt=&quot;qownnotes-media-RKPMFe&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-pinDkg.png&quot; alt=&quot;qownnotes-media-pinDkg&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-GAKAen.png&quot; alt=&quot;qownnotes-media-GAKAen&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;h3 id=&quot;midgame-upgrades&quot;&gt;Midgame Upgrades&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#midgame-upgrades&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h3&gt;
+&lt;p&gt;(charge, glaives, stim, blueflame, speed)&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Unit&lt;&#x2F;th&gt;&lt;th&gt;DPS&#x2F;Cost&lt;&#x2F;th&gt;&lt;th&gt;DPS+bonus&#x2F;Cost&lt;&#x2F;th&gt;&lt;th&gt;DPS&#x2F;Supply&lt;&#x2F;th&gt;&lt;th&gt;DPS+bonus&#x2F;Supply&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;Zealot&lt;&#x2F;td&gt;&lt;td&gt;0.1860&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;9.3023&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Stalker&lt;&#x2F;td&gt;&lt;td&gt;0.0554&lt;&#x2F;td&gt;&lt;td&gt;0.0768&lt;&#x2F;td&gt;&lt;td&gt;4.8507&lt;&#x2F;td&gt;&lt;td&gt;6.7164&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Adept&lt;&#x2F;td&gt;&lt;td&gt;0.0497&lt;&#x2F;td&gt;&lt;td&gt;0.1093&lt;&#x2F;td&gt;&lt;td&gt;3.1056&lt;&#x2F;td&gt;&lt;td&gt;6.8323&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Archon*&lt;&#x2F;td&gt;&lt;td&gt;0.0500&lt;&#x2F;td&gt;&lt;td&gt;0.0700&lt;&#x2F;td&gt;&lt;td&gt;5.0000&lt;&#x2F;td&gt;&lt;td&gt;7.0000&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Immortal&lt;&#x2F;td&gt;&lt;td&gt;0.0513&lt;&#x2F;td&gt;&lt;td&gt;0.1282&lt;&#x2F;td&gt;&lt;td&gt;4.8077&lt;&#x2F;td&gt;&lt;td&gt;12.019&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Marine&lt;&#x2F;td&gt;&lt;td&gt;0.2948&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;14.742&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Marauder&lt;&#x2F;td&gt;&lt;td&gt;0.1127&lt;&#x2F;td&gt;&lt;td&gt;0.2254&lt;&#x2F;td&gt;&lt;td&gt;7.0423&lt;&#x2F;td&gt;&lt;td&gt;14.085&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Hellbat*&lt;&#x2F;td&gt;&lt;td&gt;0.1259&lt;&#x2F;td&gt;&lt;td&gt;0.2098&lt;&#x2F;td&gt;&lt;td&gt;6.2937&lt;&#x2F;td&gt;&lt;td&gt;10.490&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Zergling&lt;&#x2F;td&gt;&lt;td&gt;0.4024&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;20.121&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Roach&lt;&#x2F;td&gt;&lt;td&gt;0.1119&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;5.5944&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Ravager**&lt;&#x2F;td&gt;&lt;td&gt;0.0702&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;4.6784&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Hydralisk&lt;&#x2F;td&gt;&lt;td&gt;0.1356&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;10.170&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Queen&lt;&#x2F;td&gt;&lt;td&gt;0.0751&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;td&gt;5.6338&lt;&#x2F;td&gt;&lt;td&gt;-&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;* Slightly misleading due to AoE&lt;&#x2F;p&gt;
+&lt;p&gt;** Slightly misleading due to biles&lt;&#x2F;p&gt;
+&lt;hr &#x2F;&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;BaseDPS&#x2F;Cost&lt;&#x2F;th&gt;&lt;th&gt;DPS+bonus&#x2F;Cost&lt;&#x2F;th&gt;&lt;th&gt;BaseDPS&#x2F;Supply&lt;&#x2F;th&gt;&lt;th&gt;DPS+bonus&#x2F;Supply&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-nSzyfa.png&quot; alt=&quot;qownnotes-media-nSzyfa&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-vAmciX.png&quot; alt=&quot;qownnotes-media-vAmciX&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-vAepGZ.png&quot; alt=&quot;qownnotes-media-vAepGZ&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-ZPjczW.png&quot; alt=&quot;qownnotes-media-ZPjczW&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;h3 id=&quot;midgame-by-size&quot;&gt;Midgame by size&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#midgame-by-size&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h3&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Unit&lt;&#x2F;th&gt;&lt;th&gt;DPS&#x2F;Size&lt;&#x2F;th&gt;&lt;th&gt;DPS+bonus&#x2F;Size&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;Zealot&lt;&#x2F;td&gt;&lt;td&gt;37.2093&lt;&#x2F;td&gt;&lt;td&gt;37.2093&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Stalker&lt;&#x2F;td&gt;&lt;td&gt;15.5224&lt;&#x2F;td&gt;&lt;td&gt;21.4925&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Adept&lt;&#x2F;td&gt;&lt;td&gt;12.4224&lt;&#x2F;td&gt;&lt;td&gt;27.3292&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Archon&lt;&#x2F;td&gt;&lt;td&gt;20.0000&lt;&#x2F;td&gt;&lt;td&gt;28.0000&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Immortal&lt;&#x2F;td&gt;&lt;td&gt;30.7692&lt;&#x2F;td&gt;&lt;td&gt;76.9231&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Marine&lt;&#x2F;td&gt;&lt;td&gt;39.3120&lt;&#x2F;td&gt;&lt;td&gt;39.3120&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Marauder&lt;&#x2F;td&gt;&lt;td&gt;25.0391&lt;&#x2F;td&gt;&lt;td&gt;50.0782&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Hellbat&lt;&#x2F;td&gt;&lt;td&gt;20.1399&lt;&#x2F;td&gt;&lt;td&gt;33.5664&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Zergling&lt;&#x2F;td&gt;&lt;td&gt;26.8276&lt;&#x2F;td&gt;&lt;td&gt;26.8276&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Roach&lt;&#x2F;td&gt;&lt;td&gt;17.9021&lt;&#x2F;td&gt;&lt;td&gt;17.9021&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Ravager&lt;&#x2F;td&gt;&lt;td&gt;18.7135&lt;&#x2F;td&gt;&lt;td&gt;18.7135&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Hydralisk&lt;&#x2F;td&gt;&lt;td&gt;32.5424&lt;&#x2F;td&gt;&lt;td&gt;32.5424&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Queen&lt;&#x2F;td&gt;&lt;td&gt;12.8773&lt;&#x2F;td&gt;&lt;td&gt;12.8773&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Sorted:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;BaseDPS&#x2F;Size&lt;&#x2F;th&gt;&lt;th&gt;DPS+bonus&#x2F;Size&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-POkBdg.png&quot; alt=&quot;qownnotes-media-POkBdg&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-WHuWoi.png&quot; alt=&quot;qownnotes-media-WHuWoi&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;h2 id=&quot;health&quot;&gt;Health&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#health&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Assumes all upgrades listed in DPS Midgame&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Health is simply health + shields&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;I factor in armor as a bonus 10% hp. I ran a simulation of every unit attacking every other unit at every possible combination of upgrades on the attacker and defender a while back and iirc the average &quot;effective HP&quot; for each point of armor was ~8% higher than their base health&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Unit&lt;&#x2F;th&gt;&lt;th&gt;HP&#x2F;Cost&lt;&#x2F;th&gt;&lt;th&gt;HP&#x2F;Supply&lt;&#x2F;th&gt;&lt;th&gt;Health&#x2F;Size&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;Zealot&lt;&#x2F;td&gt;&lt;td&gt;1.5110&lt;&#x2F;td&gt;&lt;td&gt;75.55&lt;&#x2F;td&gt;&lt;td&gt;302.20&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Stalker&lt;&#x2F;td&gt;&lt;td&gt;0.9206&lt;&#x2F;td&gt;&lt;td&gt;80.55&lt;&#x2F;td&gt;&lt;td&gt;257.76&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Adept&lt;&#x2F;td&gt;&lt;td&gt;1.1288&lt;&#x2F;td&gt;&lt;td&gt;70.55&lt;&#x2F;td&gt;&lt;td&gt;282.20&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Archon&lt;&#x2F;td&gt;&lt;td&gt;0.9000&lt;&#x2F;td&gt;&lt;td&gt;90.00&lt;&#x2F;td&gt;&lt;td&gt;360.00&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Immortal&lt;&#x2F;td&gt;&lt;td&gt;0.8029&lt;&#x2F;td&gt;&lt;td&gt;75.28&lt;&#x2F;td&gt;&lt;td&gt;481.76&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Marine&lt;&#x2F;td&gt;&lt;td&gt;1.1000&lt;&#x2F;td&gt;&lt;td&gt;55.00&lt;&#x2F;td&gt;&lt;td&gt;146.67&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Marauder&lt;&#x2F;td&gt;&lt;td&gt;1.0088&lt;&#x2F;td&gt;&lt;td&gt;63.05&lt;&#x2F;td&gt;&lt;td&gt;224.18&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Hellbat&lt;&#x2F;td&gt;&lt;td&gt;1.3500&lt;&#x2F;td&gt;&lt;td&gt;67.50&lt;&#x2F;td&gt;&lt;td&gt;216.00&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Zergling&lt;&#x2F;td&gt;&lt;td&gt;1.4000&lt;&#x2F;td&gt;&lt;td&gt;70.00&lt;&#x2F;td&gt;&lt;td&gt;93.33&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Roach&lt;&#x2F;td&gt;&lt;td&gt;1.4610&lt;&#x2F;td&gt;&lt;td&gt;73.05&lt;&#x2F;td&gt;&lt;td&gt;233.76&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Ravager&lt;&#x2F;td&gt;&lt;td&gt;0.6055&lt;&#x2F;td&gt;&lt;td&gt;40.37&lt;&#x2F;td&gt;&lt;td&gt;161.47&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Hydralisk&lt;&#x2F;td&gt;&lt;td&gt;0.6000&lt;&#x2F;td&gt;&lt;td&gt;45.00&lt;&#x2F;td&gt;&lt;td&gt;144.00&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Queen&lt;&#x2F;td&gt;&lt;td&gt;1.1740&lt;&#x2F;td&gt;&lt;td&gt;88.05&lt;&#x2F;td&gt;&lt;td&gt;201.26&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;Sorted:&lt;&#x2F;p&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Health&#x2F;Cost&lt;&#x2F;th&gt;&lt;th&gt;Health&#x2F;Supply&lt;&#x2F;th&gt;&lt;th&gt;Health&#x2F;Size&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-BeYMLz.png&quot; alt=&quot;qownnotes-media-BeYMLz&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-kymfRp.png&quot; alt=&quot;qownnotes-media-kymfRp&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;td&gt;&lt;img src=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;protoss-cost-efficiency&#x2F;qownnotes-media-OkixOP.png&quot; alt=&quot;qownnotes-media-OkixOP&quot; &#x2F;&gt;&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;&#x2F;details&gt;
+&lt;h2 id=&quot;where-do-we-go-from-here&quot;&gt;Where do we go from here?&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#where-do-we-go-from-here&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;There&#x27;s 2 solutions:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Make things cost less&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;Make things do more&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;It really is that simple.&lt;&#x2F;p&gt;
+&lt;p&gt;The caveat is that, right now, protoss is both weak AND poorly designed. That means that in addition to removing disruptors and redistributing their power, you&#x27;d also likely need to add a bit of extra sauce on top to make things truly even. I&#x27;m not saying it&#x27;s easy, the number fiddling for such a large scope is incredibly intensive. It requires lots of careful consideration, lots of testing to cover for your inevitably flawed considerations, and even more tweaking after the most egregious oversights have been fixed and mature strategies begin to emerge. But the path is straight forward: if you want a less gimmicky, less annoying, less fickle-to-balance Protoss in the long run, you need to make their core army function like a core army. It needs to be cost efficient.&lt;&#x2F;p&gt;
+&lt;p&gt;I could go on at length about why this situation has gotten as bad as it has - a lack of clear direction for the race&#x27;s design, community complaints, misunderstandings of core mechanics, etc. I could also go on at length about the various &quot;tools&quot; in the balance-design toolkit that can be used to change some aspects without affecting others, but that&#x27;s all for another time. Instead, I&#x27;ll leave you with the rough draft of the patch notes I wrote. It&#x27;s split into 3 sections: The design philosophy, some changes to core system mechanics, and then changes to each unit. The only restrictions I set on the changes were that these changes must be reasonable to implement by the Balance Council - no brand new abilities or assets. I also wanted to try to change at least 1 thing per unit. Keep in mind, this was written before patch 5.0.11, which was the first major Balance Council patch afaik. I&#x27;m not 100% pleased with it, but I think it&#x27;s interesting enough to drop in here at least.&lt;&#x2F;p&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Design Philosophy
+&lt;&#x2F;summary&gt;
+&lt;h2 id=&quot;core-design-principles&quot;&gt;Core Design Principles&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#core-design-principles&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;p&gt;The major feeling I&#x27;ve gotten from both Blizzard and the balance council is that there isn&#x27;t a clear &lt;em&gt;direction&lt;&#x2F;em&gt; that they want to take Protoss in. There&#x27;s a lot of fumbling, throwing shit at walls, and solving symptoms without solving core issues. The goal of this redesign is as follows:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;Define an archetype that Protoss should fill&lt;&#x2F;li&gt;
+&lt;li&gt;Make changes that take Protoss in that direction&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;p&gt;It&#x27;s not so complicated when you put it like that. Ideally my changes would be accompanied by similar, but less heavy-handed changes to Zerg and Terran.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Things instantly exploding is not fun for anyone&lt;&#x2F;li&gt;
+&lt;li&gt;Lategame mass air is not fun for anyone if it&#x27;s not rare&lt;&#x2F;li&gt;
+&lt;li&gt;Both players playing out on the map is more fun and interesting than if one or both players stay at home
+&lt;ul&gt;
+&lt;li&gt;The safer your base is, the more willing you are to play on the map&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;There needs to be a good mix of simple units, &quot;complex&quot; units, and units with actives&lt;&#x2F;li&gt;
+&lt;li&gt;There should be several viable compositions and strategies at every phase of the game&lt;&#x2F;li&gt;
+&lt;li&gt;Simple, elegant solutions tend to have better gamefeel than complicated solutions even if they both accomplish the same thing&lt;&#x2F;li&gt;
+&lt;li&gt;&quot;Micro&quot; as people think of it mostly has to do with a unit&#x27;s &lt;strong&gt;base stats&lt;&#x2F;strong&gt;, and has very little to do with its abilities&lt;&#x2F;li&gt;
+&lt;li&gt;&quot;A core army of effective, but somewhat expendable units supported by a small number of higher tier, niche units that cover some deficiency of the core army &quot; is always a safe pattern to fall back on&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Core Mechanics Changes
+&lt;&#x2F;summary&gt;
+&lt;h2 id=&quot;global&quot;&gt;Global&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#global&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;All starting worker counts reduced from 12 -&amp;gt; 10&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Allow for more dynamic earlygame with a longer t1 phase before t1.5&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Main and Natural bases have full mineral saturation on all 8 patches&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Main mines out a little too quickly, forcing a 3rd base earlier than feels natural.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;All workers now have a proper moving shot&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Micro is cool&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Massive air units can no longer stack ontop of eachother&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Mass air is lame and ignores too many core RTS mechanics&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;hr &#x2F;&gt;
+&lt;h2 id=&quot;protoss&quot;&gt;Protoss&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#protoss&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;h3 id=&quot;power-fields&quot;&gt;Power Fields&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#power-fields&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Slow&#x2F;Fast warp-in zones completely removed. Warp-in time is always a flat X seconds.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;artifact from when we thought reinforce time was more important than it is. This sort of added complexity is a little gross and has far-reaching consequences that still require dumb workarounds to this day.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Nexus now has an innate powerfield (only active after construction finishes). Powerfield can just barely fit a single 3x3 structure directly adjacent to the nexus&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;probably not 100% necessary, but could increase build variety&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;h3 id=&quot;shields&quot;&gt;Shields&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#shields&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h3&gt;
+&lt;p&gt;The main goal here is twofold:&lt;&#x2F;p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;It opens up an additional tool for tweaking specific unit properities by allowing one to shift it from one shield type to another&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;It makes protoss units tankier and encourages shield upgrades due to a neat quirk of the damage calculation. When damage spills from shields to hull, the damage that is dealt to shields is reduced by shield armor. When the overflow is applied to the hull, it&#x27;s &lt;em&gt;reduced again&lt;&#x2F;em&gt; by the hull&#x27;s armor. Since most protoss units come with 1 hull armor, getting the extra shield armor might be the better call, especially when&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;ul&gt;
+&lt;li&gt;Shields are now split into 3 categories: Personal, Purifier, Building
+&lt;ul&gt;
+&lt;li&gt;Personal shields have no shield recharge cooldown, restore 1&#x2F;s&lt;&#x2F;li&gt;
+&lt;li&gt;Purifier shields function the same as current shields, 7s recharge delay, restore 2&#x2F;s&lt;&#x2F;li&gt;
+&lt;li&gt;Building shields have a minimum of 1 armor a 14s recharge delay, and restore 3&#x2F;s. Buildings do not restore shields when unpowered (but do not lose current shields either).&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Personal&lt;&#x2F;th&gt;&lt;th&gt;Purifier&lt;&#x2F;th&gt;&lt;&#x2F;tr&gt;&lt;&#x2F;thead&gt;&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;Probe&lt;&#x2F;td&gt;&lt;td&gt;Stalker&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Zealot&lt;&#x2F;td&gt;&lt;td&gt;Immortal&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Adept&lt;&#x2F;td&gt;&lt;td&gt;Colossus&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Sentry&lt;&#x2F;td&gt;&lt;td&gt;Disruptor&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;High Templar&lt;&#x2F;td&gt;&lt;td&gt;Voidray&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Dark Templar&lt;&#x2F;td&gt;&lt;td&gt;Oracle&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Phoenix&lt;&#x2F;td&gt;&lt;td&gt;Tempest&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Observer&lt;&#x2F;td&gt;&lt;td&gt;Carrier&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;tr&gt;&lt;td&gt;Interceptor&lt;&#x2F;td&gt;&lt;td&gt;Mothership&lt;&#x2F;td&gt;&lt;&#x2F;tr&gt;
+&lt;&#x2F;tbody&gt;&lt;&#x2F;table&gt;
+&lt;p&gt;* Archon: see unit rework notes&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;nexus&quot;&gt;Nexus&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#nexus&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Recall and battery overcharge removed.
+&lt;ul&gt;
+&lt;li&gt;Chronoboosting a canon will increase its fire-rate&lt;&#x2F;li&gt;
+&lt;li&gt;Chronoboosting a shield battery will increase its energy regen rate&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h3 id=&quot;photon-cannon&quot;&gt;Photon Cannon&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#photon-cannon&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Attack is now split between ground and air
+&lt;ul&gt;
+&lt;li&gt;identical stats but will auto-prioritize air units similar to the thor and queen&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h3 id=&quot;shield-battery&quot;&gt;Shield Battery&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#shield-battery&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Starting energy 100 -&amp;gt; 50&lt;&#x2F;li&gt;
+&lt;li&gt;Maximum energy 100 -&amp;gt; 200
+&lt;ul&gt;
+&lt;li&gt;Maximum potential heal is 600 shields, up from 300&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Cost 100 minerals -&amp;gt; 75 minerals&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;details&gt;
+&lt;details&gt;
+&lt;summary&gt;
+Protoss Unit Changes
+&lt;&#x2F;summary&gt;
+&lt;h2 id=&quot;disruptor&quot;&gt;Disruptor&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#disruptor&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;(ಠ_ಠ)&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I unfortunately have to get this out of the way right away, as it flavors the entire rest of the changes. This change alone highlights how dire of a situation protoss is in, and how much it&#x27;s been covered up. Here is a brief description of the unit: It exists to instantly delete a significant portion of your opponent&#x27;s army because nothing else you can build can trade cost efficiently.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Here it is again for dramatic effect, because that is &lt;em&gt;fucked&lt;&#x2F;em&gt;. This unit DELETES portions of your opponent&#x27;s army, because all your other units are so cost-inefficient. The correlary here is that it &lt;em&gt;has to&lt;&#x2F;em&gt; accomplish this, otherwise you lose badly. If you get the money shot the game instantly ends in your favor, if you get several OK shots it&#x27;s even, and if you whiff you get stomped. I&#x27;ve seen it happen in so many GSL games it&#x27;s not even funny. It&#x27;s so swingy, so unpredictable, both sides are forced to just cope with this dumpster fire and just hope that things go their way.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;I&#x27;m sorry to anyone who like this unit, but it is terrible, it has made the game significantly worse, and it isn&#x27;t salvageable. Best to rip off the bandaid and see where else we can redistribute this power to.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Removed, stomped on, and thrown through a shredder into an incinerator&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;zealot&quot;&gt;Zealot&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#zealot&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Zealots are by far the weakest t1 unit. Despite what some would have you believe, they aren&#x27;t very good in the mid and lategame either (see Unit Efficiency Charts). While they have &lt;em&gt;some&lt;&#x2F;em&gt; utility in the midgame and lategame - particularly due to their cost and building damage - they are still outclassed in damage, tanking, and utility by their contemporaries. They also critically lack basic earlygame usability, and are hard to use tactically due to charge being a 1-way trip. These changes aim to put zealots on even footing in the ultra-early game, and to help them come online a bit quicker and cheaper in the midgame.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Base movespeed 3.15 -&amp;gt; 3.5 (charge values unchanged)&lt;&#x2F;li&gt;
+&lt;li&gt;Charge cost reduced 200&#x2F;200 -&amp;gt; 100&#x2F;100 AND&#x2F;OR charge impact damage re-added&lt;&#x2F;li&gt;
+&lt;li&gt;Shields increased 50 -&amp;gt; 60&lt;&#x2F;li&gt;
+&lt;li&gt;Weapon upgrades increased +1 -&amp;gt; +1.5 (zealot attack is 8x2, so this change is 9x2 -&amp;gt; 9.5x2)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;adept&quot;&gt;Adept&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#adept&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;When LotV came out, I was incredibly excited to see protoss getting a new core army unit. For those that weren&#x27;t there or don&#x27;t remember, it was originally incredibly tanky and had an additional upgrade for a bonus 50 shields. It also had a glaive bounce similar to mutas (though only 1 bounce, and only when an attack killed). A new core army unit was exactly what protoss needed to fill in the early game and add a bit of meat to the army so that it would be less reliant on splash damage and gimmicks. Unfortunately, most of that magic was removed in favor of what we have now. These changes aim to make the adept a much more viable alternative to stalkers (and complement to the army as a whole) without ruining the somewhat interesting properties they&#x27;ve acquired. An additional benefit is giving protoss a slightly more robust pivot against muta switches in PvZ and mass phoenix in PvP.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Health&#x2F;shields increased from 70&#x2F;70 -&amp;gt; 75&#x2F;75&lt;&#x2F;li&gt;
+&lt;li&gt;Resonating glaives moved to cybernetics core&lt;&#x2F;li&gt;
+&lt;li&gt;New upgrade on the twilight council, 200&#x2F;200
+&lt;ul&gt;
+&lt;li&gt;Glaives now bounce once for 33% damage
+&lt;ul&gt;
+&lt;li&gt;Non-Light: 3.33 damage bounce, total dps 12.012 (compared to 9 without bounce)&lt;&#x2F;li&gt;
+&lt;li&gt;Light: 7.33 damage bounce, dps of 26.426 (compared to 19.81 without bounce)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;allows adepts to hit air units&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Weapon upgrades rescaled +1(+1 vs light) -&amp;gt; +2&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;sentry&quot;&gt;Sentry&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#sentry&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The sentry kinda got bodied in LotV. It has very little utility for its cost, and even the utility it has is pidgeonholed. Hallucination may as well be named &quot;spawn scouting phoenix&quot; ever since it was made a base ability. I&#x27;d like to make it more appealing to summon other types of units, either as damage sponges or as misdirections&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Health&#x2F;shields rescaled from 40&#x2F;40 -&amp;gt; 20&#x2F;60&lt;&#x2F;li&gt;
+&lt;li&gt;Ravager biles no longer break forcefields
+&lt;ul&gt;
+&lt;li&gt;Queens are now massive units&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Psionic transfer can no longer pass through forcefields&lt;&#x2F;li&gt;
+&lt;li&gt;Forcefield duration reduced from 11s -&amp;gt; 8s&lt;&#x2F;li&gt;
+&lt;li&gt;Guardian shield radius 4.5 -&amp;gt; 5.0&lt;&#x2F;li&gt;
+&lt;li&gt;Guardian shield gives a flat +2 armor rather than decreasing ranged damage by 2.&lt;&#x2F;li&gt;
+&lt;li&gt;Hallucination summoned unit counts increased. Effective summoned HP differences in parentheses
+&lt;ul&gt;
+&lt;li&gt;Probes: 4 -&amp;gt; 8&lt;&#x2F;li&gt;
+&lt;li&gt;Zealots: 2 -&amp;gt; 6 (150 -&amp;gt; 480)&lt;&#x2F;li&gt;
+&lt;li&gt;Adepts: 2 -&amp;gt; 5 (140 -&amp;gt; 375)&lt;&#x2F;li&gt;
+&lt;li&gt;Stalkers: 2 -&amp;gt; 4 (180 -&amp;gt; 360)&lt;&#x2F;li&gt;
+&lt;li&gt;Immortals: 1 -&amp;gt; 2 (150 + barrier -&amp;gt; 300)&lt;&#x2F;li&gt;
+&lt;li&gt;Archons: 1 -&amp;gt; 3 (180 -&amp;gt; 540)&lt;&#x2F;li&gt;
+&lt;li&gt;Voidrays: 1 -&amp;gt; 2 (125 -&amp;gt; 250)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;stalker&quot;&gt;Stalker&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#stalker&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Stalkers are probably the only unit that I think are in a pretty much perfect position right where they are. Blink is an incredible ability, and putting it on any unit would instantly make that unit S tier. The stalker&#x27;s stats are mediocre, but with blink that&#x27;s fine. As a result, they won&#x27;t see much change aside from a minor increase to their scalability&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Weapon upgrades rescaled from +1(+1 vs armored) -&amp;gt; +2&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;immortal&quot;&gt;Immortal&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#immortal&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Immortals are in a similar position to sentries. The changes against them were so heavyhanded that it left protoss in a dire position without many other options. These changes are mostly meant to revert the nerfs, while not overcentralizing around immortals quite as much as before.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Cost reduced to 250&#x2F;100&lt;&#x2F;li&gt;
+&lt;li&gt;Barrier removed&lt;&#x2F;li&gt;
+&lt;li&gt;Hardened Shields added and reworked
+&lt;ul&gt;
+&lt;li&gt;Any damage inflicted to shields that is greater than 10 is reduced to 10 OR reduced by 50%, whichever is larger.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;colossus&quot;&gt;Colossus&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#colossus&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Iunno, it&#x27;s probably fine. I wouldn&#x27;t want to make it any more powerful than this though. If any more efficiency or damage is needed in the protoss army, it needs to be put on the adept, archon, voidray, or zealot first so we don&#x27;t end up right back in WoL deathball territory.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Damage rescaled from 10(+5 vs light) -&amp;gt; 12&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;observer&quot;&gt;Observer&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#observer&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Slightly more elegant solution than other suggestions I&#x27;ve heard. Makes proxying vs retaining a stargate much more of a choice, and relieves some of the pressure from robo production time.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Can now be built from both the robotics facility and the stargate&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;warp-prism&quot;&gt;Warp Prism&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#warp-prism&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Another change meant to make people&#x27;s bases a bit safer. Lategame warpins were a bit much, and this should help to keep them from being too egregious.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Power field radius severely reduced (4-6 unit warp-ins max)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;phoenix&quot;&gt;Phoenix&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#phoenix&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Phoenix are going to have some big shoes to fill (as you&#x27;ll see), thus they need some usability improvements. Their attack range was increased all the way back in heart of the swarm, but graviton beam range wasn&#x27;t increased to compensate. This should make phoenix a bit more viable for harass and for picking off key targets, as you won&#x27;t have to get quite as close.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Graviton beam range increased 4 -&amp;gt; 5&lt;&#x2F;li&gt;
+&lt;li&gt;Anion pulse crystals
+&lt;ul&gt;
+&lt;li&gt;moved to the cybernetics core, requires either fleet beacon or robotics bay&lt;&#x2F;li&gt;
+&lt;li&gt;Also increases the range of graviton beam 5 -&amp;gt; 7&lt;&#x2F;li&gt;
+&lt;li&gt;Cost increased to 200&#x2F;200&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;oracle&quot;&gt;Oracle&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#oracle&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Remember the dreams of the worker-friendly harass unit? Me too. Good times. This was one of the hardest units to make a call on, since I&#x27;m trying to work within the confines of what&#x27;s realistically able to be put in the game at the moment. That takes a lot of new ability ideas off the table. A tiny recall could work, but there&#x27;s so much potential for that to be fucked up that I couldn&#x27;t justify it as anything other than a &quot;Maybe&quot;. Pulsar beam &lt;em&gt;had&lt;&#x2F;em&gt; to go though, both to allow the phoenix space to shine, and to move towards the general direction of making everyone&#x27;s bases a little bit safer. It leaves the oracle feeling a little empty, but hopefully the return of interesting stasis mechanics (and a DOOR FOR PROTOSS) will make up for that.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Health&#x2F;shields rescaled from 100&#x2F;60 -&amp;gt; 60&#x2F;100&lt;&#x2F;li&gt;
+&lt;li&gt;Pulsar beam removed&lt;&#x2F;li&gt;
+&lt;li&gt;Stasis ward autocast can be turned off&lt;&#x2F;li&gt;
+&lt;li&gt;Stasis ward lifespan does not decrease while in a powerfield&lt;&#x2F;li&gt;
+&lt;li&gt;Cost reduced to 100&#x2F;100&lt;&#x2F;li&gt;
+&lt;li&gt;(Maybe) Recall ability added, functions similarly to the mothership core but with a very small radius (3-6 units max)&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;voidray&quot;&gt;Voidray&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#voidray&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Not only was the usage of passive-prismatic more tactically interesting, but the addition of a button has done nothing to cause the unit to require more skill during an actual fight. In addition, they&#x27;re a little frail. Sharing a range with stalkers means they&#x27;re usually targetted with equal priority which isn&#x27;t ideal, since having to move back to re-juggle priority works against prismatic alignment. This may not be as much of a problem with the buffs to the sentry, adept, and zealot (which all stand closer than voids), but oh well.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Prismatic alignment reverted to WoL behavior&lt;&#x2F;li&gt;
+&lt;li&gt;Attack range 6 -&amp;gt; 7&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;tempest&quot;&gt;Tempest&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#tempest&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;The tempest have always been such a weird unit. First it was meant to be anti-muta, then it was meant to be anti-zerg lategame, then we had fun for about 2 weeks, and then it was back to being anti-zerg lategame. I&#x27;m bringing the fun back. Disintegration (i.e. irradiate) is an incredibly fun to use ability, pairs well with the idea of a hit-and-run midgame, and provides unique gameplay styles over the robotics and twilight tech paths (i.e. taking out key targets to keep your opponent&#x27;s army complexity low)&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Tectonic destabilizers removed&lt;&#x2F;li&gt;
+&lt;li&gt;Disintegration re-added and reworked
+&lt;ul&gt;
+&lt;li&gt;10 Range&lt;&#x2F;li&gt;
+&lt;li&gt;Deals 300 damage over 45 seconds&lt;&#x2F;li&gt;
+&lt;li&gt;70 second cooldown&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;carrier&quot;&gt;Carrier&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#carrier&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Carriers are pretty gutted by change to massive air units, so I wanted to provide them with some extra utility. That utility comes in the form of tanking damage and repairing damage, which can be drag-and-dropped from the campaign&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Carriers now come with 2 drones that can repair friendly mechanical units&lt;&#x2F;li&gt;
+&lt;li&gt;Interceptor health&#x2F;shields increased 40&#x2F;40 -&amp;gt; 50&#x2F;50&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;high-templar&quot;&gt;High Templar&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#high-templar&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Templars are fine. The added auto attack was dumb, but I don&#x27;t really mind that much either way. It&#x27;s not super necessary now that many of protoss&#x27;s pointless fiddly buttons are removed&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Auto attack removed&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;dark-templar&quot;&gt;Dark Templar&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#dark-templar&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Why was this even added?&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Auto attack delay after blink removed&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;archon&quot;&gt;Archon&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#archon&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Archons are surprisngly bad. On paper they&#x27;re not, but in practice... Their splash radius is abysmally low, they take far too long to regen their shields, they&#x27;re a t3 unit that gets bodied in cost efficiency by t2 units, they&#x27;re bulky and reduce your army&#x27;s surface area, and they cost two production cycles and 400 total resources to build. They also almost never benefit from defensive upgrades, making them laughably flimsy in the lategame despite their high HP total.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;There are 2 options here because I&#x27;m indecisive, but I think both would accomplish a similar thing - making archons less of a sink-unit and more of something you actually want. For their cost, they should provide much more meat and stability to an army. They retain the unique &quot;making these from templar feels bad&quot; in the first option due to paying extra for the same unit.&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;p&gt;Option 1:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;Can be directly built&#x2F;warped-in from the gateway for a cost of 125&#x2F;150 and 3 supply (similar cost to siege tank&#x2F;liberator&#x2F;lurker)
+&lt;ul&gt;
+&lt;li&gt;yes, merging 2 templar that cost 4 supply would result in a unit that costs 3 supply. Theoretically this could allow for a protoss &quot;extractor trick&quot;, it&#x27;s up in the air if that&#x27;s okay or not.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;Has a unique shield type that does not have a recharge delay and recharges 2 shields per second&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Option 2:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;100% damage splash radius increasd from .25 -&amp;gt; .5&lt;&#x2F;li&gt;
+&lt;li&gt;50% damage splash radius increased from .5 -&amp;gt; .75&lt;&#x2F;li&gt;
+&lt;li&gt;25% damage splash radius increased from 1 -&amp;gt; 1.5&lt;&#x2F;li&gt;
+&lt;li&gt;Has a unique shield type that does not have a recharge delay and recharges 3 shields per second&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;mothership&quot;&gt;Mothership&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#mothership&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;If it&#x27;s gonna be a meme unit, at least let it be an &lt;em&gt;extra&lt;&#x2F;em&gt; silly one&lt;&#x2F;p&gt;
+&lt;&#x2F;blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;Tech requirement is now a Cybernetics Core rather than Fleet Beacon&lt;&#x2F;li&gt;
+&lt;li&gt;(Maybe) Add in mothership core with different, less obnoxious abilities&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;details&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Can you estimate playtime from replay folder size?</title>
+        <published>2024-01-25T00:00:00+00:00</published>
+        <updated>2024-01-25T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/estimate-playtime/"/>
+        <id>https://walnut356.github.io/posts/estimate-playtime/</id>
+        
+        <summary type="html">&lt;p&gt;I&#x27;ve seen this question come up a few times on r&#x2F;ssbm and while I&#x27;ve given hand-wavey answers before, I find myself in a good place to answer more rigorously now. We can break this question down to more basic ones: &quot;how many bytes of replay data correspond to a single frame of gameplay?&quot; and &quot;how many bytes in the replay are unrelated to frames?&quot;. From there, we can estimate a duration by simply translating the 16.667ms per frame to minutes and seconds.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+</feed>
