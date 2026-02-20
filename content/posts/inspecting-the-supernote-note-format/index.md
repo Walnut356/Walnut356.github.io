@@ -457,7 +457,7 @@ I also played around with using `PointContours` to generate polylines with fills
 
 The Scribe's eraser works by straight up deleting points (and then adjusting one stroke into multiple where necessary). This is fast and efficient, but it also means there's very low granualirty when it comes to erasing. That contour points example above with the partially erased line isn't possible on the Scribe.
 
-Despite only erasing the bottom portion of this line, because it deletes a while circle, you can see this "venn-diagram" pattern left behind:
+Despite only erasing the bottom portion of this line, because it deletes a whole circle, you can see this "venn-diagram" pattern left behind:
 
 ![](./scribe_erase.jpg)
 
