@@ -82,7 +82,7 @@ The `TOTALPATH` section starts with a few values, then a string `straightLine`, 
 
 ![](image-5.png)
 
-It was pretty easy to determine that the first value after the size of the `TOTALPATH` section is the size of the individual stroke. I was able to determine that the next handful of values are the pen type, the pen color, and the stroke thickness using a test notebook containing one stroke of each pen and color combination, along with several strokes of different thicknesses. After that are some values that seem lik econfiguration values? They don't change very much (or at all), stroke-to-stroke, and often notebook-to-notebook.
+It was pretty easy to determine that the first value after the size of the `TOTALPATH` section is the size of the individual stroke. I was able to determine that the next handful of values are the pen type, the pen color, and the stroke thickness using a test notebook containing one stroke of each pen and color combination, along with several strokes of different thicknesses. After that are some values that seem like configuration values? They don't change very much (or at all), stroke-to-stroke, and often notebook-to-notebook.
 
 Some fiddling with other test notebooks reveals that `straightLine` can instead be `others`. Straight lines have a special input method, so that this seems to be a "stroke category" field.
 
