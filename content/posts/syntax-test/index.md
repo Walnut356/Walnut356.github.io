@@ -12,9 +12,16 @@ I write my own sublime-syntax files for the syntax highlighting on this site, th
 ## Rust
 
 ```rust
+'a'
+
 mod test {
-    mod test2;
-    mod test3;
+  mod test2;
+  pub mod test3;
+
+    pub mod test4 {
+      mod test5;
+      pub mod test6;
+    }
 }
 
 use std::ops::Add;
@@ -69,7 +76,7 @@ pub enum Nums<'a> {
     Five
 }
 
-real!(f32::from(real!(0.696) / real!(1.2)) / 1.4)
+real!(f32::from(real!(0.696) / real!(1.2)) / 1.4);
 
 async fn async_fn_() {
 
@@ -102,7 +109,6 @@ fn main() {
     let z = thing.iter().map(|x| x + 1).collect::<Vec<_>>();
     println!("Hello, world! {}", z[0]);
 }
-
 ```
 
 ## LLVM

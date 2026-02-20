@@ -46,3 +46,15 @@ details[open] {
 .paginav {
   text-align: left;
 }
+
+.nb_strokes > g {
+  stroke: currentColor !important;
+}
+
+g {
+  stroke: currentColor !important;
+}
+
+.nb_background {
+  fill: var(--theme) !important;
+}

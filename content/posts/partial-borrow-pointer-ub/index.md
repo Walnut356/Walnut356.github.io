@@ -125,7 +125,8 @@ pub(crate) fn reset_speed(&mut self, state: &mut State) {
 
 Same deal, `&state.effects` borrows from `state`, but we also need to pass `state` mutably into `effect.apply`.
 
-> Aside: I know these can both be solved in safe rust via indexing, but as I said before, this is at least partially an academic pursuit. It's also worth noting that this has some ergonomic downsides, since I can't use iterator methods like `.filter()`. I'll include the safe versions of these functions later on after we talk more about the compiler.
+> [!Note]
+> I know these can both be solved in safe rust via indexing, but as I said before, this is at least partially an academic pursuit. It's also worth noting that this has some ergonomic downsides, since I can't use iterator methods like `.filter()`. I'll include the safe versions of these functions later on after we talk more about the compiler.
 
 This is where the escape hatch comes in. As the *programmer*, this is a pretty trivial case. With `state` being the same as `army.units[i]`, we *really* only have:
 
@@ -293,7 +294,8 @@ bb2:                                              ; preds = %start
 
 Wow, that certainly is some syntax...
 
-> Aside: The blog-builder I use didn't even have highlighting for it, and there isn't a sublime-syntax for it that I could find in the wild. I tried some vscode extensions to get a feel for what it might look like, but those could only really manage "everything's a variable or a keyword" which is... unhelpful. Syntax highlighting should at least hint at the relationships between various tokens. In the end I just went ahead and wrote a sublime-syntax file myself that hopefully isn't quite so hideous.
+> [!Note]
+> The blog-builder I use didn't even have highlighting for it, and there isn't a sublime-syntax for it that I could find in the wild. I tried some vscode extensions to get a feel for what it might look like, but those could only really manage "everything's a variable or a keyword" which is... unhelpful. Syntax highlighting should at least hint at the relationships between various tokens. In the end I just went ahead and wrote a sublime-syntax file myself that hopefully isn't quite so hideous.
 
 In particular, I want to point out 2 things. First is that the returned value is literally a copy of the passed in value.
 
