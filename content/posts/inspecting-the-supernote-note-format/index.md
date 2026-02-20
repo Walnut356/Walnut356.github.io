@@ -12,6 +12,8 @@ One thing that always bothered me about the Scribe is how subpar its notebook ex
 
 The SuperNote has its own proprietary format for its notebooks, so I figured I'd give it a look. This is mostly going to be about the SuperNote format, but the Scribe format will be my main point of reference.
 
+<!--more-->
+
 Ratta has said several times that they will eventually release a full spec for the format, huge props to them for that. Unfortunately, they've been saying "this year for sure" for about [5 years](https://old.reddit.com/r/Supernote/comments/kv7ccz/the_spec_for_the_note_file_format/giybmww/) from what I've seen on [various reddit posts](https://old.reddit.com/r/Supernote/comments/kv7ccz/the_spec_for_the_note_file_format/n7djup8/). I don't doubt that they'll get it done eventually, their plugin system appears to be next on the priorities list, so we'll see. Every experience I've had with them thusfar has been great. They're very transparent, they engage well with their power users, and they make a damn good product. For the moment though, we don't have that spec and I'm *impatient*.
 
 The parser I wrote for the format while working on this post is available [in this repo](https://github.com/Walnut356/snlib). It's a simple Rust library that parses files into a `zerocopy` view into the file. There is also an ImHex pattern file if you wanted a nicely highlighted view in a hex editor.
