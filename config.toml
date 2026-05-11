@@ -43,9 +43,10 @@ lazy_async_image = true
 
 [markdown.highlighting]
 error_on_missing_language = false
+style = "inline"
 # extra_grammars = ["./syntaxes/Rust.json"]
 # extra_themes = ["./syntaxes/one-dark-pro-darker.json"]
-style = "inline"
+# theme = "one-dark-pro-darker"
 theme = "one-dark-pro"
 
 
@@ -76,7 +77,10 @@ navigation = [
 home_content = """My name is Anthony, I'm a self taught developer based in the midwest. I'm interested in systems programming, dev tools, and game design. Currently looking for work.
 <br>
 <br>
-3 miles deep in the Rust debugging rabbit hole. If you have any questions regarding that, feel free to send me an email or a message in the Rust zulip or LLVM discourse.
+There is no AI generated content on this blog and there never will be.
+<br>
+<br>
+Currently working on a Google Summer of Code project to improve the Rust debuginfo test suite. If you have any questions regarding that or the Rust debugging experience as a whole, feel free to send me an email or a message in the Rust zulip or LLVM discourse.
 <br>
 <br>
 I love epic fantasy novels, my favorites are Malazan Book of the Fallen and The Wheel of Time. Currently reading The Black Company."""
