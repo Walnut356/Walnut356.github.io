@@ -19,6 +19,9 @@ During the community bonding period, I spent time familiarizing myself with `com
 * [PR#156688 Manually load GDB visualizers on windows for GDB tests](https://github.com/rust-lang/rust/pull/156688)
 * [PR#156899 fix breakpoint callback registration in `lldb_batchmode`](https://github.com/rust-lang/rust/pull/156899)
 * [PR#157234 Convert `lldb_batchmode` to a package](https://github.com/rust-lang/rust/pull/157234)
+* [PR#159381 emit (lldb) prefix to make commands more distinct](https://github.com/rust-lang/rust/pull/159381)
+
+We also needed a way to specify both Apple LLDB and LLVM LLDB versions, since they use different versioning schemes. This was resolved with [PR#159215 [compiletest] Differentiate between LLVM LLDB and Apple LLDB](https://github.com/rust-lang/rust/pull/159215).
 
 Some fixes were also required for the visualizers themselves to get them in a state reliable enough for us to properly test
 
@@ -37,7 +40,7 @@ The Pyton API framework was largely implemented in the following 3 PRs:
 
 This also came with the need to update some of the Work In Progress sections of the Rustc Dev Guide's Debug Info chapter:
 
-* [rustc-dev-guide PR#2947 Document debuginfo repr directive](https://github.com/rust-lang/rustc-dev-guide/pull/2947)
+* [rustc-dev-guide PR#2947 Document debuginfo `repr` directive](https://github.com/rust-lang/rustc-dev-guide/pull/2947)
 * [rustc-dev-guide PR#3016 Update debuginfo testing information w/ GDB changes](https://github.com/rust-lang/rustc-dev-guide/pull/3016) - still awaiting approval at time of writing
 
 Around this point, one of the patches ended up letting a regression slip through that we needed to [re-bless in a followup PR](https://github.com/rust-lang/rust/pull/161573). This made it clear that getting the tests to run in CI on all relevant targets was more urgent than switching existing tests to the new format. Testing LLDB on the `aarch64` linux CI runner took a bit of experimentation but was ultimately pretty straightforward.
