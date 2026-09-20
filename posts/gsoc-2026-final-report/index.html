@@ -1,0 +1,96 @@
+<!doctype html><html dir=auto lang=en><head><meta charset=utf-8><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1,shrink-to-fit=no" name=viewport><meta content="index, follow" name=robots><title>GSoC 2026 Final Report</title><meta name=keywords><meta name=description><meta content=Walnut356 name=author><link href=https://walnut356.github.io/posts/gsoc-2026-final-report/ rel=canonical><link href=/styles.css rel=stylesheet><link href=/override.css rel=stylesheet><link href=/syntax-theme.css rel=stylesheet><link href=https://fonts.googleapis.com rel=preconnect><link crossorigin href=https://fonts.gstatic.com rel=preconnect><link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel=stylesheet><link crossorigin href=/CascadiaCode-Regular.woff2 rel=font><link href=/favicon.png rel=icon type=image/x-icon><link href=https://walnut356.github.io/atom.xml rel=alternate title=RSS type=application/atom+xml><noscript><style>#theme-toggle,.top-link{display:none}</style></noscript><script src="https://www.googletagmanager.com/gtag/js?id=G-PKLX5VEB4H" async></script><script>window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PKLX5VEB4H');</script><body class=dark id=top><script>if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    }</script><header class=header><nav class=nav><div class=logo><a title="Cracking The Shell (Alt + H)" accesskey=h href=https://walnut356.github.io> Cracking The Shell </a><div class=logo-switches><button title="(Alt + T)" accesskey=t id=theme-toggle><svg viewbox="0 0 24 24" fill=none height=18 id=moon stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> <svg viewbox="0 0 24 24" fill=none height=18 id=sun stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5></circle><line x1=12 x2=12 y1=1 y2=3></line><line x1=12 x2=12 y1=21 y2=23></line><line x1=4.22 x2=5.64 y1=4.22 y2=5.64></line><line x1=18.36 x2=19.78 y1=18.36 y2=19.78></line><line x1=1 x2=3 y1=12 y2=12></line><line x1=21 x2=23 y1=12 y2=12></line><line x1=4.22 x2=5.64 y1=19.78 y2=18.36></line><line x1=18.36 x2=19.78 y1=5.64 y2=4.22></line></svg></button><ul class=lang-switch><li></ul></div></div><ul id=menu><li><a href=https://walnut356.github.io/archive title=Archive> <span>Archive</span> </a><li><a href=https://walnut356.github.io/search title=Search> <span>Search</span> </a><li><a href=https://walnut356.github.io/tags title=Tags> <span>Tags</span> </a></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://walnut356.github.io>Home</a> »  <a href=https://walnut356.github.io/posts/>Posts</a> »  <a href=https://walnut356.github.io/posts/gsoc-2026-final-report/>GSoC 2026 Final Report</a></div><h1 class=post-title>GSoC 2026 Final Report</h1><div class=post-meta><span title="2026-09-20 00:00:00 +0000">2026-09-20</span> · 7 min · 1273 words</div></header><div class=toc><details><summary title="(Alt + C)" accesskey=c><span class=details>Table of Contents</span></summary> <div class=inner><ul><li><a aria-label=Overview href=#overview>Overview</a><li><a aria-label="My work" href=#my-work>My work</a><li><a aria-label="What's left" href=#what-s-left>What's left</a><li><a aria-label=Acknowledgements href=#acknowledgements>Acknowledgements</a></ul></div></details></div><div class=post-content><h1 id=overview>Overview<a aria-hidden=true class=anchor hidden href=#overview>#</a></h1><p>Rust's debugging experience is a common pain point. The existing debugger plugins that help visualize data were/are somewhat buggy and unreliable. Some efforts were made to improve the situation, but a key blocker was the poor state of the <code>tests/debuginfo</code> test suite. It was difficult to control for ambient tools, updates to debuggers would frequently break existing tests. Over time, more and more tests were disabled, and CI runners stopped testing on entire combinations of platforms and debuggers. For example, LLDB was only tested on <code>aarch64-apple</code>. This lead to many of the test suites not working locally either, making it even more difficult to ensure that patches to the visualizers worked properly and did not introduce regressions.<p>The goal of this project was to use the Python API exposed by LLDB and GDB to create a testing framework more resistant to platform and debug info format differences. Secondarily, the tests in this new framework needed to be "bless-able" (i.e. able to be updated automatically for expected changes). A more in-depth description of how this system works is available in my <a rel="noopener external" href=https://walnut356.github.io/posts/debuginfo-test-rework-1/ target=_blank>previous blog post</a>. While part of the initial goal was to transition most/all of the tests to the new format, the state of the old tests on some targets made it clear that the higher priority should be placed on making sure <code>tests/debuginfo</code> is run in CI on all major targets.<h1 id=my-work>My work<a aria-hidden=true class=anchor hidden href=#my-work>#</a></h1><p>During the community bonding period, I spent time familiarizing myself with <code>compiletest</code>, the test orchestration framework that handles <code>tests/debuginfo</code> (among others). Some time was spent experimenting with how the frameworks could slot into <code>compiletest</code>'s existing pass/fail mechanisms, and some was spent making preparatory bug fixes and refactors.<ul><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/156688 target=_blank>PR#156688 Manually load GDB visualizers on windows for GDB tests</a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/156899 target=_blank>PR#156899 fix breakpoint callback registration in <code>lldb_batchmode</code></a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/157234 target=_blank>PR#157234 Convert <code>lldb_batchmode</code> to a package</a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/159381 target=_blank>PR#159381 emit (lldb) prefix to make commands more distinct</a></ul><p>We also needed a way to specify both Apple LLDB and LLVM LLDB versions, since they use different versioning schemes. This was resolved with <a rel="noopener external" href=https://github.com/rust-lang/rust/pull/159215 target=_blank>PR#159215 [compiletest] Differentiate between LLVM LLDB and Apple LLDB</a>.<p>Some fixes were also required for the visualizers themselves to get them in a state reliable enough for us to properly test<ul><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/157289 target=_blank>PR#157289 Add infallible primitive type lookups to template arg resolver</a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/157298 target=_blank>PR#157298 Use alternate means of detecting enums in <code>is_udt</code></a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/159834 target=_blank>PR#159834 Apply <code>str</code> debugger visualizer to <code>*const str</code>, <code>*mut str</code> and <code>Box&lt;str></code></a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/160791 target=_blank>PR#160791 Use recognizer functions for enums and tuple structs</a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/160842 target=_blank>PR#160842 Apply <code>&[T]</code> visualizer to <code>*const [T]</code>, <code>*mut [T]</code> and <code>Box&lt;[T]></code></a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/161216 target=_blank>PR#161216 Clean up some <code>lldb_batchmode</code> lints</a></ul><p>The Pyton API framework was largely implemented in the following 3 PRs:<ul><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/157529 target=_blank>PR#157529 Add tests/debuginfo data classes to define schema</a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/158298 target=_blank>PR#158298 Add lldb-repr command for tests/debuginfo</a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/160377 target=_blank>PR#160377 Add gdb-repr directive for tests/debuginfo</a></ul><p>This also came with the need to update some of the Work In Progress sections of the Rustc Dev Guide's Debug Info chapter:<ul><li><a rel="noopener external" href=https://github.com/rust-lang/rustc-dev-guide/pull/2947 target=_blank>rustc-dev-guide PR#2947 Document debuginfo <code>repr</code> directive</a><li><a rel="noopener external" href=https://github.com/rust-lang/rustc-dev-guide/pull/3016 target=_blank>rustc-dev-guide PR#3016 Update debuginfo testing information w/ GDB changes</a> - still awaiting approval at time of writing</ul><p>Around this point, one of the patches ended up letting a regression slip through that we needed to <a rel="noopener external" href=https://github.com/rust-lang/rust/pull/161573 target=_blank>re-bless in a followup PR</a>. This made it clear that getting the tests to run in CI on all relevant targets was more urgent than switching existing tests to the new format. Testing LLDB on the <code>aarch64</code> linux CI runner took a bit of experimentation but was ultimately pretty straightforward.<p>Running the tests on the Windows CI runners was a bit more of a hurdle. Running <code>tests/debuginfo</code> locally yielded 1 LLDB test failure on <code>windows-gnu</code> and 53 LLDB test failures on <code>windows-msvc</code>. I opened <a rel="noopener external" href=https://github.com/rust-lang/rust/issues/161657 target=_blank>an issue with a listing of the failures</a>, and got to work diagnosing and fixing them. This involved tracking down quite a few weird behavior quirks or bugs in LLDB itself, alongside a number of changes to the test suite.<ul><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/162358 target=_blank>PR#162358 Force <code>u8</code>/<code>i8</code> numeric formatting on LLDB</a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/162359 target=_blank>PR#162359 Use <code>lldb.eTypeOptionHideChildren</code> for msvc tuples</a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/162364 target=_blank>PR#162364 Use <code>#[repr(C)]</code> on debuginfo test structs</a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/162412 target=_blank>PR#162412 Fix msvc-specific differences in debuginfo tests</a><li><a rel="noopener external" href=https://github.com/rust-lang/rust/pull/162598 target=_blank>PR#162598 Fix the remaining <code>tests/debuginfo</code> failures on <code>msvc</code></a></ul><p>Notably, most of the tests didn't use <code>#[repr(C)]</code>, so the field ordering of the structs was not guaranteed. This caused issues because LLDB's DWARF parser kept fields in source-order, but the PDB parser reordered the fields to be in offset order. This ended up being a bit of a happy coincidence though, as it revealed that many of the tests I changed <em>should</em> have had <code>#[repr(C)]</code> in the first place, since they were deliberately written to test LLDB's handling of padded structs.<h1 id=what-s-left>What's left<a aria-hidden=true class=anchor hidden href=#what-s-left>#</a></h1><p>In the immediate-term, we need to get CI to actually run the tests. <a rel="noopener external" href=https://github.com/rust-lang/rust/pull/161574 target=_blank>PR#161574 Enable tests/debuginfo on aarch64-gnu-llvm-21</a> accomplishes that for PR CI (awaiting approval at time of writing). Getting the Windows runners to run the tests requires a bit of extra legwork, as it's not quite as easy to get LLDB and the appropriate Python version.<p>In the short-term, the goal is to write a single comprehensive test for each of the types we have visualizers for, and remove the visualizer-dependent types from the existing tests. This should allow us to reduce the total number of tests. Once that is complete, the remainder of the tests can be ported over to the new format (where applicable).<p>In the medium-term, I want to look into some way to accomplish something similar for the CDB tests, even if it's just adding <code>--bless</code> support.<h1 id=acknowledgements>Acknowledgements<a aria-hidden=true class=anchor hidden href=#acknowledgements>#</a></h1><p>A huge thank you to my mentors <a rel="noopener external" href=https://github.com/Kobzol target=_blank>@Kobzol</a> and <a rel="noopener external" href=https://github.com/jieyouxu target=_blank>@jieyouxu</a>. They've both provided incredibly valuable insight about CI and the broader Rust testing ecosystem; they've pushed me to refine both my plan and my implementation; they've caught numerous bugs and logic errors in PR's that were <em>definitely</em> too large; and they've been incredibly friendly and welcoming throughout.<p>I also want to shout out <a rel="noopener external" href=https://github.com/Nerixyz target=_blank>@Nerixyz</a>. While they weren't involved in GSoC, they <em>did</em> help diagnose and fix quite a few LLDB bugs that I filed issues for.<p>Additionally, thank you to Google and all of the staff that run GSoC. These sorts of programs are indcredibly cool, and I'm grateful that I was able to take part.</div><footer class=post-footer><ul class=post-tags><li><a href=https://walnut356.github.io/tags/programming/>programming</a><li><a href=https://walnut356.github.io/tags/rust/>rust</a><li><a href=https://walnut356.github.io/tags/debugging/>debugging</a></ul><nav class=paginav><a class=prev href=https://walnut356.github.io/posts/debuginfo-test-rework-1/> <span class=title>« Prev</span> <br> <span>GSoC Debuginfo Test Rework: Data</span> </a></nav></footer></article></main><footer class=footer><span>© 2026 <a href=https://walnut356.github.io>Walnut356</a></span><span> Powered by <a rel="noopener noreferrer" href=https://www.getzola.org/ target=_blank>Zola</a> & <a href=https://github.com/cydave/zola-theme-papermod rel=noopener target=_blank>PaperMod</a> </span></footer><a aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g class=top-link href=#top id=top-link> <svg viewbox="0 0 12 6" fill=currentColor xmlns=http://www.w3.org/2000/svg><path d="M12 6H0l6-6z"/></svg> </a><script>let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });</script><script>var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };</script><script>document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })</script><script>document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                var content = codeblock.textContent;
+                if(codeblock.firstChild.tagName == 'TABLE') {
+                    content = Array(...codeblock.firstChild.getElementsByTagName('span')).map((span) => { return span.textContent; }).join('');
+                }
+                navigator.clipboard.writeText(content);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            // td containing LineNos
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            // table containing LineNos and code
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            // code blocks not having highlight as parent class
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });</script>

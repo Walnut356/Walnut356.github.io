@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title>Cracking the Shell - programming</title>
+    <link rel="self" type="application/atom+xml" href="https://walnut356.github.io/tags/programming/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://walnut356.github.io"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2026-09-20T00:00:00+00:00</updated>
+    <id>https://walnut356.github.io/tags/programming/atom.xml</id>
+    <entry xml:lang="en">
+        <title>GSoC 2026 Final Report</title>
+        <published>2026-09-20T00:00:00+00:00</published>
+        <updated>2026-09-20T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/gsoc-2026-final-report/"/>
+        <id>https://walnut356.github.io/posts/gsoc-2026-final-report/</id>
+        
+        <content type="html" xml:base="https://walnut356.github.io/posts/gsoc-2026-final-report/">&lt;h1 id=&quot;overview&quot;&gt;Overview&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#overview&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h1&gt;
+&lt;p&gt;Rust&#x27;s debugging experience is a common pain point. The existing debugger plugins that help visualize data were&#x2F;are somewhat buggy and unreliable. Some efforts were made to improve the situation, but a key blocker was the poor state of the &lt;code&gt;tests&#x2F;debuginfo&lt;&#x2F;code&gt; test suite. It was difficult to control for ambient tools, updates to debuggers would frequently break existing tests. Over time, more and more tests were disabled, and CI runners stopped testing on entire combinations of platforms and debuggers. For example, LLDB was only tested on &lt;code&gt;aarch64-apple&lt;&#x2F;code&gt;. This lead to many of the test suites not working locally either, making it even more difficult to ensure that patches to the visualizers worked properly and did not introduce regressions.&lt;&#x2F;p&gt;
+&lt;p&gt;The goal of this project was to use the Python API exposed by LLDB and GDB to create a testing framework more resistant to platform and debug info format differences. Secondarily, the tests in this new framework needed to be &quot;bless-able&quot; (i.e. able to be updated automatically for expected changes). A more in-depth description of how this system works is available in my &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;walnut356.github.io&#x2F;posts&#x2F;debuginfo-test-rework-1&#x2F;&quot;&gt;previous blog post&lt;&#x2F;a&gt;. While part of the initial goal was to transition most&#x2F;all of the tests to the new format, the state of the old tests on some targets made it clear that the higher priority should be placed on making sure &lt;code&gt;tests&#x2F;debuginfo&lt;&#x2F;code&gt; is run in CI on all major targets.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;my-work&quot;&gt;My work&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#my-work&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h1&gt;
+&lt;p&gt;During the community bonding period, I spent time familiarizing myself with &lt;code&gt;compiletest&lt;&#x2F;code&gt;, the test orchestration framework that handles &lt;code&gt;tests&#x2F;debuginfo&lt;&#x2F;code&gt; (among others). Some time was spent experimenting with how the frameworks could slot into &lt;code&gt;compiletest&lt;&#x2F;code&gt;&#x27;s existing pass&#x2F;fail mechanisms, and some was spent making preparatory bug fixes and refactors.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;156688&quot;&gt;PR#156688 Manually load GDB visualizers on windows for GDB tests&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;156899&quot;&gt;PR#156899 fix breakpoint callback registration in &lt;code&gt;lldb_batchmode&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;157234&quot;&gt;PR#157234 Convert &lt;code&gt;lldb_batchmode&lt;&#x2F;code&gt; to a package&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;159381&quot;&gt;PR#159381 emit (lldb) prefix to make commands more distinct&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;We also needed a way to specify both Apple LLDB and LLVM LLDB versions, since they use different versioning schemes. This was resolved with &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;159215&quot;&gt;PR#159215 [compiletest] Differentiate between LLVM LLDB and Apple LLDB&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;Some fixes were also required for the visualizers themselves to get them in a state reliable enough for us to properly test&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;157289&quot;&gt;PR#157289 Add infallible primitive type lookups to template arg resolver&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;157298&quot;&gt;PR#157298 Use alternate means of detecting enums in &lt;code&gt;is_udt&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;159834&quot;&gt;PR#159834 Apply &lt;code&gt;str&lt;&#x2F;code&gt; debugger visualizer to &lt;code&gt;*const str&lt;&#x2F;code&gt;, &lt;code&gt;*mut str&lt;&#x2F;code&gt; and &lt;code&gt;Box&amp;lt;str&amp;gt;&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;160791&quot;&gt;PR#160791 Use recognizer functions for enums and tuple structs&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;160842&quot;&gt;PR#160842 Apply &lt;code&gt;&amp;amp;[T]&lt;&#x2F;code&gt; visualizer to &lt;code&gt;*const [T]&lt;&#x2F;code&gt;, &lt;code&gt;*mut [T]&lt;&#x2F;code&gt; and &lt;code&gt;Box&amp;lt;[T]&amp;gt;&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;161216&quot;&gt;PR#161216 Clean up some &lt;code&gt;lldb_batchmode&lt;&#x2F;code&gt; lints&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;The Pyton API framework was largely implemented in the following 3 PRs:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;157529&quot;&gt;PR#157529 Add tests&#x2F;debuginfo data classes to define schema&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;158298&quot;&gt;PR#158298 Add lldb-repr command for tests&#x2F;debuginfo&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;160377&quot;&gt;PR#160377 Add gdb-repr directive for tests&#x2F;debuginfo&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;This also came with the need to update some of the Work In Progress sections of the Rustc Dev Guide&#x27;s Debug Info chapter:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rustc-dev-guide&#x2F;pull&#x2F;2947&quot;&gt;rustc-dev-guide PR#2947 Document debuginfo &lt;code&gt;repr&lt;&#x2F;code&gt; directive&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rustc-dev-guide&#x2F;pull&#x2F;3016&quot;&gt;rustc-dev-guide PR#3016 Update debuginfo testing information w&#x2F; GDB changes&lt;&#x2F;a&gt; - still awaiting approval at time of writing&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Around this point, one of the patches ended up letting a regression slip through that we needed to &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;161573&quot;&gt;re-bless in a followup PR&lt;&#x2F;a&gt;. This made it clear that getting the tests to run in CI on all relevant targets was more urgent than switching existing tests to the new format. Testing LLDB on the &lt;code&gt;aarch64&lt;&#x2F;code&gt; linux CI runner took a bit of experimentation but was ultimately pretty straightforward.&lt;&#x2F;p&gt;
+&lt;p&gt;Running the tests on the Windows CI runners was a bit more of a hurdle. Running &lt;code&gt;tests&#x2F;debuginfo&lt;&#x2F;code&gt; locally yielded 1 LLDB test failure on &lt;code&gt;windows-gnu&lt;&#x2F;code&gt; and 53 LLDB test failures on &lt;code&gt;windows-msvc&lt;&#x2F;code&gt;. I opened &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;issues&#x2F;161657&quot;&gt;an issue with a listing of the failures&lt;&#x2F;a&gt;, and got to work diagnosing and fixing them. This involved tracking down quite a few weird behavior quirks or bugs in LLDB itself, alongside a number of changes to the test suite.&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;162358&quot;&gt;PR#162358 Force &lt;code&gt;u8&lt;&#x2F;code&gt;&#x2F;&lt;code&gt;i8&lt;&#x2F;code&gt; numeric formatting on LLDB&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;162359&quot;&gt;PR#162359 Use &lt;code&gt;lldb.eTypeOptionHideChildren&lt;&#x2F;code&gt; for msvc tuples&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;162364&quot;&gt;PR#162364 Use &lt;code&gt;#[repr(C)]&lt;&#x2F;code&gt; on debuginfo test structs&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;162412&quot;&gt;PR#162412 Fix msvc-specific differences in debuginfo tests&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;li&gt;&lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;162598&quot;&gt;PR#162598 Fix the remaining &lt;code&gt;tests&#x2F;debuginfo&lt;&#x2F;code&gt; failures on &lt;code&gt;msvc&lt;&#x2F;code&gt;&lt;&#x2F;a&gt;&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;Notably, most of the tests didn&#x27;t use &lt;code&gt;#[repr(C)]&lt;&#x2F;code&gt;, so the field ordering of the structs was not guaranteed. This caused issues because LLDB&#x27;s DWARF parser kept fields in source-order, but the PDB parser reordered the fields to be in offset order. This ended up being a bit of a happy coincidence though, as it revealed that many of the tests I changed &lt;em&gt;should&lt;&#x2F;em&gt; have had &lt;code&gt;#[repr(C)]&lt;&#x2F;code&gt; in the first place, since they were deliberately written to test LLDB&#x27;s handling of padded structs.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;what-s-left&quot;&gt;What&#x27;s left&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#what-s-left&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h1&gt;
+&lt;p&gt;In the immediate-term, we need to get CI to actually run the tests. &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;rust-lang&#x2F;rust&#x2F;pull&#x2F;161574&quot;&gt;PR#161574 Enable tests&#x2F;debuginfo on aarch64-gnu-llvm-21&lt;&#x2F;a&gt; accomplishes that for PR CI (awaiting approval at time of writing). Getting the Windows runners to run the tests requires a bit of extra legwork, as it&#x27;s not quite as easy to get LLDB and the appropriate Python version.&lt;&#x2F;p&gt;
+&lt;p&gt;In the short-term, the goal is to write a single comprehensive test for each of the types we have visualizers for, and remove the visualizer-dependent types from the existing tests. This should allow us to reduce the total number of tests. Once that is complete, the remainder of the tests can be ported over to the new format (where applicable).&lt;&#x2F;p&gt;
+&lt;p&gt;In the medium-term, I want to look into some way to accomplish something similar for the CDB tests, even if it&#x27;s just adding &lt;code&gt;--bless&lt;&#x2F;code&gt; support.&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;acknowledgements&quot;&gt;Acknowledgements&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; href=&quot;#acknowledgements&quot; hidden=&quot;&quot;&gt;#&lt;&#x2F;a&gt;
+&lt;&#x2F;h1&gt;
+&lt;p&gt;A huge thank you to my mentors &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Kobzol&quot;&gt;@Kobzol&lt;&#x2F;a&gt; and &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;jieyouxu&quot;&gt;@jieyouxu&lt;&#x2F;a&gt;. They&#x27;ve both provided incredibly valuable insight about CI and the broader Rust testing ecosystem; they&#x27;ve pushed me to refine both my plan and my implementation; they&#x27;ve caught numerous bugs and logic errors in PR&#x27;s that were &lt;em&gt;definitely&lt;&#x2F;em&gt; too large; and they&#x27;ve been incredibly friendly and welcoming throughout.&lt;&#x2F;p&gt;
+&lt;p&gt;I also want to shout out &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Nerixyz&quot;&gt;@Nerixyz&lt;&#x2F;a&gt;. While they weren&#x27;t involved in GSoC, they &lt;em&gt;did&lt;&#x2F;em&gt; help diagnose and fix quite a few LLDB bugs that I filed issues for.&lt;&#x2F;p&gt;
+&lt;p&gt;Additionally, thank you to Google and all of the staff that run GSoC. These sorts of programs are indcredibly cool, and I&#x27;m grateful that I was able to take part.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>GSoC Debuginfo Test Rework: Data</title>
+        <published>2026-05-30T00:00:00+00:00</published>
+        <updated>2026-05-30T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/debuginfo-test-rework-1/"/>
+        <id>https://walnut356.github.io/posts/debuginfo-test-rework-1/</id>
+        
+        <summary type="html">&lt;p&gt;As I mentioned in my previous post, I started a Google Summer of Code project to (more or less) dig &lt;code&gt;tests&#x2F;debuginfo&lt;&#x2F;code&gt; out of tech debt.&lt;&#x2F;p&gt;
+&lt;p&gt;The original plan was to create and entirely new test suite. Tests would slowly be translated over, and then the old test suite would be removed. There was a bit more complexity with this option, between the plumbing for the new test suite, and the coordination between the two. There was also the matter of preserving the behavior of the tests that do more than just print variables (e.g. stepping behavior in macros).&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Rust Debugging Progress Report May 2026</title>
+        <published>2026-05-11T00:00:00+00:00</published>
+        <updated>2026-05-11T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/rust-debugging-progress-report-1/"/>
+        <id>https://walnut356.github.io/posts/rust-debugging-progress-report-1/</id>
+        
+        <summary type="html">&lt;p&gt;Since my last post, my work regarding Rust debugging as slowed a bit. The fixes to the visualizers assuaged my annoyance enough to finish some side projects. Crafting Interpreters, and a rewrite-it-in-rust of a python tool that turns Kindle Scribe notebook files into SVGs, and some other silly stuff. The break was a fat reminder of how weak the debugging experience still is, and it has worked wonders to refresh my spite-based motivation. Before I hang my &quot;It doesn&#x27;t have to be this way. We make our own tools.&quot; poster back up, I want to do a bit of a brain dump.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Investigating the SuperNote Notebook Format</title>
+        <published>2026-02-20T00:00:00+00:00</published>
+        <updated>2026-02-20T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/inspecting-the-supernote-note-format/"/>
+        <id>https://walnut356.github.io/posts/inspecting-the-supernote-note-format/</id>
+        
+        <summary type="html">&lt;p&gt;I&#x27;m a big fan of eink tablets. I read a lot, I write a lot, I prefer handwritten notes, it&#x27;s a match made in heaven. I&#x27;ve been using a Kindle Scribe for the past several years - I probably used it as much or more than my phone. Recently, I upgraded to a Supernote Nomad, which has been a lovely experience so far.&lt;&#x2F;p&gt;
+&lt;p&gt;One thing that always bothered me about the Scribe is how subpar its notebook exporting is. I don&#x27;t want to have to be online to do it, I want to be able to do it from my computer rather than my phone, and I want the output file to look exactly like the note I wrote on the screen. Amazon is 0 for 3 on that. Luckily, someone has already solved this problem with a third party app, and I was able to learn a lot from their implementation.&lt;&#x2F;p&gt;
+&lt;p&gt;The SuperNote has its own proprietary format for its notebooks, so I figured I&#x27;d give it a look. This is mostly going to be about the SuperNote format, but the Scribe format will be my main point of reference.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>LLDB&#x27;s TypeSystems Part 2: PDB</title>
+        <published>2025-07-07T00:00:00+00:00</published>
+        <updated>2025-07-07T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/lldbs-typesystems-pt-2/"/>
+        <id>https://walnut356.github.io/posts/lldbs-typesystems-pt-2/</id>
+        
+        <summary type="html">&lt;p&gt;In my previous post, I described implementing PDB parsing as a can of worms. That might have been a bit of an understatement. PDB has been one &quot;oh, it&#x27;s gonna be twice as much work as I thought&quot; after another. Implementing it has revealed many of the same issues as the &lt;code&gt;TypeSystem&lt;&#x2F;code&gt; itself: lack of documentation, cryptic implementations, poor naming schemes, and unclear expectations. Despite all that, I was able to get it working.&lt;&#x2F;p&gt;
+&lt;p&gt;That means &lt;code&gt;TypeSystemRust&lt;&#x2F;code&gt; can be used for executables that target &lt;code&gt;*-gnu&lt;&#x2F;code&gt; or &lt;code&gt;*-msvc&lt;&#x2F;code&gt;. It&#x27;s not quite done yet, but this is a massive step towards the &lt;code&gt;TypeSystem&lt;&#x2F;code&gt; being fully complete. I want to talk a bit about the process, at least partially for posterity. As we&#x27;ll see later, PDB itself is &lt;em&gt;also&lt;&#x2F;em&gt; not documented very well, so any additional literature could be helpful to someone down the line.&lt;&#x2F;p&gt;
+&lt;p&gt;Fair warning, we&#x27;re getting into the weeds. This is gonna be a long one.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>LLDB&#x27;s TypeSystems: An Unfinished Interface</title>
+        <published>2025-03-28T00:00:00+00:00</published>
+        <updated>2025-03-28T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/lldbs-typesystems-an-unfinished-interface/"/>
+        <id>https://walnut356.github.io/posts/lldbs-typesystems-an-unfinished-interface/</id>
+        
+        <summary type="html">&lt;p&gt;Well, it&#x27;s &quot;done&quot;. &lt;code&gt;TypeSystemRust&lt;&#x2F;code&gt; has a &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Walnut356&#x2F;llvm-project&#x2F;tree&#x2F;lldbrust&#x2F;19.x&quot;&gt;(semi) working prototype for LLDB 19.x&lt;&#x2F;a&gt;. It doesn&#x27;t support expressions or MSVC targets (i.e. PDB debug info), and there are a whole host of catastrophic crashes, but it more or less proves what it needs to: Rust&#x27;s debugging experience &lt;em&gt;can&lt;&#x2F;em&gt; be improved, and there are worthwhile benefits to a working &lt;code&gt;TypeSystem&lt;&#x2F;code&gt; that can&#x27;t be emulated on other layers of the debugging stack.&lt;&#x2F;p&gt;
+&lt;p&gt;If you want to test it out, you&#x27;ll need to build my fork from source (sorry), but then &lt;code&gt;lldb.exe&lt;&#x2F;code&gt; can be used as-is, or you can point a debugger extension like lldb-dap or CodeLLDB to your newly built &lt;code&gt;lldb-dap.exe&lt;&#x2F;code&gt; or &lt;code&gt;liblldb.dll&lt;&#x2F;code&gt; respectively. If you&#x27;re on Windows, make sure to compile for MSVC otherwise CodeLLDB won&#x27;t be able to interface with &lt;code&gt;liblldb&lt;&#x2F;code&gt; properly.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>So you want better debug info?</title>
+        <published>2025-02-14T00:00:00+00:00</published>
+        <updated>2025-02-14T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/so-you-want-better-debug-info/"/>
+        <id>https://walnut356.github.io/posts/so-you-want-better-debug-info/</id>
+        
+        <summary type="html">&lt;p&gt;Let me start with an emphatic &lt;strong&gt;&quot;me too&quot;&lt;&#x2F;strong&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;I&#x27;ve put many of my side projects on hold because recent events have resulted in, what I consider to be, an unacceptable degredation of the debugging experience. It&#x27;s a bit hard to focus on whatever I&#x27;m doing when I have to fight to figure out what&#x27;s in a &lt;code&gt;Vec&lt;&#x2F;code&gt;. One of the great things about programming is that we&#x27;re the ones who make our own tools; we don&#x27;t have to just blindly accept mediocrity.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>TwoVec: A Very Silly Container</title>
+        <published>2024-10-18T00:00:00+00:00</published>
+        <updated>2024-10-18T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/twovec-a-very-silly-container/"/>
+        <id>https://walnut356.github.io/posts/twovec-a-very-silly-container/</id>
+        
+        <summary type="html">&lt;p&gt;Lets say you want to store two different types of objects in 1 container. Simple right? Just slap those puppies in a tuple and you&#x27;re good to go:&lt;&#x2F;p&gt;
+&lt;pre class=&quot;giallo&quot; style=&quot;color: #ABB2BF; background-color: #282C34;&quot;&gt;&lt;code data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;giallo-l&quot;&gt;&lt;span style=&quot;color: #C678DD;&quot;&gt;let&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E06C75;&quot;&gt; list&lt;&#x2F;span&gt;&lt;span&gt;:&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E5C07B;&quot;&gt; Vec&lt;&#x2F;span&gt;&lt;span&gt;&amp;lt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E5C07B;&quot;&gt;u8&lt;&#x2F;span&gt;&lt;span&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E5C07B;&quot;&gt; f32&lt;&#x2F;span&gt;&lt;span&gt;)&amp;gt;&lt;&#x2F;span&gt;&lt;span style=&quot;color: #56B6C2;&quot;&gt; =&lt;&#x2F;span&gt;&lt;span style=&quot;color: #61AFEF;&quot;&gt; vec!&lt;&#x2F;span&gt;&lt;span&gt;[(&lt;&#x2F;span&gt;&lt;span style=&quot;color: #D19A66;&quot;&gt;255&lt;&#x2F;span&gt;&lt;span&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color: #D19A66;&quot;&gt; 20.0&lt;&#x2F;span&gt;&lt;span&gt;), (&lt;&#x2F;span&gt;&lt;span style=&quot;color: #D19A66;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span&gt;,&lt;&#x2F;span&gt;&lt;span style=&quot;color: #D19A66;&quot;&gt; 37.0&lt;&#x2F;span&gt;&lt;span&gt;)];&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;But what if you wanted to include elements of two different types in &lt;em&gt;arbitrary orders&lt;&#x2F;em&gt;? Thankfully, there&#x27;s sum types for that:&lt;&#x2F;p&gt;
+&lt;pre class=&quot;giallo&quot; style=&quot;color: #ABB2BF; background-color: #282C34;&quot;&gt;&lt;code data-lang=&quot;rust&quot;&gt;&lt;span class=&quot;giallo-l&quot;&gt;&lt;span style=&quot;color: #C678DD;&quot;&gt;pub enum&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E5C07B;&quot;&gt; Val&lt;&#x2F;span&gt;&lt;span&gt; {&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;
+&lt;span class=&quot;giallo-l&quot;&gt;&lt;span style=&quot;color: #61AFEF;&quot;&gt;    A&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E5C07B;&quot;&gt;u8&lt;&#x2F;span&gt;&lt;span&gt;),&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;
+&lt;span class=&quot;giallo-l&quot;&gt;&lt;span style=&quot;color: #61AFEF;&quot;&gt;    B&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E5C07B;&quot;&gt;f32&lt;&#x2F;span&gt;&lt;span&gt;),&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;
+&lt;span class=&quot;giallo-l&quot;&gt;&lt;span&gt;}&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;
+&lt;span class=&quot;giallo-l&quot;&gt;&lt;&#x2F;span&gt;
+&lt;span class=&quot;giallo-l&quot;&gt;&lt;span&gt;... {&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;
+&lt;span class=&quot;giallo-l&quot;&gt;&lt;span style=&quot;color: #C678DD;&quot;&gt;    let&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E06C75;&quot;&gt; list&lt;&#x2F;span&gt;&lt;span style=&quot;color: #56B6C2;&quot;&gt; =&lt;&#x2F;span&gt;&lt;span style=&quot;color: #61AFEF;&quot;&gt; vec!&lt;&#x2F;span&gt;&lt;span&gt;[&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E5C07B;&quot;&gt;Val&lt;&#x2F;span&gt;&lt;span&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color: #61AFEF;&quot;&gt;A&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color: #D19A66;&quot;&gt;255&lt;&#x2F;span&gt;&lt;span&gt;),&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E5C07B;&quot;&gt; Val&lt;&#x2F;span&gt;&lt;span&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color: #61AFEF;&quot;&gt;B&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color: #D19A66;&quot;&gt;20.0&lt;&#x2F;span&gt;&lt;span&gt;),&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E5C07B;&quot;&gt; Val&lt;&#x2F;span&gt;&lt;span&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color: #61AFEF;&quot;&gt;B&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color: #D19A66;&quot;&gt;37.0&lt;&#x2F;span&gt;&lt;span&gt;),&lt;&#x2F;span&gt;&lt;span style=&quot;color: #E5C07B;&quot;&gt; Val&lt;&#x2F;span&gt;&lt;span&gt;::&lt;&#x2F;span&gt;&lt;span style=&quot;color: #61AFEF;&quot;&gt;A&lt;&#x2F;span&gt;&lt;span&gt;(&lt;&#x2F;span&gt;&lt;span style=&quot;color: #D19A66;&quot;&gt;10&lt;&#x2F;span&gt;&lt;span&gt;)];&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;
+&lt;span class=&quot;giallo-l&quot;&gt;&lt;span&gt;}&lt;&#x2F;span&gt;&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;One small problem. That&#x27;s &lt;em&gt;wasteful&lt;&#x2F;em&gt;.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Why is language documentation still so terrible?</title>
+        <published>2024-09-12T00:00:00+00:00</published>
+        <updated>2024-09-12T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/language-documentation/"/>
+        <id>https://walnut356.github.io/posts/language-documentation/</id>
+        
+        <summary type="html">&lt;p&gt;Seriously, is there a good reason for this? I feel like I&#x27;m going crazy because almost every language doc I&#x27;ve looked at is legitimately awful in a bunch of obvious ways. It&#x27;s not uncommon to see third party libraries updated by a single person that are better structured, more thorough, with better layouts than the official documentation upheld by the language team itself.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Bypassing the borrow checker - do ref -&gt; ptr -&gt; ref partial borrows cause UB?</title>
+        <published>2024-08-09T00:00:00+00:00</published>
+        <updated>2024-08-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/partial-borrow-pointer-ub/"/>
+        <id>https://walnut356.github.io/posts/partial-borrow-pointer-ub/</id>
+        
+        <summary type="html">&lt;p&gt;Partial borrows across function boundaries don&#x27;t really work in Rust. Unfortunately, that&#x27;s kind of a major issue. There are workarounds, some are outlined &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;smallcultfollowing.com&#x2F;babysteps&#x2F;blog&#x2F;2018&#x2F;11&#x2F;01&#x2F;after-nll-interprocedural-conflicts&#x2F;&quot;&gt;here&lt;&#x2F;a&gt;, but all of them come with pretty major drawbacks.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Simulating Starcraft Part 2 - Data Wrangling</title>
+        <published>2024-06-02T00:00:00+00:00</published>
+        <updated>2024-06-02T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/simulating-starcraft-p2/"/>
+        <id>https://walnut356.github.io/posts/simulating-starcraft-p2/</id>
+        
+        <summary type="html">&lt;p&gt;Oh how naive I was when I thought I&#x27;d be moving on to pathfinding and abilities. I had hoped some of the game&#x27;s mechanics would function better in isolation, so I could gradually add complexity on top of the tracer bullet in a modular way. Unfortunately, that doesn&#x27;t seem possible without a huge refactoring burden every time I add the next layer. It&#x27;ll be more worth my time to properly architect it right now, and build it from the ground up with all of the systems it&#x27;ll need.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Simulating Starcraft Part 1 - Tracer Bullet</title>
+        <published>2024-05-15T00:00:00+00:00</published>
+        <updated>2024-05-15T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/simulating-starcraft-p1/"/>
+        <id>https://walnut356.github.io/posts/simulating-starcraft-p1/</id>
+        
+        <summary type="html">&lt;p&gt;A while back, I made a &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;github.com&#x2F;Walnut356&#x2F;SC2-Upgrade-Calculator&quot;&gt;small application&lt;&#x2F;a&gt; meant to demonstrate some important principles about RTS design, namely that unit stats in a vacuum can be very misleading. As a quick example, stalkers have ~9.7 dps on paper. When fighting marines though, their effective DPS drops to ~8.4 (8.2 with combat shields) due to overkill. That&#x27;s about the same DPS as a sentry. Unfortunately, there&#x27;s only so much info that can be extracted from a Time To Kill calculation between two units.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>The space time complexity tradeoff</title>
+        <published>2024-03-09T00:00:00+00:00</published>
+        <updated>2024-03-09T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/space-time-complexity-tradeoff/"/>
+        <id>https://walnut356.github.io/posts/space-time-complexity-tradeoff/</id>
+        
+        <summary type="html">&lt;p&gt;I encountered a neat example recently while solving &lt;a rel=&quot;noopener external&quot; target=&quot;_blank&quot; href=&quot;https:&#x2F;&#x2F;adventofcode.com&#x2F;2015&#x2F;day&#x2F;6&quot;&gt;Advent of Code 2015, day 6&lt;&#x2F;a&gt;. The problem can be boiled down to &quot;There is a 2D array of values. Given a range and instruction, apply the instruction to all values in that range. How many values are &#x27;on&#x27; at the end?&quot;. There are only 2 possible states for each value: on and off, and only 3 possible instructions: on, off, and toggle. I won&#x27;t focus too much on parsing the input or the structure of the algorithm here, I just want to investigate the hot loop which applies the instruction to each value.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Can you estimate playtime from replay folder size?</title>
+        <published>2024-01-25T00:00:00+00:00</published>
+        <updated>2024-01-25T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/estimate-playtime/"/>
+        <id>https://walnut356.github.io/posts/estimate-playtime/</id>
+        
+        <summary type="html">&lt;p&gt;I&#x27;ve seen this question come up a few times on r&#x2F;ssbm and while I&#x27;ve given hand-wavey answers before, I find myself in a good place to answer more rigorously now. We can break this question down to more basic ones: &quot;how many bytes of replay data correspond to a single frame of gameplay?&quot; and &quot;how many bytes in the replay are unrelated to frames?&quot;. From there, we can estimate a duration by simply translating the 16.667ms per frame to minutes and seconds.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Syntax Test</title>
+        <published>2024-01-01T00:00:00+00:00</published>
+        <updated>2024-01-01T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Walnut356
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://walnut356.github.io/posts/syntax-test/"/>
+        <id>https://walnut356.github.io/posts/syntax-test/</id>
+        
+        <summary type="html">&lt;p&gt;I write my own sublime-syntax files for the syntax highlighting on this site, this page is meant for testing edge cases.&lt;&#x2F;p&gt;</summary>
+        
+    </entry>
+</feed>

@@ -1,0 +1,308 @@
+<!doctype html><html dir=auto lang=en><head><meta charset=utf-8><meta content="IE=edge" http-equiv=X-UA-Compatible><meta content="width=device-width,initial-scale=1,shrink-to-fit=no" name=viewport><meta content="index, follow" name=robots><title>Syntax Test</title><meta name=keywords><meta name=description><meta content=Walnut356 name=author><link href=https://walnut356.github.io/posts/syntax-test/ rel=canonical><link href=/styles.css rel=stylesheet><link href=/override.css rel=stylesheet><link href=/syntax-theme.css rel=stylesheet><link href=https://fonts.googleapis.com rel=preconnect><link crossorigin href=https://fonts.gstatic.com rel=preconnect><link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap" rel=stylesheet><link crossorigin href=/CascadiaCode-Regular.woff2 rel=font><link href=/favicon.png rel=icon type=image/x-icon><link href=https://walnut356.github.io/atom.xml rel=alternate title=RSS type=application/atom+xml><noscript><style>#theme-toggle,.top-link{display:none}</style></noscript><script src="https://www.googletagmanager.com/gtag/js?id=G-PKLX5VEB4H" async></script><script>window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-PKLX5VEB4H');</script><body class=dark id=top><script>if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    }</script><header class=header><nav class=nav><div class=logo><a title="Cracking The Shell (Alt + H)" accesskey=h href=https://walnut356.github.io> Cracking The Shell </a><div class=logo-switches><button title="(Alt + T)" accesskey=t id=theme-toggle><svg viewbox="0 0 24 24" fill=none height=18 id=moon stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> <svg viewbox="0 0 24 24" fill=none height=18 id=sun stroke=currentColor stroke-linecap=round stroke-linejoin=round stroke-width=2 width=24 xmlns=http://www.w3.org/2000/svg><circle cx=12 cy=12 r=5></circle><line x1=12 x2=12 y1=1 y2=3></line><line x1=12 x2=12 y1=21 y2=23></line><line x1=4.22 x2=5.64 y1=4.22 y2=5.64></line><line x1=18.36 x2=19.78 y1=18.36 y2=19.78></line><line x1=1 x2=3 y1=12 y2=12></line><line x1=21 x2=23 y1=12 y2=12></line><line x1=4.22 x2=5.64 y1=19.78 y2=18.36></line><line x1=18.36 x2=19.78 y1=5.64 y2=4.22></line></svg></button><ul class=lang-switch><li></ul></div></div><ul id=menu><li><a href=https://walnut356.github.io/archive title=Archive> <span>Archive</span> </a><li><a href=https://walnut356.github.io/search title=Search> <span>Search</span> </a><li><a href=https://walnut356.github.io/tags title=Tags> <span>Tags</span> </a></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://walnut356.github.io>Home</a> »  <a href=https://walnut356.github.io/posts/>Posts</a> »  <a href=https://walnut356.github.io/posts/syntax-test/>Syntax Test</a></div><h1 class=post-title>Syntax Test</h1><div class=post-meta><span title="2024-01-01 00:00:00 +0000">2024-01-01</span> · 1 min · 25 words</div></header><div class=toc><details><summary title="(Alt + C)" accesskey=c><span class=details>Table of Contents</span></summary> <div class=inner><ul><li><a aria-label=Rust href=#rust>Rust</a><li><a aria-label=LLVM href=#llvm>LLVM</a></ul></div></details></div><div class=post-content><p>I write my own sublime-syntax files for the syntax highlighting on this site, this page is meant for testing edge cases.</p><span id=continue-reading></span><h2 id=rust>Rust<a aria-hidden=true class=anchor hidden href=#rust>#</a></h2><pre class=giallo style=color:#abb2bf;background-color:#282c34><code data-lang=rust><span class=giallo-l><span style=color:#98c379>'a'</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>mod</span><span> test {</span></span>
+<span class=giallo-l><span style=color:#c678dd>  mod</span><span> test2;</span></span>
+<span class=giallo-l><span style=color:#c678dd>  pub mod</span><span> test3;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    pub mod</span><span> test4 {</span></span>
+<span class=giallo-l><span style=color:#c678dd>      mod</span><span> test5;</span></span>
+<span class=giallo-l><span style=color:#c678dd>      pub mod</span><span> test6;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>use</span><span style=color:#e5c07b> std</span><span>::</span><span style=color:#e5c07b>ops</span><span>::</span><span style=color:#e5c07b>Add</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>// regular comment</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>/*</span></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>    Block Comment</span></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>    multiple lines</span></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>*/</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>/// Docs</span></span>
+<span class=giallo-l><span>#[derive(</span><span style=color:#e5c07b>Debug</span><span>,</span><span style=color:#e5c07b> Clone</span><span>)]</span></span>
+<span class=giallo-l><span style=color:#c678dd>pub struct</span><span style=color:#e5c07b> Thing</span><span>&lt;'</span><span style=color:#e5c07b>a</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#e06c75>        eef</span><span>:</span><span style=color:#e5c07b> usize</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>        freef</span><span>: &'</span><span style=color:#e5c07b>a usize</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>impl</span><span>&lt;'</span><span style=color:#e5c07b>a</span><span>></span><span style=color:#e5c07b> Thing</span><span>&lt;'</span><span style=color:#e5c07b>a</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#c678dd>    pub const</span><span style=color:#d19a66> CON</span><span>:</span><span style=color:#e5c07b> usize</span><span style=color:#56b6c2> =</span><span style=color:#d19a66> 7</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    pub fn</span><span style=color:#61afef> new</span><span>(</span><span style=color:#e06c75>eef</span><span>:</span><span style=color:#e5c07b> usize</span><span>,</span><span style=color:#e06c75> freef</span><span>: &'</span><span style=color:#e5c07b>a usize</span><span>) -></span><span style=color:#e5c07b> Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e5c07b>        Self</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e06c75>            eef</span><span>,</span></span>
+<span class=giallo-l><span style=color:#e06c75>            freef</span><span>,</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>pub const</span><span style=color:#d19a66> CON</span><span>:</span><span style=color:#e5c07b> usize</span><span style=color:#56b6c2> =</span><span style=color:#d19a66> 7</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>const</span><span style=color:#d19a66> CON</span><span>:</span><span style=color:#e5c07b> usize</span><span style=color:#56b6c2> =</span><span style=color:#d19a66> 7</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>pub static</span><span style=color:#d19a66> STAT</span><span>:</span><span style=color:#e5c07b> usize</span><span style=color:#56b6c2> =</span><span style=color:#d19a66> 7</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>static</span><span style=color:#d19a66> STAT</span><span>:</span><span style=color:#e5c07b> usize</span><span style=color:#56b6c2> =</span><span style=color:#d19a66> 7</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>impl</span><span>&lt;'</span><span style=color:#e5c07b>a</span><span>></span><span style=color:#e5c07b> std</span><span>::</span><span style=color:#e5c07b>ops</span><span>::</span><span style=color:#e5c07b>Mul</span><span style=color:#c678dd> for</span><span style=color:#e5c07b> Thing</span><span>&lt;'</span><span style=color:#e5c07b>a</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#c678dd>    type</span><span style=color:#e5c07b> Output</span><span style=color:#56b6c2> =</span><span style=color:#e5c07b> Self</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    fn</span><span style=color:#61afef> mul</span><span>(</span><span style=color:#e5c07b>self</span><span>,</span><span style=color:#e06c75> rhs</span><span>:</span><span style=color:#e5c07b> Self</span><span>) -></span><span style=color:#e5c07b> Self</span><span>::</span><span style=color:#e5c07b>Output</span><span> {</span></span>
+<span class=giallo-l><span style=color:#61afef>        todo!</span><span>()</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>pub trait</span><span style=color:#e5c07b> Wow</span><span> {</span></span>
+<span class=giallo-l><span style=color:#c678dd>    fn</span><span style=color:#61afef> wee</span><span>(</span><span style=color:#e06c75>e</span><span>:</span><span style=color:#e5c07b> usize</span><span>) -></span><span style=color:#e5c07b> Self</span><span>;</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>pub enum</span><span style=color:#e5c07b> Nums</span><span>&lt;'</span><span style=color:#e5c07b>a</span><span>> {</span></span>
+<span class=giallo-l><span style=color:#e5c07b>    One</span><span>,</span></span>
+<span class=giallo-l><span style=color:#61afef>    Two</span><span>(</span><span style=color:#e5c07b>i32</span><span>),</span></span>
+<span class=giallo-l><span style=color:#e5c07b>    Three</span><span> {</span><span style=color:#e06c75> val</span><span>:</span><span style=color:#e5c07b> usize</span><span> },</span></span>
+<span class=giallo-l><span style=color:#61afef>    Four</span><span>(</span><span style=color:#e5c07b>Thing</span><span>&lt;'</span><span style=color:#e5c07b>a</span><span>>),</span></span>
+<span class=giallo-l><span style=color:#e5c07b>    Five</span></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#61afef>real!</span><span>(</span><span style=color:#e5c07b>f32</span><span>::</span><span style=color:#61afef>from</span><span>(</span><span style=color:#61afef>real!</span><span>(</span><span style=color:#d19a66>0.696</span><span>) /</span><span style=color:#61afef> real!</span><span>(</span><span style=color:#d19a66>1.2</span><span>)) /</span><span style=color:#d19a66> 1.4</span><span>);</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>async fn</span><span style=color:#61afef> async_fn_</span><span>() {</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span>}</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>fn</span><span style=color:#61afef> main</span><span>() {</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> e</span><span>:</span><span style=color:#e5c07b> i32</span><span style=color:#56b6c2> =</span><span style=color:#d19a66> 5</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> thing</span><span style=color:#56b6c2> =</span><span style=color:#e5c07b> Thing</span><span> {</span><span style=color:#e06c75> eef</span><span>:</span><span style=color:#d19a66> 5</span><span>,</span><span style=color:#e06c75> freef</span><span>: &</span><span style=color:#e06c75>e</span><span>};</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    for</span><span style=color:#e06c75> x</span><span style=color:#c678dd> in</span><span style=color:#d19a66> 0</span><span>..</span><span style=color:#e06c75>thing</span><span>.eef {</span></span>
+<span class=giallo-l><span style=color:#c678dd>        let</span><span style=color:#e06c75> z</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> x</span><span> -</span><span style=color:#d19a66> 5</span><span>;</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    let mut</span><span style=color:#e06c75> thing</span><span>:</span><span style=color:#e5c07b> Vec</span><span>&lt;</span><span style=color:#e5c07b>i32</span><span>></span><span style=color:#56b6c2> =</span><span style=color:#61afef> vec!</span><span>[</span><span style=color:#d19a66>1</span><span>,</span><span style=color:#d19a66> 2</span><span>,</span><span style=color:#d19a66> 3</span><span>];</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> num</span><span style=color:#56b6c2> =</span><span style=color:#e5c07b> Num</span><span>::</span><span style=color:#e5c07b>One</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    for</span><span> (</span><span style=color:#e06c75>x</span><span>,</span><span style=color:#e06c75> y</span><span>)</span><span style=color:#c678dd> in</span><span> (</span><span style=color:#d19a66>0</span><span>..</span><span style=color:#d19a66>10</span><span>).</span><span style=color:#61afef>iter</span><span>().</span><span style=color:#61afef>zip</span><span>(</span><span style=color:#d19a66>0</span><span>..</span><span style=color:#d19a66>10.</span><span style=color:#61afef>iter</span><span>()) {</span></span>
+<span class=giallo-l><span style=color:#c678dd>        match</span><span style=color:#e06c75> num</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e5c07b>            Num</span><span>::</span><span style=color:#e5c07b>One</span><span> => (),</span></span>
+<span class=giallo-l><span style=color:#e5c07b>            Num</span><span>::</span><span style=color:#61afef>Two</span><span>(</span><span style=color:#e06c75>x</span><span>) => (),</span></span>
+<span class=giallo-l><span style=color:#e5c07b>            Num</span><span>::</span><span style=color:#e5c07b>Three</span><span> {</span><span style=color:#e06c75> val</span><span> } => (),</span></span>
+<span class=giallo-l><span style=color:#e06c75>            _</span><span> => (),</span></span>
+<span class=giallo-l><span>        }</span></span>
+<span class=giallo-l><span>    }</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> eef</span><span style=color:#56b6c2> =</span><span> &</span><span style=color:#e06c75>thing</span><span>;</span></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> freef</span><span style=color:#56b6c2> =</span><span style=color:#e5c07b> Thing</span><span>::</span><span style=color:#d19a66>CON</span><span>;</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#c678dd>    let</span><span style=color:#e06c75> z</span><span style=color:#56b6c2> =</span><span style=color:#e06c75> thing</span><span>.</span><span style=color:#61afef>iter</span><span>().</span><span style=color:#61afef>map</span><span>(</span><span style=color:#56b6c2>|</span><span style=color:#e06c75>x</span><span style=color:#56b6c2>|</span><span style=color:#e06c75> x</span><span> +</span><span style=color:#d19a66> 1</span><span>).</span><span style=color:#61afef>collect</span><span>::&lt;</span><span style=color:#e5c07b>Vec</span><span>&lt;</span><span style=color:#e06c75>_</span><span>>>();</span></span>
+<span class=giallo-l><span style=color:#61afef>    println!</span><span>(</span><span style=color:#98c379>"Hello, world! {}"</span><span>,</span><span style=color:#e06c75> z</span><span>[</span><span style=color:#d19a66>0</span><span>]);</span></span>
+<span class=giallo-l><span>}</span></span></code></pre><h2 id=llvm>LLVM<a aria-hidden=true class=anchor hidden href=#llvm>#</a></h2><pre class=giallo style=color:#abb2bf;background-color:#282c34><code data-lang=llvm><span class=giallo-l><span style=color:#7f848e;font-style:italic>; sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}</span></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>; Function Attrs: inlinehint uwtable</span></span>
+<span class=giallo-l><span style=color:#c678dd>define internal void</span><span> @</span><span style=color:#98c379>"sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}"</span><span>(ptr </span><span style=color:#c678dd>noalias noundef readonly align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>8</span><span>) </span><span style=color:#e06c75>%_1</span><span>, ptr </span><span style=color:#c678dd>noalias noundef align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>144</span><span>) </span><span style=color:#e06c75>%army</span><span>) </span><span style=color:#c678dd>unnamed_addr</span><span> #</span><span style=color:#d19a66>0</span><span> {</span></span>
+<span class=giallo-l><span style=color:#e06c75>start:</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_25</span><span> = </span><span style=color:#c678dd>alloca</span><span> [</span><span style=color:#d19a66>1</span><span> x </span><span style=color:#c678dd>i8</span><span>], </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 1</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_20</span><span> = </span><span style=color:#c678dd>alloca</span><span> [</span><span style=color:#d19a66>16</span><span> x </span><span style=color:#c678dd>i8</span><span>], </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %i</span><span> = </span><span style=color:#c678dd>alloca</span><span> [</span><span style=color:#d19a66>8</span><span> x </span><span style=color:#c678dd>i8</span><span>], </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_8</span><span> = </span><span style=color:#c678dd>alloca</span><span> [</span><span style=color:#d19a66>8</span><span> x </span><span style=color:#c678dd>i8</span><span>], </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %iter</span><span> = </span><span style=color:#c678dd>alloca</span><span> [</span><span style=color:#d19a66>16</span><span> x </span><span style=color:#c678dd>i8</span><span>], </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>; call sc2_sim::utils::unchecked_mut</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %units</span><span> = </span><span style=color:#c678dd>call noundef align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>24</span><span>) ptr </span><span style=color:#61afef>@sc2_sim</span><span>::</span><span style=color:#e06c75>utils:</span><span>:unchecked_mut(ptr </span><span style=color:#c678dd>noalias noundef align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>24</span><span>) </span><span style=color:#e06c75>%army</span><span>)</span></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>; call &lt;&mut alloc::vec::Vec&lt;T,A> as core::iter::traits::collect::IntoIterator>::into_iter</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %0</span><span> = </span><span style=color:#c678dd>call</span><span> { ptr, ptr } @</span><span style=color:#98c379>"&lt;&mut alloc::vec::Vec&lt;T,A> as core::iter::traits::collect::IntoIterator>::into_iter"</span><span>(ptr </span><span style=color:#c678dd>noalias noundef align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>24</span><span>) </span><span style=color:#e06c75>%units</span><span>)</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_5.0</span><span> = </span><span style=color:#c678dd>extractvalue</span><span> { ptr, ptr } </span><span style=color:#e06c75>%0</span><span>, </span><span style=color:#d19a66>0</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_5.1</span><span> = </span><span style=color:#c678dd>extractvalue</span><span> { ptr, ptr } </span><span style=color:#e06c75>%0</span><span>, </span><span style=color:#d19a66>1</span></span>
+<span class=giallo-l><span style=color:#c678dd>  call void</span><span style=color:#61afef> @llvm.lifetime.start.p0</span><span>(</span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 16</span><span>, ptr </span><span style=color:#e06c75>%iter</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c678dd>  store</span><span> ptr </span><span style=color:#e06c75>%_5.0</span><span>, ptr </span><span style=color:#e06c75>%iter</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %1</span><span> = </span><span style=color:#c678dd>getelementptr inbounds i8</span><span>, ptr </span><span style=color:#e06c75>%iter</span><span>, </span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 8</span></span>
+<span class=giallo-l><span style=color:#c678dd>  store</span><span> ptr </span><span style=color:#e06c75>%_5.1</span><span>, ptr </span><span style=color:#e06c75>%1</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span></span>
+<span class=giallo-l><span style=color:#c678dd>  br label</span><span style=color:#e06c75> %bb3</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb3:</span><span style=color:#7f848e;font-style:italic>                                              ; preds = %bb16, %start</span></span>
+<span class=giallo-l><span style=color:#c678dd>  call void</span><span style=color:#61afef> @llvm.lifetime.start.p0</span><span>(</span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 8</span><span>, ptr </span><span style=color:#e06c75>%_8</span><span>)</span></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>; call &lt;core::slice::iter::IterMut&lt;T> as core::iter::traits::iterator::Iterator>::next</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %2</span><span> = </span><span style=color:#c678dd>call noundef align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable_or_null</span><span>(</span><span style=color:#d19a66>88</span><span>) ptr @</span><span style=color:#98c379>"&lt;core::slice::iter::IterMut&lt;T> as core::iter::traits::iterator::Iterator>::next"</span><span>(ptr </span><span style=color:#c678dd>noalias noundef align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>16</span><span>) </span><span style=color:#e06c75>%iter</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c678dd>  store</span><span> ptr </span><span style=color:#e06c75>%2</span><span>, ptr </span><span style=color:#e06c75>%_8</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %3</span><span> = </span><span style=color:#c678dd>load</span><span> ptr, ptr </span><span style=color:#e06c75>%_8</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %4</span><span> = </span><span style=color:#c678dd>ptrtoint</span><span> ptr </span><span style=color:#e06c75>%3</span><span style=color:#c678dd> to i64</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %5</span><span> = </span><span style=color:#c678dd>icmp eq i64</span><span style=color:#e06c75> %4</span><span>, </span><span style=color:#d19a66>0</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_10</span><span> = </span><span style=color:#c678dd>select i1</span><span style=color:#e06c75> %5</span><span>, </span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 0</span><span>, </span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 1</span></span>
+<span class=giallo-l><span style=color:#c678dd>  switch i64</span><span style=color:#e06c75> %_10</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb5</span><span> [</span></span>
+<span class=giallo-l><span style=color:#c678dd>    i64</span><span style=color:#d19a66> 0</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb7</span></span>
+<span class=giallo-l><span style=color:#c678dd>    i64</span><span style=color:#d19a66> 1</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb6</span></span>
+<span class=giallo-l><span>  ]</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb5:</span><span style=color:#7f848e;font-style:italic>                                              ; preds = %bb12, %bb9, %bb3</span></span>
+<span class=giallo-l><span style=color:#c678dd>  unreachable</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb7:</span><span style=color:#7f848e;font-style:italic>                                              ; preds = %bb3</span></span>
+<span class=giallo-l><span style=color:#c678dd>  call void</span><span style=color:#61afef> @llvm.lifetime.end.p0</span><span>(</span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 8</span><span>, ptr </span><span style=color:#e06c75>%_8</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c678dd>  call void</span><span style=color:#61afef> @llvm.lifetime.end.p0</span><span>(</span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 16</span><span>, ptr </span><span style=color:#e06c75>%iter</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c678dd>  ret void</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb6:</span><span style=color:#7f848e;font-style:italic>                                              ; preds = %bb3</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %unit</span><span> = </span><span style=color:#c678dd>load</span><span> ptr, ptr </span><span style=color:#e06c75>%_8</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span><span>, </span><span style=color:#e06c75>!nonnull</span><span> !</span><span style=color:#d19a66>2</span><span>, </span><span style=color:#e06c75>!align</span><span> !</span><span style=color:#d19a66>4</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#c678dd>  call void</span><span style=color:#61afef> @llvm.lifetime.start.p0</span><span>(</span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 8</span><span>, ptr </span><span style=color:#e06c75>%i</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c678dd>  store i64</span><span style=color:#d19a66> 0</span><span>, ptr </span><span style=color:#e06c75>%i</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span></span>
+<span class=giallo-l><span style=color:#c678dd>  br label</span><span style=color:#e06c75> %bb8</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb8:</span><span style=color:#7f848e;font-style:italic>                                              ; preds = %bb15, %bb6</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_14</span><span> = </span><span style=color:#c678dd>load i64</span><span>, ptr </span><span style=color:#e06c75>%i</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %6</span><span> = </span><span style=color:#c678dd>getelementptr inbounds i8</span><span>, ptr </span><span style=color:#e06c75>%unit</span><span>, </span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 16</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_15</span><span> = </span><span style=color:#c678dd>load i64</span><span>, ptr </span><span style=color:#e06c75>%6</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_13</span><span> = </span><span style=color:#c678dd>icmp ult i64</span><span style=color:#e06c75> %_14</span><span>, </span><span style=color:#e06c75>%_15</span></span>
+<span class=giallo-l><span style=color:#c678dd>  br i1</span><span style=color:#e06c75> %_13</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb9</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb16</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb16:</span><span style=color:#7f848e;font-style:italic>                                             ; preds = %bb8</span></span>
+<span class=giallo-l><span style=color:#c678dd>  call void</span><span style=color:#61afef> @llvm.lifetime.end.p0</span><span>(</span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 8</span><span>, ptr </span><span style=color:#e06c75>%i</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c678dd>  call void</span><span style=color:#61afef> @llvm.lifetime.end.p0</span><span>(</span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 8</span><span>, ptr </span><span style=color:#e06c75>%_8</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c678dd>  br label</span><span style=color:#e06c75> %bb3</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb9:</span><span style=color:#7f848e;font-style:italic>                                              ; preds = %bb8</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_18</span><span> = </span><span style=color:#c678dd>load i64</span><span>, ptr </span><span style=color:#e06c75>%i</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>; call &lt;alloc::vec::Vec&lt;T,A> as core::ops::index::Index&lt;I>>::index</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_16</span><span> = </span><span style=color:#c678dd>call noundef align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>16</span><span>) ptr @</span><span style=color:#98c379>"&lt;alloc::vec::Vec&lt;T,A> as core::ops::index::Index&lt;I>>::index"</span><span>(ptr </span><span style=color:#c678dd>noalias noundef readonly align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>24</span><span>) </span><span style=color:#e06c75>%unit</span><span>, </span><span style=color:#c678dd>i64 noundef</span><span style=color:#e06c75> %_18</span><span>, ptr </span><span style=color:#c678dd>noalias noundef readonly align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>24</span><span>) </span><span style=color:#61afef>@alloc_4fdbcb53d8adebf2d48242f5b6c09e60</span><span>)</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %7</span><span> = </span><span style=color:#c678dd>load i32</span><span>, ptr </span><span style=color:#e06c75>%_16</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span><span>, </span><span style=color:#e06c75>!range</span><span> !</span><span style=color:#d19a66>6</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_19</span><span> = </span><span style=color:#c678dd>zext i32</span><span style=color:#e06c75> %7</span><span style=color:#c678dd> to i64</span></span>
+<span class=giallo-l><span style=color:#c678dd>  switch i64</span><span style=color:#e06c75> %_19</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb5</span><span> [</span></span>
+<span class=giallo-l><span style=color:#c678dd>    i64</span><span style=color:#d19a66> 1</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb12</span></span>
+<span class=giallo-l><span style=color:#c678dd>    i64</span><span style=color:#d19a66> 0</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb11</span></span>
+<span class=giallo-l><span>  ]</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb12:</span><span style=color:#7f848e;font-style:italic>                                             ; preds = %bb9</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %8</span><span> = </span><span style=color:#c678dd>getelementptr inbounds i8</span><span>, ptr </span><span style=color:#e06c75>%_16</span><span>, </span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 4</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %timestamp</span><span> = </span><span style=color:#c678dd>load i32</span><span>, ptr </span><span style=color:#e06c75>%8</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 4</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_23</span><span> = </span><span style=color:#c678dd>load</span><span> ptr, ptr </span><span style=color:#e06c75>%_1</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span><span>, </span><span style=color:#e06c75>!nonnull</span><span> !</span><span style=color:#d19a66>2</span><span>, </span><span style=color:#e06c75>!align</span><span> !</span><span style=color:#d19a66>5</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_26</span><span> = </span><span style=color:#c678dd>load i32</span><span>, ptr </span><span style=color:#e06c75>%_23</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 4</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %9</span><span> = </span><span style=color:#c678dd>icmp slt i32</span><span style=color:#e06c75> %timestamp</span><span>, </span><span style=color:#e06c75>%_26</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %10</span><span> = </span><span style=color:#c678dd>icmp ne i32</span><span style=color:#e06c75> %timestamp</span><span>, </span><span style=color:#e06c75>%_26</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %11</span><span> = </span><span style=color:#c678dd>select i1</span><span style=color:#e06c75> %10</span><span>, </span><span style=color:#c678dd>i8</span><span style=color:#d19a66> 1</span><span>, </span><span style=color:#c678dd>i8</span><span style=color:#d19a66> 0</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %12</span><span> = </span><span style=color:#c678dd>select i1</span><span style=color:#e06c75> %9</span><span>, </span><span style=color:#c678dd>i8</span><span style=color:#d19a66> -1</span><span>, </span><span style=color:#c678dd>i8</span><span style=color:#e06c75> %11</span></span>
+<span class=giallo-l><span style=color:#c678dd>  store i8</span><span style=color:#e06c75> %12</span><span>, ptr </span><span style=color:#e06c75>%_25</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 1</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_24</span><span> = </span><span style=color:#c678dd>load i8</span><span>, ptr </span><span style=color:#e06c75>%_25</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 1</span><span>, </span><span style=color:#e06c75>!range</span><span> !</span><span style=color:#d19a66>11</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#c678dd>  switch i8</span><span style=color:#e06c75> %_24</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb5</span><span> [</span></span>
+<span class=giallo-l><span style=color:#c678dd>    i8</span><span style=color:#d19a66> -1</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb18</span></span>
+<span class=giallo-l><span style=color:#c678dd>    i8</span><span style=color:#d19a66> 0</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb18</span></span>
+<span class=giallo-l><span style=color:#c678dd>    i8</span><span style=color:#d19a66> 1</span><span>, </span><span style=color:#c678dd>label</span><span style=color:#e06c75> %bb17</span></span>
+<span class=giallo-l><span>  ]</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb11:</span><span style=color:#7f848e;font-style:italic>                                             ; preds = %bb9</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %13</span><span> = </span><span style=color:#c678dd>load i64</span><span>, ptr </span><span style=color:#e06c75>%i</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %14</span><span> = </span><span style=color:#c678dd>add i64</span><span style=color:#e06c75> %13</span><span>, </span><span style=color:#d19a66>1</span></span>
+<span class=giallo-l><span style=color:#c678dd>  store i64</span><span style=color:#e06c75> %14</span><span>, ptr </span><span style=color:#e06c75>%i</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span></span>
+<span class=giallo-l><span style=color:#c678dd>  br label</span><span style=color:#e06c75> %bb15</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb18:</span><span style=color:#7f848e;font-style:italic>                                             ; preds = %bb12, %bb12</span></span>
+<span class=giallo-l><span style=color:#c678dd>  call void</span><span style=color:#61afef> @llvm.lifetime.start.p0</span><span>(</span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 16</span><span>, ptr </span><span style=color:#e06c75>%_20</span><span>)</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %_22</span><span> = </span><span style=color:#c678dd>load i64</span><span>, ptr </span><span style=color:#e06c75>%i</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>; call alloc::vec::Vec&lt;T,A>::swap_remove</span></span>
+<span class=giallo-l><span style=color:#c678dd>  call void</span><span> @</span><span style=color:#98c379>"alloc::vec::Vec&lt;T,A>::swap_remove"</span><span>(ptr </span><span style=color:#c678dd>noalias nocapture noundef sret</span><span>([</span><span style=color:#d19a66>16</span><span> x </span><span style=color:#c678dd>i8</span><span>]) </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>16</span><span>) </span><span style=color:#e06c75>%_20</span><span>, ptr </span><span style=color:#c678dd>noalias noundef align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>24</span><span>) </span><span style=color:#e06c75>%unit</span><span>, </span><span style=color:#c678dd>i64 noundef</span><span style=color:#e06c75> %_22</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c678dd>  call void</span><span style=color:#61afef> @llvm.lifetime.end.p0</span><span>(</span><span style=color:#c678dd>i64</span><span style=color:#d19a66> 16</span><span>, ptr </span><span style=color:#e06c75>%_20</span><span>)</span></span>
+<span class=giallo-l><span style=color:#7f848e;font-style:italic>; call sc2_sim::army::Army::reset_speed</span></span>
+<span class=giallo-l><span style=color:#c678dd>  call void</span><span style=color:#61afef> @sc2_sim</span><span>::</span><span style=color:#e06c75>army:</span><span>:</span><span style=color:#e06c75>Army:</span><span>:reset_speed(ptr </span><span style=color:#c678dd>noalias noundef align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>144</span><span>) </span><span style=color:#e06c75>%army</span><span>, ptr </span><span style=color:#c678dd>noalias noundef align</span><span style=color:#d19a66> 8</span><span style=color:#c678dd> dereferenceable</span><span>(</span><span style=color:#d19a66>88</span><span>) </span><span style=color:#e06c75>%unit</span><span>)</span></span>
+<span class=giallo-l><span style=color:#c678dd>  br label</span><span style=color:#e06c75> %bb14</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb17:</span><span style=color:#7f848e;font-style:italic>                                             ; preds = %bb12</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %15</span><span> = </span><span style=color:#c678dd>load i64</span><span>, ptr </span><span style=color:#e06c75>%i</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span><span>, </span><span style=color:#e06c75>!noundef</span><span> !</span><span style=color:#d19a66>2</span></span>
+<span class=giallo-l><span style=color:#e06c75>  %16</span><span> = </span><span style=color:#c678dd>add i64</span><span style=color:#e06c75> %15</span><span>, </span><span style=color:#d19a66>1</span></span>
+<span class=giallo-l><span style=color:#c678dd>  store i64</span><span style=color:#e06c75> %16</span><span>, ptr </span><span style=color:#e06c75>%i</span><span>, </span><span style=color:#c678dd>align</span><span style=color:#d19a66> 8</span></span>
+<span class=giallo-l><span style=color:#c678dd>  br label</span><span style=color:#e06c75> %bb14</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb14:</span><span style=color:#7f848e;font-style:italic>                                             ; preds = %bb17, %bb18</span></span>
+<span class=giallo-l><span style=color:#c678dd>  br label</span><span style=color:#e06c75> %bb15</span></span>
+<span class=giallo-l></span>
+<span class=giallo-l><span style=color:#e06c75>bb15:</span><span style=color:#7f848e;font-style:italic>                                             ; preds = %bb11, %bb14</span></span>
+<span class=giallo-l><span style=color:#c678dd>  br label</span><span style=color:#e06c75> %bb8</span></span>
+<span class=giallo-l><span>}</span></span></code></pre></div><footer class=post-footer><ul class=post-tags><li><a href=https://walnut356.github.io/tags/programming/>programming</a><li><a href=https://walnut356.github.io/tags/rust/>rust</a></ul><nav class=paginav><a class=prev href=https://walnut356.github.io/search/> <span class=title>« Prev</span> <br> <span>Search</span> </a><a class=next href=https://walnut356.github.io/posts/estimate-playtime/> <span class=title>Next »</span> <br> <span>Can you estimate playtime from replay folder size?</span> </a></nav></footer></article></main><footer class=footer><span>© 2026 <a href=https://walnut356.github.io>Walnut356</a></span><span> Powered by <a rel="noopener noreferrer" href=https://www.getzola.org/ target=_blank>Zola</a> & <a href=https://github.com/cydave/zola-theme-papermod rel=noopener target=_blank>PaperMod</a> </span></footer><a aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g class=top-link href=#top id=top-link> <svg viewbox="0 0 12 6" fill=currentColor xmlns=http://www.w3.org/2000/svg><path d="M12 6H0l6-6z"/></svg> </a><script>let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });</script><script>var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };</script><script>document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })</script><script>document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                var content = codeblock.textContent;
+                if(codeblock.firstChild.tagName == 'TABLE') {
+                    content = Array(...codeblock.firstChild.getElementsByTagName('span')).map((span) => { return span.textContent; }).join('');
+                }
+                navigator.clipboard.writeText(content);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            // td containing LineNos
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            // table containing LineNos and code
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            // code blocks not having highlight as parent class
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });</script>
