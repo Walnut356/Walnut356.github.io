@@ -1,6 +1,6 @@
 +++
 title = "GSoC Retrospective"
-date = 2026-09-20
+date = 2026-10-05
 
 [taxonomies]
 tags=["programming", "rust", "debugging"]
@@ -9,6 +9,8 @@ tags=["programming", "rust", "debugging"]
 This will be a more informal brain-dump of my thoughts on how my GSoC project went. This was written around the same time as the more formal [Final Report](../gsoc-2026-final-report/index.md) (i.e. before I've recieved my final evaluation), but I did wait to do a final pass and proofread until after the final evaluation. During the mentor's evaluation period, I took the first real break I've taken since around March or April, mostly so I could look at literally any other code at all. I've been tinkering with an RTS engine I've had on the backburner for a long time, as well as a very silly Python project that I'll probably make a post about soon.
 
 In any case, I'm pleased to say that I passed my final evaluation! I have some additional awesome news. Just before my project ended, I recieved a surprise DM notifying me that a few people had nominated me for Rust Compiler Team membership! I accepted, and I'm very excited to keep contributing to Rust for the foreseeable future. It maybe sounds silly, but as someone who hasn't like... done a whole lot with their life, or had a whole lot of opportunities, seeing my name on the official website alongside the names of people whose blogs I've been reading for years made me tear up a little.
+
+<!--more-->
 
 GSoC as a whole was a really enjoyable experience. It's still kindof wild to me that programs like that exist, but I'm very glad they do and that I was able to take part. Even outside of my own project, seeing the progress made on other projects was very cool. I didn't quite have the time to look at projects outside of the Rust organization, but it was still really neat to see what was going on outside of the Debuginfo Singularity. Some of them were infrastructure-based like mine, some were working on handy new features for the language, and others were more ecosystem related. The variety surprised me a bit, though I suppose it's easy to get tunnel-visioned when working on one part of the compiler for so long.
 
