@@ -343,7 +343,7 @@ start:
   %units.val6.i = load i64, ptr %1, align 8, !alias.scope !679, !noundef !5 ; deref/copy units.len
   %2 = getelementptr inbounds %"army::State", ptr %units.val.i, i64 %units.val6.i ; get a pointer to 1 past the end of the units.data
   %3 = icmp eq i64 %units.val6.i, 0 ; if len = 0, exit
-  br i1 %3, label %"sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}.exit", label %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i.preheader"
+  br i1 %3, label %"sc2_sim::coordinator::Coordinator::tick_effects::{{"{{closure}}"}}.exit", label %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i.preheader"
 
 "<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i.preheader": ; preds = %start
   %_26.i = load i32, ptr %_3, align 8 ; load current time
@@ -351,7 +351,7 @@ start:
 
 bb3.loopexit.i:                                   ; preds = %bb15.i, %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i"
   %4 = icmp eq ptr %_14.i.i.i, %2 ; if current == end, exit
-  br i1 %4, label %"sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}.exit", label %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i"
+  br i1 %4, label %"sc2_sim::coordinator::Coordinator::tick_effects::{{"{{closure}}"}}.exit", label %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i"
 
 "<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i": ; preds = %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i.preheader", %bb3.loopexit.i
   %iter.sroa.0.08.i = phi ptr [ %_14.i.i.i, %bb3.loopexit.i ], [ %units.val.i, %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i.preheader" ]
@@ -405,7 +405,7 @@ bb15.i:                                           ; preds = %bb17.i, %"alloc::ve
   %_13.i = icmp ult i64 %i.sroa.0.1.i, %_15.i
   br i1 %_13.i, label %"<alloc::vec::Vec<T,A> as core::ops::index::Index<I>>::index.exit.i", label %bb3.loopexit.i
 
-"sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}.exit": ; preds = %bb3.loopexit.i, %start
+"sc2_sim::coordinator::Coordinator::tick_effects::{{"{{closure}}"}}.exit": ; preds = %bb3.loopexit.i, %start
   %_11 = getelementptr inbounds i8, ptr %self, i64 144
   tail call void @llvm.experimental.noalias.scope.decl(metadata !688)
   %11 = getelementptr inbounds i8, ptr %self, i64 152
@@ -414,15 +414,15 @@ bb15.i:                                           ; preds = %bb17.i, %"alloc::ve
   %units.val6.i3 = load i64, ptr %12, align 8, !alias.scope !688, !noundef !5
   %13 = getelementptr inbounds %"army::State", ptr %units.val.i2, i64 %units.val6.i3
   %14 = icmp eq i64 %units.val6.i3, 0
-  br i1 %14, label %"sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}.exit32", label %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i5.preheader"
+  br i1 %14, label %"sc2_sim::coordinator::Coordinator::tick_effects::{{"{{closure}}"}}.exit32", label %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i5.preheader"
 
-"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i5.preheader": ; preds = %"sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}.exit"
+"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i5.preheader": ; preds = %"sc2_sim::coordinator::Coordinator::tick_effects::{{"{{closure}}"}}.exit"
   %_26.i19 = load i32, ptr %_3, align 8
   br label %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i5"
 
 bb3.loopexit.i29:                                 ; preds = %bb15.i25, %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i5"
   %15 = icmp eq ptr %_14.i.i.i7, %13
-  br i1 %15, label %"sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}.exit32", label %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i5"
+  br i1 %15, label %"sc2_sim::coordinator::Coordinator::tick_effects::{{"{{closure}}"}}.exit32", label %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i5"
 
 "<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i5": ; preds = %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i5.preheader", %bb3.loopexit.i29
   %iter.sroa.0.08.i6 = phi ptr [ %_14.i.i.i7, %bb3.loopexit.i29 ], [ %units.val.i2, %"<core::slice::iter::IterMut<T> as core::iter::traits::iterator::Iterator>::next.exit.i5.preheader" ]
@@ -476,7 +476,7 @@ bb15.i25:                                         ; preds = %bb17.i30, %"alloc::
   %_13.i28 = icmp ult i64 %i.sroa.0.1.i27, %_15.i26
   br i1 %_13.i28, label %"<alloc::vec::Vec<T,A> as core::ops::index::Index<I>>::index.exit.i11", label %bb3.loopexit.i29
 
-"sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}.exit32": ; preds = %bb3.loopexit.i29, %"sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}.exit"
+"sc2_sim::coordinator::Coordinator::tick_effects::{{"{{closure}}"}}.exit32": ; preds = %bb3.loopexit.i29, %"sc2_sim::coordinator::Coordinator::tick_effects::{{"{{closure}}"}}.exit"
   ret void
 }
 ```

@@ -26,12 +26,32 @@ mod test {
 
 use std::ops::Add;
 
+use std::{
+    alloc::{self, Layout, handle_alloc_error},
+    cell::{Cell, RefCell, UnsafeCell},
+    collections::{HashMap, HashSet},
+    ffi::{CStr, CString, OsString, os_str},
+    hash::Hash,
+    num::{NonZero, NonZeroI16, NonZeroU8},
+    path::PathBuf,
+    ptr::{self, NonNull},
+    rc::Rc,
+    sync::{Arc, Mutex, RwLock},
+    time::{Duration, Instant, SystemTime},
+};
+
+use freef::FREEF;
+
 // regular comment
 
 /*
     Block Comment
     multiple lines
 */
+
+pub const unsafe extern "C" fn this() {
+
+}
 
 /// Docs
 #[derive(Debug, Clone)]
@@ -49,7 +69,12 @@ impl<'a> Thing<'a> {
             freef,
         }
     }
+
+    fn eef(&self) -> usize {
+
+    }
 }
+
 
 pub const CON: usize = 7;
 const CON: usize = 7;
@@ -114,9 +139,9 @@ fn main() {
 ## LLVM
 
 ```llvm
-; sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}
+; sc2_sim::coordinator::Coordinator::tick_effects::{{"{{closure}}"}}
 ; Function Attrs: inlinehint uwtable
-define internal void @"sc2_sim::coordinator::Coordinator::tick_effects::{{closure}}"(ptr noalias noundef readonly align 8 dereferenceable(8) %_1, ptr noalias noundef align 8 dereferenceable(144) %army) unnamed_addr #0 {
+define internal void @"sc2_sim::coordinator::Coordinator::tick_effects::{{"{{closure}}"}}"(ptr noalias noundef readonly align 8 dereferenceable(8) %_1, ptr noalias noundef align 8 dereferenceable(144) %army) unnamed_addr #0 {
 start:
   %_25 = alloca [1 x i8], align 1
   %_20 = alloca [16 x i8], align 8

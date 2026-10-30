@@ -58,7 +58,7 @@
         <ul id="menu">
             {% for item in config.extra.papermod.navigation %}
             {% set url = item.url | replace(from='$BASE_URL', to=config.base_url) %}
-            {% set is_active_link = current_url and url | trim_end_matches(pat="/") == current_url | trim_end_matches(pat="/") %}
+            {% set is_active_link = current_url and url | trim_end(pat="/") == current_url | trim_end(pat="/") %}
             <li>
                 <a href="{{ url }}" title="{{ item.title }}">
                     <span{% if is_active_link %} class="active"{% endif %}>{{ item.title }}</span>
